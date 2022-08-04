@@ -15,6 +15,8 @@ import com.comitfy.healtie.util.common.HelperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("doctor-statistics")
 public class DoctorStatisticsController extends BaseCrudController<DoctorDTO, DoctorRequestDTO, Doctor, DoctorRepository, DoctorMapper, DoctorSpecification, DoctorService> {
@@ -48,4 +50,27 @@ public class DoctorStatisticsController extends BaseCrudController<DoctorDTO, Do
         long dto = doctorStatisticsService.getCountOfLikesByDate(user.getUuid(), doctorStatisticsDTO);
         return dto;
     }
+
+    @GetMapping("/total-saves/dashboard/doctor")
+    public long getTotalSavesByDoctor(@RequestBody DoctorStatisticsDTO doctorStatisticsDTO) {
+        User user = helperService.getUserFromSession();
+        long dto = doctorStatisticsService.getCountOfSavesByDate(user.getUuid(), doctorStatisticsDTO);
+        return dto;
+    }
+
+    @GetMapping("/total-profile-click/dashboard/doctor/{doctorUUID}")
+    public long getTotalClickByDoctor(@PathVariable UUID doctorUUID, @RequestBody DoctorStatisticsDTO doctorStatisticsDTO) {
+        //User user = helperService.getUserFromSession();
+        long dto = doctorStatisticsService.getCountOfDoctorProfileClickByDate(doctorUUID, doctorStatisticsDTO);
+        return dto;
+    }
+
+    @GetMapping("/total-article-click/dashboard/doctor/{articleUUID}")
+    public long getTotalArticleClickByDoctor(@PathVariable UUID articleUUID, @RequestBody DoctorStatisticsDTO doctorStatisticsDTO) {
+        // User user = helperService.getUserFromSession();
+        long dto = doctorStatisticsService.getCountOfArticleClickByDate(articleUUID, doctorStatisticsDTO);
+        return dto;
+    }
+
+
 }

@@ -20,6 +20,7 @@ public class PaymentMomentMapper implements BaseMapper<PaymentMomentDTO, Payment
         paymentMomentDTO.setPaidAmount(entity.getPaidAmount());
         paymentMomentDTO.setPaymentTypeEnum(entity.getPaymentTypeEnum());
         paymentMomentDTO.setUuid(entity.getUuid());
+        paymentMomentDTO.setCurrencyEnum(entity.getCurrencyEnum());
         return paymentMomentDTO;
     }
 
@@ -28,6 +29,7 @@ public class PaymentMomentMapper implements BaseMapper<PaymentMomentDTO, Payment
         PaymentMoment paymentMoment = new PaymentMoment();
         paymentMoment.setPaidAmount(dto.getPaidAmount());
         paymentMoment.setPaymentTypeEnum(dto.getPaymentTypeEnum());
+        paymentMoment.setCurrencyEnum(dto.getCurrencyEnum());
         return paymentMoment;
 
     }
@@ -37,6 +39,7 @@ public class PaymentMomentMapper implements BaseMapper<PaymentMomentDTO, Payment
         PaymentMoment paymentMoment = new PaymentMoment();
         paymentMoment.setPaidAmount(dto.getPaidAmount());
         paymentMoment.setPaymentTypeEnum(dto.getPaymentTypeEnum());
+        paymentMoment.setCurrencyEnum(dto.getCurrencyEnum());
 
         return paymentMoment;
     }
@@ -45,6 +48,7 @@ public class PaymentMomentMapper implements BaseMapper<PaymentMomentDTO, Payment
     public PaymentMoment requestDTOToExistEntity(PaymentMoment paymentMoment, PaymentMomentRequestDTO dto) {
         paymentMoment.setPaidAmount(dto.getPaidAmount());
         paymentMoment.setPaymentTypeEnum(dto.getPaymentTypeEnum());
+        paymentMoment.setCurrencyEnum(dto.getCurrencyEnum());
         return paymentMoment;
     }
 

@@ -5,14 +5,11 @@ import com.comitfy.healtie.commercial.dto.request.PaymentMomentRequestDTO;
 import com.comitfy.healtie.commercial.entity.Order;
 import com.comitfy.healtie.commercial.entity.PaymentMoment;
 import com.comitfy.healtie.commercial.mapper.PaymentMomentMapper;
-import com.comitfy.healtie.commercial.model.enums.PaymentStatusEnum;
 import com.comitfy.healtie.commercial.repository.OrderRepository;
 import com.comitfy.healtie.commercial.repository.PaymentMomentRepository;
 import com.comitfy.healtie.commercial.specification.PaymentMomentSpecification;
 import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.util.common.BaseService;
-import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +60,8 @@ public class PaymentMomentService extends BaseService<PaymentMomentDTO, PaymentM
             paymentMoment.setOrderUUID(orderId);
             paymentMoment.setUserUUID(user.getUuid());
             paymentMoment.setCheckingTypeEnum(orders.get().getCheckingTypeEnum());
-           // paymentMoment.setOrderDate(orders.get().getOrderDate());
+            paymentMoment.setCurrencyEnum(orders.get().getCurrencyEnum());
+
 
             if (dto.getPaidAmount() > orders.get().getRemainingMoney()) {
                 return null;
@@ -73,23 +71,12 @@ public class PaymentMomentService extends BaseService<PaymentMomentDTO, PaymentM
 
             orders.get().setRemainingMoney(orders.get().getRemainingMoney() - paymentMoment.getPaidAmount());
 
- /*           if (orders.get().getRemainingMoney() <= 0) {
-                paymentMoment.setPaymentStatusEnum(PaymentStatusEnum.PAID);
-                orders.get().setPaymentStatusEnum(PaymentStatusEnum.PAID);
-            } else if (orders.get().getRemainingMoney() < orders.get().getTotalPrice()) {
-                paymentMoment.setPaymentStatusEnum(PaymentStatusEnum.PARTIALLY_PAID);
-                orders.get().setPaymentStatusEnum(PaymentStatusEnum.PARTIALLY_PAID);
-            } else {
-                paymentMoment.setPaymentStatusEnum(PaymentStatusEnum.UNPAID);
-                orders.get().setPaymentStatusEnum(PaymentStatusEnum.UNPAID);
-            }
-*/
             paymentMomentRepository.save(paymentMoment);
             return dto;
 
         } else {
             log.info("OrderId is null.");
-          return null;
+            return null;
         }
     }
 

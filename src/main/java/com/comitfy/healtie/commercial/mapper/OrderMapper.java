@@ -1,7 +1,5 @@
 package com.comitfy.healtie.commercial.mapper;
 
-import com.comitfy.healtie.app.dto.requestDTO.DoctorTitleRequestDTO;
-import com.comitfy.healtie.app.entity.Doctor;
 import com.comitfy.healtie.commercial.dto.OrderDTO;
 import com.comitfy.healtie.commercial.dto.request.OrderRequestDTO;
 import com.comitfy.healtie.commercial.dto.request.OrderStatusRequestDTO;
@@ -34,6 +32,7 @@ public class OrderMapper implements BaseMapper<OrderDTO, OrderRequestDTO, Order>
         orderDTO.setPaymentStatusEnum(entity.getPaymentStatusEnum());
         orderDTO.setOrderStatusEnum(OrderStatusEnum.ON_HOLD);
         orderDTO.setCardStatusEnum(CardStatusEnum.APPROVED);
+        orderDTO.setCurrencyEnum(entity.getCurrencyEnum());
 
         orderDTO.setUuid(entity.getUuid());
         return orderDTO;
@@ -52,6 +51,7 @@ public class OrderMapper implements BaseMapper<OrderDTO, OrderRequestDTO, Order>
         order.setCheckingTypeEnum(dto.getCheckingTypeEnum());
         order.setPaymentStatusEnum(dto.getPaymentStatusEnum());
         order.setOrderStatusEnum(dto.getOrderStatusEnum());
+        order.setCurrencyEnum(dto.getCurrencyEnum());
         return order;
     }
 

@@ -1,9 +1,6 @@
 package com.comitfy.healtie.commercial.dto;
 
-import com.comitfy.healtie.commercial.model.enums.CardStatusEnum;
-import com.comitfy.healtie.commercial.model.enums.CheckingTypeEnum;
-import com.comitfy.healtie.commercial.model.enums.OrderStatusEnum;
-import com.comitfy.healtie.commercial.model.enums.PaymentStatusEnum;
+import com.comitfy.healtie.commercial.model.enums.*;
 import com.comitfy.healtie.util.common.BaseDTO;
 import lombok.Data;
 
@@ -35,4 +32,6 @@ public class OrderDTO extends BaseDTO {
     private OrderStatusEnum orderStatusEnum;
 
     private CardStatusEnum cardStatusEnum;
+
+    private CurrencyEnum currencyEnum;
 }
