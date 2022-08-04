@@ -1,16 +1,12 @@
 package com.comitfy.healtie.commercial.entity;
 
-import com.comitfy.healtie.commercial.model.enums.CardStatusEnum;
-import com.comitfy.healtie.commercial.model.enums.CheckingTypeEnum;
-import com.comitfy.healtie.commercial.model.enums.OrderStatusEnum;
-import com.comitfy.healtie.commercial.model.enums.PaymentStatusEnum;
+import com.comitfy.healtie.commercial.model.enums.*;
 import com.comitfy.healtie.util.dbUtil.BaseEntity;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -63,4 +59,8 @@ public class Order extends BaseEntity {
     @Column
     @Enumerated(EnumType.STRING)
     private CardStatusEnum cardStatusEnum;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private CurrencyEnum currencyEnum;
 }

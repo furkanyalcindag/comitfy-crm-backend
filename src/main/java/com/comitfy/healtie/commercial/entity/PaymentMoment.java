@@ -1,6 +1,7 @@
 package com.comitfy.healtie.commercial.entity;
 
 import com.comitfy.healtie.commercial.model.enums.CheckingTypeEnum;
+import com.comitfy.healtie.commercial.model.enums.CurrencyEnum;
 import com.comitfy.healtie.commercial.model.enums.PaymentTypeEnum;
 import com.comitfy.healtie.util.dbUtil.BaseEntity;
 import lombok.Data;
@@ -47,6 +48,10 @@ public class PaymentMoment extends BaseEntity {
     @Column
     @Enumerated(EnumType.STRING)
     private CheckingTypeEnum checkingTypeEnum;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private CurrencyEnum currencyEnum;
 
 
 }

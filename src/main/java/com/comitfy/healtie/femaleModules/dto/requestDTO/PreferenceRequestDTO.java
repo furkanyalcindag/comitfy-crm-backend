@@ -12,5 +12,4 @@ import java.util.List;
 public class PreferenceRequestDTO extends BaseDTO {
     private int expectedNumberOfDay;
 
-   // List<UserPreferenceDTO> userPreferenceDTOList;
 }

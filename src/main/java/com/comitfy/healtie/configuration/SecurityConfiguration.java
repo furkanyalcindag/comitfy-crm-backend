@@ -19,8 +19,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.Arrays;
+import java.util.List;
+
 
 
 
@@ -51,6 +56,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.csrf().disable()
 				.httpBasic().disable()
 				.cors()
+				.configurationSource(request-> {
+					CorsConfiguration configuration = new CorsConfiguration();
+					configuration.setAllowedOrigins(List.of("*"));
+					configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+					configuration.setAllowedHeaders(List.of("*"));
+					return configuration;
+				})
 				.and()
 				.authorizeHttpRequests()
 				.antMatchers("/swagger-ui/**").permitAll()

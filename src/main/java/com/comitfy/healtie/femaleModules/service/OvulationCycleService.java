@@ -2,6 +2,7 @@ package com.comitfy.healtie.femaleModules.service;
 
 import com.comitfy.healtie.femaleModules.dto.FertilityLevelDTO;
 import com.comitfy.healtie.femaleModules.dto.OvulationCycleDTO;
+import com.comitfy.healtie.femaleModules.dto.requestDTO.FertilityLevelRequestDTO;
 import com.comitfy.healtie.femaleModules.dto.requestDTO.OvulationCycleRequestDTO;
 import com.comitfy.healtie.femaleModules.entity.OvulationCycle;
 import com.comitfy.healtie.femaleModules.mapper.FertilityLevelMapper;
@@ -131,7 +132,6 @@ public class OvulationCycleService extends BaseService<OvulationCycleDTO, Ovulat
     public OvulationCycleDTO getActiveOvulationCycle(User user) {
 
         OvulationCycleDTO ovulationCycleDTO = ovulationCycleMapper.entityToDTO(ovulationCycleRepository.findByActivatedAndUser(true, user));
-
 
         List<FertilityLevelDTO> fertilityLevelDTOS = keepFertilityLevel(ovulationCycleDTO);
 

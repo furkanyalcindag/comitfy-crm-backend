@@ -1,9 +1,7 @@
 package com.comitfy.healtie.femaleModules.mapper;
 
-import com.comitfy.healtie.femaleModules.dto.FertilityLevelDTO;
 import com.comitfy.healtie.femaleModules.dto.OvulationCycleDTO;
 import com.comitfy.healtie.femaleModules.dto.requestDTO.OvulationCycleRequestDTO;
-import com.comitfy.healtie.femaleModules.entity.FertilityLevel;
 import com.comitfy.healtie.femaleModules.entity.OvulationCycle;
 import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseMapper;
@@ -11,9 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class OvulationCycleMapper implements BaseMapper<OvulationCycleDTO, OvulationCycleRequestDTO, OvulationCycle> {
@@ -25,16 +21,6 @@ public class OvulationCycleMapper implements BaseMapper<OvulationCycleDTO, Ovula
         ovulationCycleDTO.setActuality(entity.isActuality());
         ovulationCycleDTO.setActivated(entity.isActivated());
         ovulationCycleDTO.setUuid(entity.getUuid());
-
-        Set<FertilityLevelDTO> fertilityLevelDTOS = new HashSet<>();
-   /*     for (FertilityLevel fertilityLevel : entity.getFertilityLevels()) {
-
-            FertilityLevelDTO fertilityLevelDTO = new FertilityLevelDTO();
-            fertilityLevelDTO.setFertilityLevelEnum(fertilityLevel.getFertilityLevelEnum());
-            fertilityLevelDTO.setDate(fertilityLevel.getDate());
-            fertilityLevelDTOS.add(fertilityLevelDTO);
-        }
-        ovulationCycleDTO.setFertilityLevels(fertilityLevelDTOS);*/
         return ovulationCycleDTO;
     }
 
@@ -67,12 +53,6 @@ public class OvulationCycleMapper implements BaseMapper<OvulationCycleDTO, Ovula
         ovulationCycle.setActuality(dto.isActuality());
         return ovulationCycle;
     }
- 
-    public OvulationCycle requestDTOToExistEntityForActivate(OvulationCycle ovulationCycle,OvulationCycleRequestDTO dto){
-        ovulationCycle.setActivated(dto.isActivated());
-        return ovulationCycle;
-    }
-
 
     @Override
     public List<OvulationCycle> dtoListToEntityList(List<OvulationCycleDTO> ovulationCycleDTOS) {
@@ -93,7 +73,6 @@ public class OvulationCycleMapper implements BaseMapper<OvulationCycleDTO, Ovula
         }
         return ovulationCycleDTOList;
     }
-
 
     @Override
     public PageDTO<OvulationCycleDTO> pageEntityToPageDTO(Page<OvulationCycle> pageEntity) {
