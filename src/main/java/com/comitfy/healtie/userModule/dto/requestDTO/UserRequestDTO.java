@@ -12,6 +12,7 @@ public class UserRequestDTO extends BaseDTO {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
 
     private AgeRangeEnum ageRangeEnum;
     private GenderEnum genderEnum;
