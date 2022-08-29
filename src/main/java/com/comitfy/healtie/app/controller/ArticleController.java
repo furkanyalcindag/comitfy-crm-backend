@@ -1,10 +1,7 @@
 package com.comitfy.healtie.app.controller;
 
 import com.comitfy.healtie.app.dto.ArticleDTO;
-import com.comitfy.healtie.app.dto.requestDTO.ArticleClickRequestDTO;
-import com.comitfy.healtie.app.dto.requestDTO.ArticleLikeRequestDTO;
-import com.comitfy.healtie.app.dto.requestDTO.ArticleRequestDTO;
-import com.comitfy.healtie.app.dto.requestDTO.ArticleSaveRequestDTO;
+import com.comitfy.healtie.app.dto.requestDTO.*;
 import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Doctor;
 import com.comitfy.healtie.app.mapper.ArticleMapper;
@@ -87,6 +84,7 @@ public class ArticleController extends BaseWithMultiLanguageCrudController<Artic
             }
         } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
 
 
     @PostMapping("user-api/like-article/{articleId}")
