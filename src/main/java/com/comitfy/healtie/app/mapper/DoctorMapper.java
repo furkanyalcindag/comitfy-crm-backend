@@ -5,7 +5,9 @@ import com.comitfy.healtie.app.dto.requestDTO.*;
 import com.comitfy.healtie.app.entity.Doctor;
 import com.comitfy.healtie.app.repository.DoctorRepository;
 import com.comitfy.healtie.app.service.UserInfoService;
+import com.comitfy.healtie.userModule.entity.Role;
 import com.comitfy.healtie.userModule.entity.User;
+import com.comitfy.healtie.userModule.repository.RoleRepository;
 import com.comitfy.healtie.userModule.repository.UserRepository;
 import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseMapper;
@@ -15,7 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class DoctorMapper implements BaseMapper<DoctorDTO, DoctorRequestDTO, Doctor> {
@@ -31,6 +35,9 @@ public class DoctorMapper implements BaseMapper<DoctorDTO, DoctorRequestDTO, Doc
 
     @Autowired
     UserInfoService userInfoService;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Override
     public DoctorDTO entityToDTO(Doctor entity) {
@@ -100,7 +107,13 @@ public class DoctorMapper implements BaseMapper<DoctorDTO, DoctorRequestDTO, Doc
         user.setAgeRangeEnum(dto.getAgeRangeEnum());
         user.setPhotoLink(dto.getPhotoLink());
         user.setUsername(dto.getEmail());
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.findByName("doctor").get());
+        user.setRoles(roles);
+
         doctor.setUser(user);
+
 
         return doctor;
     }
@@ -132,6 +145,12 @@ public class DoctorMapper implements BaseMapper<DoctorDTO, DoctorRequestDTO, Doc
 
     public Doctor requestDTOToExistEntityForTitle(Doctor doctor, DoctorTitleRequestDTO dto) {
         doctor.setTitle(dto.getTitle());
+        return doctor;
+
+    }
+
+    public Doctor requestDTOToExistEntityForProfileImage(Doctor doctor, DoctorProfileImageRequestDTO dto) {
+        doctor.setProfileImage(dto.getProfileImage());
         return doctor;
 
     }

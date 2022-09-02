@@ -23,6 +23,8 @@ public class Notification extends BaseEntity {
     private String link;
     private boolean isSend;
     private String base64;
+    @ManyToMany
+    private Set<User> userList;
 
 
 /*

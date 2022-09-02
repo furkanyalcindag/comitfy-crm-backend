@@ -147,6 +147,19 @@ public class DoctorService extends BaseService<DoctorDTO, DoctorRequestDTO, Doct
             return null;
         }
     }
+    public DoctorProfileImageRequestDTO updateProfileImage(DoctorProfileImageRequestDTO dto, User user) {
+        Optional<Doctor> doctor = doctorRepository.findByUser(user);
+        if (doctor.isPresent()) {
+            Doctor doctor1 = doctorMapper.requestDTOToExistEntityForProfileImage(doctor.get(), dto);
+            doctor1.setProfileImage(dto.getProfileImage());
+            doctorRepository.save(doctor1);
+            return dto;
+
+        } else {
+
+            return null;
+        }
+    }
 
 }
 

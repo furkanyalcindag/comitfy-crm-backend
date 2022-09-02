@@ -2,6 +2,7 @@ package com.comitfy.healtie.app.repository;
 
 import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Category;
+import com.comitfy.healtie.app.entity.Doctor;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.util.common.BaseWithMultiLanguageRepository;

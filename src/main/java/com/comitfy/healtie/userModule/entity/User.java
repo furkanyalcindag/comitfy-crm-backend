@@ -2,6 +2,7 @@ package com.comitfy.healtie.userModule.entity;
 
 
 import com.comitfy.healtie.app.entity.Article;
+import com.comitfy.healtie.app.entity.Notification;
 import com.comitfy.healtie.app.model.enums.AgeRangeEnum;
 import com.comitfy.healtie.app.model.enums.GenderEnum;
 import com.comitfy.healtie.util.dbUtil.BaseEntity;
@@ -46,8 +47,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Article> articleList;
 
-
-
+    @ManyToMany
+    private Set<Notification> notificationList;
 
 
 
