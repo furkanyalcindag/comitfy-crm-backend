@@ -1,9 +1,11 @@
 package com.comitfy.healtie.app.service;
 
 import com.comitfy.healtie.app.dto.ArticleDTO;
+import com.comitfy.healtie.app.dto.requestDTO.AcademicInfoRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ArticleLikeRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ArticleRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ArticleSaveRequestDTO;
+import com.comitfy.healtie.app.entity.AcademicInfo;
 import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Category;
 import com.comitfy.healtie.app.entity.Doctor;
@@ -78,29 +80,29 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
 
 
     public PageDTO<ArticleDTO> getArticleByDoctor(UUID id, int page, int size, LanguageEnum languageEnum) {
-        Doctor doctor = doctorService.findEntityByUUID(id);
+        Optional<Doctor> doctor = doctorRepository.findByUuid(id);
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
 
         if (doctor != null) {
 
-            PageDTO<ArticleDTO> pageDTO = getMapper().pageEntityToPageDTO(getRepository().findAllByUser(pageable, doctor.getUser(),languageEnum));
+            PageDTO<ArticleDTO> pageDTO = getMapper().pageEntityToPageDTO(getRepository().findAllByUser(pageable, doctor.get().getUser(), languageEnum));
             for (int i = 0; i < pageDTO.getData().size(); i++) {
 
                 pageDTO.getData().get(i).setLikeCount(getRepository().getCountOfArticleLike(pageDTO.getData().get(i).getUuid()));
                 pageDTO.getData().get(i).setSaveCount(getRepository().getCountOfArticleSave(pageDTO.getData().get(i).getUuid()));
                 pageDTO.getData().get(i).setCommentCount(getRepository().getCountOfComment(pageDTO.getData().get(i).getUuid()));
+                pageDTO.getData().get(i).setLike(isLikedArticleByUser( pageDTO.getData().get(i).getUuid(), id));
+                pageDTO.getData().get(i).setSave(isSavedArticleByUser( pageDTO.getData().get(i).getUuid(), id));
             }
 
-            for (ArticleDTO articleDTO : pageDTO.getData()) {
-                articleDTO.setLike(isLikedArticleByUser(articleDTO.getUuid(), id));
-                articleDTO.setSave(isSavedArticleByUser(articleDTO.getUuid(), id));
-            }
 
             return pageDTO;
         } else {
             return null;
         }
     }
+
+
 
     public ArticleRequestDTO saveArticleByUser(UUID id, ArticleRequestDTO dto) {
         Optional<User> user = userRepository.findByUuid(id);

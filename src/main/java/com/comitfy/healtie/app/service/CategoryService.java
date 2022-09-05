@@ -1,7 +1,9 @@
 package com.comitfy.healtie.app.service;
 
 import com.comitfy.healtie.app.dto.CategoryDTO;
+import com.comitfy.healtie.app.dto.requestDTO.ArticleRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.CategoryRequestDTO;
+import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Category;
 import com.comitfy.healtie.app.mapper.CategoryMapper;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
@@ -9,6 +11,7 @@ import com.comitfy.healtie.app.repository.ArticleRepository;
 import com.comitfy.healtie.app.repository.CategoryRepository;
 import com.comitfy.healtie.app.specification.CategorySpecification;
 import com.comitfy.healtie.userModule.entity.User;
+import com.comitfy.healtie.userModule.repository.UserRepository;
 import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseWithMultiLanguageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,8 @@ public class CategoryService extends BaseWithMultiLanguageService<CategoryDTO, C
 
     @Autowired
     ArticleRepository articleRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public CategoryRepository getRepository() {
@@ -76,6 +81,17 @@ public class CategoryService extends BaseWithMultiLanguageService<CategoryDTO, C
             return null;
         }
 
+    }
+    public CategoryRequestDTO saveCategoryByUser(UUID id, CategoryRequestDTO dto) {
+        Optional<User> user = userRepository.findByUuid(id);
+        if (user.isPresent()) {
+            Category category = getMapper().requestDTOToEntity(dto);
+
+            categoryRepository.save(category);
+            return dto;
+        } else {
+            return null;
+        }
     }
 
 }

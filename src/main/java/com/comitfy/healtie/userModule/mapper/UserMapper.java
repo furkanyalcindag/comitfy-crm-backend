@@ -60,6 +60,10 @@ public class UserMapper implements BaseMapper<UserDTO, UserRequestDTO, User> {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
+        //user.setPassword(dto.getPassword());
+        user.setAgeRangeEnum(dto.getAgeRangeEnum());
+        user.setGenderEnum(dto.getGenderEnum());
+        user.setUsername(dto.getEmail());
         //user.setPhotoLink(dto.getPhotoLink());
 
         return user;

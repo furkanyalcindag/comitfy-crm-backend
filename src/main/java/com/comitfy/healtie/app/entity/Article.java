@@ -40,11 +40,6 @@ public class Article extends BaseEntity {
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Comment> commentList;
 
-
-  /*  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn()
-    private Doctor doctor;*/
-
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn()
     private User user;
@@ -75,8 +70,5 @@ public class Article extends BaseEntity {
         this.userSaves.add(user);
     }
 
-    public void addTag(Tag tag) {
-        this.tags.add(tag);
-    }
 
 }

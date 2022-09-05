@@ -147,5 +147,16 @@ public class DoctorController extends BaseCrudController<DoctorDTO, DoctorReques
             return new ResponseEntity<>("The object was updated", HttpStatus.OK);
         }
     }
+    @PutMapping("/profile-image-update/")
+    public ResponseEntity<String> updateDoctorProfileImage(@RequestBody DoctorProfileImageRequestDTO dto) {
+        User user = helperService.getUserFromSession();
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
+
+        } else {
+            doctorService.updateProfileImage(dto, user);
+            return new ResponseEntity<>("The object was updated", HttpStatus.OK);
+        }
+    }
 
 }

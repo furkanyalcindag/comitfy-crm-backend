@@ -1,6 +1,7 @@
 package com.comitfy.healtie.app.controller;
 
 import com.comitfy.healtie.app.dto.CategoryDTO;
+import com.comitfy.healtie.app.dto.requestDTO.ArticleRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.CategoryRequestDTO;
 import com.comitfy.healtie.app.entity.Category;
 import com.comitfy.healtie.app.mapper.CategoryMapper;
@@ -65,6 +66,16 @@ public class CategoryController extends BaseWithMultiLanguageCrudController<Cate
             return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
         }
 
+    }
+    @PostMapping("/user-api")
+    public ResponseEntity<CategoryRequestDTO> saveByUserId(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
+                                                          @RequestBody CategoryRequestDTO categoryRequestDTO) {
+        User user = helperService.getUserFromSession();
+        if (user != null) {
+            {
+                return new ResponseEntity<>(categoryService.saveCategoryByUser(user.getUuid(), categoryRequestDTO), HttpStatus.OK);
+            }
+        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 

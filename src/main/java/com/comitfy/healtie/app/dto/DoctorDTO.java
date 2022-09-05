@@ -20,7 +20,7 @@ public class DoctorDTO extends BaseDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private String photoLink;
+    private String profileImage;
     private String userName;
 
     private AgeRangeEnum ageRangeEnum;

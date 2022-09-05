@@ -45,6 +45,9 @@ public class Doctor extends BaseEntity {
     @Column
     private String clinicName;
 
+    @Column
+    private  String profileImage;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private User user;
 
