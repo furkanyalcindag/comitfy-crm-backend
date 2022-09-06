@@ -59,7 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.configurationSource(request-> {
 					CorsConfiguration configuration = new CorsConfiguration();
 					configuration.setAllowedOrigins(List.of("*"));
-					configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+					configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
 					configuration.setAllowedHeaders(List.of("*"));
 					return configuration;
 				})
