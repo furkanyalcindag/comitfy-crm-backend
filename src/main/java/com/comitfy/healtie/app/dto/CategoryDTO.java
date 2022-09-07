@@ -23,7 +23,7 @@ public class CategoryDTO extends BaseDTO {
 
     private LanguageEnum languageEnum;
 
-    private List<CategoryDTO> parentList;
+    private Set<CategoryDTO> parentList;
 
     private long articleCount;
 

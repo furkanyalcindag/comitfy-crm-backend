@@ -1,26 +1,33 @@
 package com.comitfy.healtie.userModule.mapper;
 
+import com.comitfy.healtie.app.dto.TagDTO;
+import com.comitfy.healtie.app.entity.Tag;
 import com.comitfy.healtie.app.service.UserInfoService;
+import com.comitfy.healtie.userModule.dto.RoleDTO;
 import com.comitfy.healtie.userModule.dto.UserDTO;
 import com.comitfy.healtie.userModule.dto.requestDTO.UserAgeRangeRequestDTO;
 import com.comitfy.healtie.userModule.dto.requestDTO.UserGenderRequestDTO;
 import com.comitfy.healtie.userModule.dto.requestDTO.UserNameRequestDTO;
 import com.comitfy.healtie.userModule.dto.requestDTO.UserRequestDTO;
+import com.comitfy.healtie.userModule.entity.Role;
 import com.comitfy.healtie.userModule.entity.User;
+import com.comitfy.healtie.userModule.repository.RoleRepository;
 import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class UserMapper implements BaseMapper<UserDTO, UserRequestDTO, User> {
 
     @Autowired
     UserInfoService userService;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Override
     public UserDTO entityToDTO(User entity) {
@@ -35,11 +42,22 @@ public class UserMapper implements BaseMapper<UserDTO, UserRequestDTO, User> {
         userDTO.setLikedCount(userService.getLikeCountByUser(entity.getUuid()));
         userDTO.setSavedCount(userService.getSaveCountByUser(entity.getUuid()));
         userDTO.setGenderEnum(entity.getGenderEnum());
-       userDTO.setAgeRangeEnum(entity.getAgeRangeEnum());
+        userDTO.setAgeRangeEnum(entity.getAgeRangeEnum());
 
         if (entity.getArticleList() != null) {
             userDTO.setArticleCount(entity.getArticleList().size());
         }
+
+     /*   Set<RoleDTO> roleDTOS = new HashSet<>();
+        for (Role role : entity.getRoles()) {
+
+            RoleDTO roleDTO = new RoleDTO();
+            roleDTO.setName(role.getName());
+            roleDTO.setUuid(role.getUuid());
+            roleDTOS.add(roleDTO);
+        }
+
+      */
         return userDTO;
     }
 
@@ -65,6 +83,7 @@ public class UserMapper implements BaseMapper<UserDTO, UserRequestDTO, User> {
         user.setGenderEnum(dto.getGenderEnum());
         user.setUsername(dto.getEmail());
         //user.setPhotoLink(dto.getPhotoLink());
+        user.setRoles(new HashSet<>());
 
         return user;
     }

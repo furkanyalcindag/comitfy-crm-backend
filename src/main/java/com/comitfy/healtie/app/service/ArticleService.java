@@ -85,7 +85,7 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
 
         if (doctor != null) {
 
-            PageDTO<ArticleDTO> pageDTO = getMapper().pageEntityToPageDTO(getRepository().findAllByUser(pageable, doctor.get().getUser(), languageEnum));
+            PageDTO<ArticleDTO> pageDTO = getMapper().pageEntityToPageDTO(getRepository().findAllByUserAndLanguageEnum(pageable, doctor.get().getUser(), languageEnum));
             for (int i = 0; i < pageDTO.getData().size(); i++) {
 
                 pageDTO.getData().get(i).setLikeCount(getRepository().getCountOfArticleLike(pageDTO.getData().get(i).getUuid()));

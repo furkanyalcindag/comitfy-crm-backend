@@ -47,6 +47,7 @@ public class AcademicInfoMapper implements BaseMapper<AcademicInfoDTO, AcademicI
         academicInfo.setStartYear(dto.getStartYear());
         academicInfo.setGraduateYear(dto.getGraduateYear());
         academicInfo.setProfession(dto.getProfession());
+        academicInfo.setUuid(dto.getUuid());
 
         return academicInfo;
 

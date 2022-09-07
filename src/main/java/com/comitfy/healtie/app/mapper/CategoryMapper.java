@@ -1,11 +1,15 @@
 package com.comitfy.healtie.app.mapper;
 
 import com.comitfy.healtie.app.dto.CategoryDTO;
+import com.comitfy.healtie.app.dto.TagDTO;
 import com.comitfy.healtie.app.dto.requestDTO.CategoryRequestDTO;
 import com.comitfy.healtie.app.entity.Category;
+import com.comitfy.healtie.app.entity.Tag;
 import com.comitfy.healtie.app.repository.ArticleRepository;
 import com.comitfy.healtie.app.repository.CategoryRepository;
 import com.comitfy.healtie.app.service.CategoryService;
+import com.comitfy.healtie.userModule.dto.RoleDTO;
+import com.comitfy.healtie.userModule.entity.Role;
 import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +41,19 @@ public class CategoryMapper implements BaseMapper<CategoryDTO, CategoryRequestDT
     /*    if (entity.getArticleList() != null) {
             categoryDTO.setArticleCount(entity.getArticleList().size());
         }*/
+
+        Set<CategoryDTO> categoryDTOS = new HashSet<>();
+        for (Category category : entity.getParent()) {
+
+            CategoryDTO categoryDTO1 = new CategoryDTO();
+            categoryDTO1.setName(category.getName());
+            categoryDTO1.setUuid(category.getUuid());
+            categoryDTOS.add(categoryDTO1);
+
+        }
+        categoryDTO.setParentList(categoryDTOS);
+
+
         if (entity.getArticleList() != null) {
             categoryDTO.setArticleCount(articleRepository.getCountOfArticleByCategory(entity.getUuid()));
         }
@@ -49,6 +66,7 @@ public class CategoryMapper implements BaseMapper<CategoryDTO, CategoryRequestDT
         Category category = new Category();
         category.setName(dto.getName());
         category.setLanguageEnum(dto.getLanguageEnum());
+        category.setUuid(dto.getUuid());
         for (CategoryDTO categoryDTO : dto.getParentList()) {
             Category category1 = new Category();
             category1.setName(categoryDTO.getName());

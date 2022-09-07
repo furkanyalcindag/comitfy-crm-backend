@@ -5,6 +5,9 @@ import com.comitfy.healtie.app.model.enums.GenderEnum;
 import com.comitfy.healtie.util.common.BaseDTO;
 import lombok.Data;
 
+import java.util.List;
+import java.util.UUID;
+
 @Data
 public class UserRequestDTO extends BaseDTO {
 

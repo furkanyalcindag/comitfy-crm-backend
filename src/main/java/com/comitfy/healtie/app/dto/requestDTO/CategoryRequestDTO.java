@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.dto.requestDTO;
 
+import com.comitfy.healtie.app.dto.CategoryDTO;
 import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.util.common.BaseDTO;
