@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 public class ArticleDTO extends BaseDTO {
@@ -21,6 +22,8 @@ public class ArticleDTO extends BaseDTO {
     private boolean isSave = Boolean.FALSE;
 
     private Set<TagDTO> tags;
+    private Set<CategoryDTO> categoryList;
+    private Set<CategoryDTOForArticle> categoryListForArticle;
 
     private long commentCount;
 
