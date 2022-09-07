@@ -5,6 +5,7 @@ import com.comitfy.healtie.app.dto.requestDTO.ExperienceRequestDTO;
 import com.comitfy.healtie.app.entity.Doctor;
 import com.comitfy.healtie.app.entity.Experience;
 import com.comitfy.healtie.app.mapper.ExperienceMapper;
+import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.app.repository.ExperienceRepository;
 import com.comitfy.healtie.app.service.DoctorService;
 import com.comitfy.healtie.app.service.ExperienceService;
@@ -53,6 +54,7 @@ public class ExperienceController extends BaseCrudController<ExperienceDTO, Expe
                                                              @RequestBody ExperienceRequestDTO experienceRequestDTO) {
         User user = helperService.getUserFromSession();
         if (user != null) {
+            experienceRequestDTO.setLanguageEnum(LanguageEnum.valueOf(experienceRequestDTO.getLanguage()));
             return new ResponseEntity<>(experienceService.saveExperienceByDoctor(user, experienceRequestDTO), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -78,6 +80,7 @@ public class ExperienceController extends BaseCrudController<ExperienceDTO, Expe
         if (experienceDTO == null || user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
         } else {
+            dto.setLanguageEnum(LanguageEnum.valueOf(dto.getLanguage()));
             experienceService.updateExperience(experienceId, dto, user);
             return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
         }

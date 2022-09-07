@@ -5,6 +5,7 @@ import com.comitfy.healtie.app.dto.requestDTO.CertificateRequestDTO;
 import com.comitfy.healtie.app.entity.Certificate;
 import com.comitfy.healtie.app.entity.Doctor;
 import com.comitfy.healtie.app.mapper.CertificateMapper;
+import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.app.repository.CertificateRepository;
 import com.comitfy.healtie.app.repository.DoctorRepository;
 import com.comitfy.healtie.app.service.CertificateService;
@@ -55,7 +56,9 @@ public class CertificateController extends BaseCrudController<CertificateDTO, Ce
                                                               @RequestBody CertificateRequestDTO certificateRequestDTO) {
         User user = helperService.getUserFromSession();
         if (user != null) {
+            certificateRequestDTO.setLanguageEnum(LanguageEnum.valueOf(certificateRequestDTO.getLanguage()));
             return new ResponseEntity<>(certificateService.saveCertificateByDoctor(user, certificateRequestDTO), HttpStatus.OK);
+
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -79,6 +82,7 @@ public class CertificateController extends BaseCrudController<CertificateDTO, Ce
         if (certificateDTO == null || user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
         } else {
+            dto.setLanguageEnum(LanguageEnum.valueOf(dto.getLanguage()));
             certificateService.updateCertificate(certificateId, dto, user);
             return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
         }
