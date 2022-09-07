@@ -1,17 +1,22 @@
 package com.comitfy.healtie.app.service;
 
+import com.comitfy.healtie.app.dto.AcademicInfoDTO;
 import com.comitfy.healtie.app.dto.NotificationDTO;
-import com.comitfy.healtie.app.dto.requestDTO.CategoryRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.NotificationRequestDTO;
-import com.comitfy.healtie.app.entity.Category;
+import com.comitfy.healtie.app.entity.Doctor;
 import com.comitfy.healtie.app.entity.Notification;
 import com.comitfy.healtie.app.mapper.NotificationMapper;
+import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.app.repository.NotificationRepository;
 import com.comitfy.healtie.app.specification.NotificationSpecification;
 import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.userModule.repository.UserRepository;
+import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -57,4 +62,16 @@ public class NotificationService extends BaseService<NotificationDTO, Notificati
             return null;
         }
     }
+
+    public PageDTO<NotificationDTO> getNotificationByUser(int page, int size, User user, LanguageEnum languageEnum) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
+
+
+        return getMapper().pageEntityToPageDTO(getRepository().findAll(pageable));
+
+    }
+
+
+
 }

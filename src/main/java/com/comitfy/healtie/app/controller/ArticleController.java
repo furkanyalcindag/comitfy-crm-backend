@@ -80,6 +80,7 @@ public class ArticleController extends BaseWithMultiLanguageCrudController<Artic
         User user = helperService.getUserFromSession();
         if (user != null) {
             {
+                articleRequestDTO.setLanguageEnum(LanguageEnum.valueOf(articleRequestDTO.getLanguage()));
                 return new ResponseEntity<>(articleService.saveArticleByUser(user.getUuid(), articleRequestDTO), HttpStatus.OK);
             }
         } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -92,6 +93,7 @@ public class ArticleController extends BaseWithMultiLanguageCrudController<Artic
                                                        @PathVariable UUID articleId, @RequestBody ArticleLikeRequestDTO articleLikeRequestDTO) {
         Article article = articleService.findEntityByUUID(articleId);
         User user = helperService.getUserFromSession();
+        articleLikeRequestDTO.setLanguageEnum(LanguageEnum.valueOf(articleLikeRequestDTO.getLanguage()));
         articleService.likeOrDislikeArticle(articleLikeRequestDTO, article, user);
         return new ResponseEntity<>("Başarılı", HttpStatus.OK);
     }
@@ -101,6 +103,7 @@ public class ArticleController extends BaseWithMultiLanguageCrudController<Artic
                                                        @PathVariable UUID articleId, @RequestBody ArticleSaveRequestDTO articleSaveRequestDTO) {
         Article article = articleService.findEntityByUUID(articleId);
         User user = helperService.getUserFromSession();
+        articleSaveRequestDTO.setLanguageEnum(LanguageEnum.valueOf(articleSaveRequestDTO.getLanguage()));
         articleService.saveOrNotSaveArticle(articleSaveRequestDTO, article, user);
         return new ResponseEntity<>("Başarılı", HttpStatus.OK);
     }

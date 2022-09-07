@@ -51,7 +51,7 @@ public class CategoryController extends BaseWithMultiLanguageCrudController<Cate
         if (optional == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(categoryService.getCategoryById(categoryId, pageNumber, pageSize, LanguageEnum.valueOf(language)), HttpStatus.OK);
+            return new ResponseEntity<>(getService().getCategoryById(categoryId, pageNumber, pageSize, LanguageEnum.valueOf(language)), HttpStatus.OK);
         }
     }
 
@@ -63,17 +63,30 @@ public class CategoryController extends BaseWithMultiLanguageCrudController<Cate
             return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
         } else {
             categoryService.updateCategory(categoryId, dto, user);
+            dto.setLanguageEnum(LanguageEnum.valueOf(categoryDTO.getLanguage()));
             return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
         }
 
     }
+    /*
     @PostMapping("/user-api")
     public ResponseEntity<CategoryRequestDTO> saveByUserId(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
                                                           @RequestBody CategoryRequestDTO categoryRequestDTO) {
         User user = helperService.getUserFromSession();
         if (user != null) {
             {
-                return new ResponseEntity<>(categoryService.saveCategoryByUser(user.getUuid(), categoryRequestDTO), HttpStatus.OK);
+                return new ResponseEntity<>(categoryService.saveCategoryByUser(user.getUuid(), categoryRequestDTO,LanguageEnum.valueOf(acceptLanguage)), HttpStatus.OK);
+            }
+        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    */
+    @PostMapping("/user-api")
+    public ResponseEntity<CategoryDTO> saveByUserId(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
+                                                           @RequestBody CategoryRequestDTO categoryDTO) {
+        User user = helperService.getUserFromSession();
+        if (user != null) {
+            {  categoryDTO.setLanguageEnum(LanguageEnum.valueOf(categoryDTO.getLanguage()));
+                return new ResponseEntity<>(getService().saveCategoryByUser(user,categoryDTO,LanguageEnum.valueOf(acceptLanguage)),HttpStatus.OK);
             }
         } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

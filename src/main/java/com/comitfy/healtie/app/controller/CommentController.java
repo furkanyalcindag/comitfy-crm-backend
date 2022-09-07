@@ -56,6 +56,7 @@ public class CommentController extends BaseCrudController<CommentDTO, CommentReq
         Article article = articleService.findEntityByUUID(articleId);
         User user = helperService.getUserFromSession();
         if (user != null) {
+            commentRequestDTO.setLanguageEnum(LanguageEnum.valueOf(commentRequestDTO.getLanguage()));
             return new ResponseEntity<>(commentService.saveCommentByArticle(articleId, commentRequestDTO, article, user), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -67,6 +68,7 @@ public class CommentController extends BaseCrudController<CommentDTO, CommentReq
                                                        @PathVariable UUID commentId, @RequestBody CommentLikeRequestDTO commentLikeRequestDTO) {
         Comment comment = commentService.findEntityByUUID(commentId);
         User user = helperService.getUserFromSession();
+        commentLikeRequestDTO.setLanguageEnum(LanguageEnum.valueOf(commentLikeRequestDTO.getLanguage()));
         commentService.likeOrDislikeComment(commentLikeRequestDTO, comment, user);
         return new ResponseEntity<>("Başarılı", HttpStatus.OK);
     }

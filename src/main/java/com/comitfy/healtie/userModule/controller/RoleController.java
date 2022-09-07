@@ -9,9 +9,12 @@ import com.comitfy.healtie.userModule.service.RoleService;
 import com.comitfy.healtie.userModule.specification.RoleSpecification;
 import com.comitfy.healtie.util.common.BaseCrudController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+
+@RequestMapping("user-api/role")
 public class RoleController extends BaseCrudController<RoleDTO, RoleRequestDTO, Role, RoleRepository, RoleMapper, RoleSpecification, RoleService> {
 
     @Autowired

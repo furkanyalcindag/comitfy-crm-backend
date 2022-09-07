@@ -82,16 +82,40 @@ public class CategoryService extends BaseWithMultiLanguageService<CategoryDTO, C
         }
 
     }
-    public CategoryRequestDTO saveCategoryByUser(UUID id, CategoryRequestDTO dto) {
+    /*
+    public CategoryDTO saveCategoryByUserr(UUID id, CategoryRequestDTO dto,LanguageEnum languageEnum) {
         Optional<User> user = userRepository.findByUuid(id);
         if (user.isPresent()) {
             Category category = getMapper().requestDTOToEntity(dto);
+            categoryRepository.save(category);
+            return getMapper().entityToDTO(category);
+        } else {
+            return null;
+        }
+    }
+*/
+/*
 
+    public CategoryRequestDTO saveCategoryByUser(User user, CategoryRequestDTO dto,LanguageEnum languageEnum) {
+
+        if (user!=null) {
+            Category category = getMapper().requestDTOToEntity(dto);
             categoryRepository.save(category);
             return dto;
         } else {
             return null;
         }
     }
+*/
+public CategoryDTO saveCategoryByUser(User user, CategoryRequestDTO dto,LanguageEnum languageEnum) {
+
+    if (user!=null) {
+        Category category = getMapper().requestDTOToEntity(dto);
+        categoryRepository.save(category);
+        return getMapper().entityToDTO(category);
+    } else {
+        return null;
+    }
+}
 
 }

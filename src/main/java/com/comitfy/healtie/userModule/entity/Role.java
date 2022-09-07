@@ -1,6 +1,7 @@
 package com.comitfy.healtie.userModule.entity;
 
 
+import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.util.dbUtil.BaseEntity;
 import lombok.Data;
 
@@ -21,6 +22,7 @@ public class Role extends BaseEntity {
 
     @ManyToMany
     private Set<User> users;
+
 
     public Role() {
 
