@@ -88,7 +88,7 @@ public class CategoryController extends BaseWithMultiLanguageCrudController<Cate
             {  categoryDTO.setLanguageEnum(LanguageEnum.valueOf(categoryDTO.getLanguage()));
                 return new ResponseEntity<>(getService().saveCategoryByUser(user,categoryDTO,LanguageEnum.valueOf(acceptLanguage)),HttpStatus.OK);
             }
-        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
 

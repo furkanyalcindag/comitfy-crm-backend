@@ -3,8 +3,10 @@ package com.comitfy.healtie.app.service;
 import com.comitfy.healtie.app.dto.CategoryDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ArticleRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.CategoryRequestDTO;
+import com.comitfy.healtie.app.dto.requestDTO.DoctorBranchRequestDTO;
 import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Category;
+import com.comitfy.healtie.app.entity.Doctor;
 import com.comitfy.healtie.app.mapper.CategoryMapper;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.app.repository.ArticleRepository;
@@ -76,6 +78,7 @@ public class CategoryService extends BaseWithMultiLanguageService<CategoryDTO, C
             Category category1 = categoryMapper.requestDTOToExistEntity(category.get(), dto);
             category1.setName(dto.getName());
             category1.setTop(dto.isTop());
+            categoryRepository.save(category1);
             return dto;
         } else {
             return null;
