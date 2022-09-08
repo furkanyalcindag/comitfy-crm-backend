@@ -1,6 +1,8 @@
 package com.comitfy.healtie.app.mapper;
 
 import com.comitfy.healtie.app.dto.ArticleDTO;
+import com.comitfy.healtie.app.dto.CategoryDTO;
+import com.comitfy.healtie.app.dto.CategoryDTOForArticle;
 import com.comitfy.healtie.app.dto.TagDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ArticleRequestDTO;
 import com.comitfy.healtie.app.entity.Article;
@@ -41,6 +43,7 @@ public class ArticleMapper implements BaseMapper<ArticleDTO, ArticleRequestDTO, 
         articleDTO.setDescription(entity.getDescription());
         articleDTO.setTitle(entity.getTitle());
         articleDTO.setPublishedDate(entity.getPublishedDate());
+
         ;
         // articleDTO.setAuthor(entity.getAuthor());
         if (entity.getUserSaves() != null) {
@@ -69,6 +72,17 @@ public class ArticleMapper implements BaseMapper<ArticleDTO, ArticleRequestDTO, 
         }
 
         articleDTO.setTags(tagDTOS);
+
+        Set<CategoryDTOForArticle> categoryDTOS=new HashSet<>();
+        for (Category category:entity.getCategoryList())
+        {
+            CategoryDTOForArticle categoryDTO=new CategoryDTOForArticle();
+            categoryDTO.setName(category.getName());
+            categoryDTO.setUuid(category.getUuid());
+            categoryDTOS.add(categoryDTO);
+        }
+        articleDTO.setCategoryListForArticle(categoryDTOS);
+
         articleDTO.setUuid(entity.getUuid());
         articleDTO.setLanguage(entity.getLanguageEnum().name());
         return articleDTO;
