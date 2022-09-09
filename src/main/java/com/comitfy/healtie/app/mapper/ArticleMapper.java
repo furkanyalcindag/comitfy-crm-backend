@@ -164,6 +164,13 @@ public class ArticleMapper implements BaseMapper<ArticleDTO, ArticleRequestDTO, 
             }
             tags.add(tag);
         }
+        article.setCategoryList(new HashSet<>());
+        for (UUID uuid : dto.getCategoryList()) {
+            Optional<Category> category1 = categoryRepository.findByUuid(uuid);
+
+            category1.ifPresent(value -> article.getCategoryList().add(value));
+
+        }
 
         return article;
     }
