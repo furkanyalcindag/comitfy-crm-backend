@@ -1,5 +1,6 @@
 package com.comitfy.healtie.userModule.controller;
 
+import com.comitfy.healtie.app.dto.requestDTO.ArticleRequestDTO;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.userModule.dto.UserDTO;
 import com.comitfy.healtie.userModule.dto.requestDTO.UserRequestDTO;
@@ -66,5 +67,18 @@ public class UserController extends BaseCrudController<UserDTO, UserRequestDTO, 
 
         return new ResponseEntity<>(pageDTO, HttpStatus.OK);
     }
+    @PostMapping("/user-api")
+    public ResponseEntity<UserRequestDTO> saveByUser(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
+                                                          @RequestBody UserRequestDTO userRequestDTO) {
+        //UserDTO optional = userService.findByUUID(userId);
+        User user = helperService.getUserFromSession();
+        if (user != null) {
+            {
+                userRequestDTO.setLanguageEnum(LanguageEnum.valueOf(userRequestDTO.getLanguage()));
+                return new ResponseEntity<>(userService.saveUserByUser(user.getUuid(), userRequestDTO), HttpStatus.OK);
+            }
+        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
 
 }
