@@ -1,6 +1,8 @@
 package com.comitfy.healtie.userModule.service;
 
 import com.comitfy.healtie.app.dto.ArticleDTO;
+import com.comitfy.healtie.app.dto.requestDTO.ArticleRequestDTO;
+import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Category;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.userModule.dto.UserDTO;
@@ -84,5 +86,14 @@ public class UserService extends BaseService<UserDTO, UserRequestDTO, User, User
             return null;
         }
     }
-
+    public UserRequestDTO saveUserByUser(UUID id, UserRequestDTO dto) {
+        Optional<User> user = userRepository.findByUuid(id);
+        if (user.isPresent()) {
+            User user1 = getMapper().requestDTOToEntity(dto);
+            userRepository.save(user1);
+            return dto;
+        } else {
+            return null;
+        }
+    }
 }
