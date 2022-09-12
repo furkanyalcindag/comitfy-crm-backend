@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -87,6 +88,16 @@ public class AcademicInfoService extends BaseService<AcademicInfoDTO, AcademicIn
             return null;
         }
     }
+    public PageDTO<AcademicInfoDTO> getAcademicInfoByUser(User user, int page, int size) {
+        Optional<Doctor> doctor = doctorRepository.findByUser(user);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("graduateYear")));
+        if (user!= null) {
+            return getMapper().pageEntityToPageDTO(academicInfoRepository.findAllByDoctor(pageable, doctor.get()));
+        } else {
+            return null;
+        }
+    }
+
 
 }
 

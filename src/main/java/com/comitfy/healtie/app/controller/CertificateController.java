@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.controller;
 
+import com.comitfy.healtie.app.dto.AcademicInfoDTO;
 import com.comitfy.healtie.app.dto.CertificateDTO;
 import com.comitfy.healtie.app.dto.requestDTO.CertificateRequestDTO;
 import com.comitfy.healtie.app.entity.Certificate;
@@ -85,6 +86,17 @@ public class CertificateController extends BaseCrudController<CertificateDTO, Ce
             dto.setLanguageEnum(LanguageEnum.valueOf(dto.getLanguage()));
             certificateService.updateCertificate(certificateId, dto, user);
             return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
+        }
+    }
+    @GetMapping("doctor/user-api")
+    public ResponseEntity<PageDTO<CertificateDTO>> getByUser(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
+                                                                  @RequestParam int pageNumber, @RequestParam int pageSize) {
+        User user=helperService.getUserFromSession();
+
+        if (user==null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(certificateService.getCertificateByUser(user,pageNumber,pageSize), HttpStatus.OK);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.controller;
 
+import com.comitfy.healtie.app.dto.AcademicInfoDTO;
 import com.comitfy.healtie.app.dto.ExperienceDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ExperienceRequestDTO;
 import com.comitfy.healtie.app.entity.Doctor;
@@ -85,4 +86,16 @@ public class ExperienceController extends BaseCrudController<ExperienceDTO, Expe
             return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
         }
     }
+    @GetMapping("doctor/user-api")
+    public ResponseEntity<PageDTO<ExperienceDTO>> getByUser(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
+                                                              @RequestParam int pageNumber, @RequestParam int pageSize) {
+        User user=helperService.getUserFromSession();
+
+        if (user==null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(experienceService.getExperienceByUser(user,pageNumber,pageSize), HttpStatus.OK);
+        }
+    }
+
 }
