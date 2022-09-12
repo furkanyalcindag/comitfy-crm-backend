@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.service;
 
+import com.comitfy.healtie.app.dto.AcademicInfoDTO;
 import com.comitfy.healtie.app.dto.CertificateDTO;
 import com.comitfy.healtie.app.dto.requestDTO.CertificateRequestDTO;
 import com.comitfy.healtie.app.entity.Certificate;
@@ -87,4 +88,14 @@ public class CertificateService extends BaseService<CertificateDTO, CertificateR
             return null;
         }
     }
+    public PageDTO<CertificateDTO> getCertificateByUser(User user, int page, int size) {
+        Optional<Doctor> doctor = doctorRepository.findByUser(user);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("takenDate")));
+        if (user!= null) {
+            return getMapper().pageEntityToPageDTO(certificateRepository.findAllByDoctor(pageable, doctor.get()));
+        } else {
+            return null;
+        }
+    }
+
 }

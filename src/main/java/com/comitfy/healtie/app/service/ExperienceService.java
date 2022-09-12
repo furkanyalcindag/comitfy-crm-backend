@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.service;
 
+import com.comitfy.healtie.app.dto.CertificateDTO;
 import com.comitfy.healtie.app.dto.ExperienceDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ExperienceRequestDTO;
 import com.comitfy.healtie.app.entity.Certificate;
@@ -86,6 +87,16 @@ public class ExperienceService extends BaseService<ExperienceDTO, ExperienceRequ
             experienceRepository.save(experience1);
 
             return dto;
+        } else {
+            return null;
+        }
+    }
+
+    public PageDTO<ExperienceDTO> getExperienceByUser(User user, int page, int size) {
+        Optional<Doctor> doctor = doctorRepository.findByUser(user);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("takenDate")));
+        if (user!= null) {
+            return getMapper().pageEntityToPageDTO(experienceRepository.findAllByDoctor(pageable, doctor.get()));
         } else {
             return null;
         }
