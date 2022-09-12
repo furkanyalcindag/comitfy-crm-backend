@@ -52,6 +52,7 @@ public class DoctorMapper implements BaseMapper<DoctorDTO, DoctorRequestDTO, Doc
         doctorDTO.setAbout(entity.getAbout());
         doctorDTO.setLanguageEnum(entity.getLanguageEnum());
         doctorDTO.setArticleLikeCount(userInfoService.getLikeCountOfArticleByUser(entity.getUser().getUuid()));
+        doctorDTO.setUuid(entity.getUuid());
 
 
         doctorDTO.setFirstName(entity.getUser().getFirstName());

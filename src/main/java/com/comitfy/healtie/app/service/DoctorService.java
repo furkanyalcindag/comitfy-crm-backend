@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.service;
 
+import com.comitfy.healtie.app.dto.AcademicInfoDTO;
 import com.comitfy.healtie.app.dto.DoctorDTO;
 import com.comitfy.healtie.app.dto.requestDTO.*;
 import com.comitfy.healtie.app.entity.Doctor;
@@ -8,6 +9,7 @@ import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.app.repository.ArticleRepository;
 import com.comitfy.healtie.app.repository.DoctorRepository;
 import com.comitfy.healtie.app.specification.DoctorSpecification;
+import com.comitfy.healtie.userModule.dto.UserDTO;
 import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseService;
@@ -157,6 +159,14 @@ public class DoctorService extends BaseService<DoctorDTO, DoctorRequestDTO, Doct
 
         } else {
 
+            return null;
+        }
+    }
+    public DoctorDTO getDoctorByUser(User user) {
+        Optional<Doctor> doctor = doctorRepository.findByUser(user);
+        if (doctor.isPresent()) {
+            return getMapper().entityToDTO(doctor.get());
+        } else {
             return null;
         }
     }
