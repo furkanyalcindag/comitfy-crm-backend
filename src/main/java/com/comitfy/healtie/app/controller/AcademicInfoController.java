@@ -89,6 +89,18 @@ public class AcademicInfoController extends BaseCrudController<AcademicInfoDTO, 
         }
     }
 
+    @GetMapping("doctor/user-api")
+    public ResponseEntity<PageDTO<AcademicInfoDTO>> getByUser(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
+                                                                  @RequestParam int pageNumber, @RequestParam int pageSize) {
+        User user=helperService.getUserFromSession();
+
+        if (user==null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(academicInfoService.getAcademicInfoByUser(user,pageNumber,pageSize), HttpStatus.OK);
+        }
+    }
+
 }
 
 
