@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.controller;
 
+import antlr.Token;
 import com.comitfy.healtie.app.dto.DoctorDTO;
 import com.comitfy.healtie.app.dto.requestDTO.*;
 import com.comitfy.healtie.app.entity.Doctor;
@@ -9,6 +10,8 @@ import com.comitfy.healtie.app.repository.DoctorRepository;
 import com.comitfy.healtie.app.service.DoctorProfileClickService;
 import com.comitfy.healtie.app.service.DoctorService;
 import com.comitfy.healtie.app.specification.DoctorSpecification;
+import com.comitfy.healtie.userModule.dto.UserDTO;
+import com.comitfy.healtie.userModule.dto.requestDTO.UserRequestDTO;
 import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseCrudController;
@@ -158,5 +161,13 @@ public class DoctorController extends BaseCrudController<DoctorDTO, DoctorReques
             return new ResponseEntity<>("The object was updated", HttpStatus.OK);
         }
     }
+
+    @GetMapping("/user-api/")
+    public ResponseEntity<DoctorDTO> getDoctorInfoFromSession(){
+      User user=helperService.getUserFromSession();
+      DoctorDTO doctorDTO=doctorService.getDoctorByUser(user);
+      return new ResponseEntity<>(doctorDTO,HttpStatus.OK);
+        }
+
 
 }
