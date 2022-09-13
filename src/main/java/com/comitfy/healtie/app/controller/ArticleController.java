@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.controller;
 
+import com.comitfy.healtie.app.dto.AcademicInfoDTO;
 import com.comitfy.healtie.app.dto.ArticleDTO;
 import com.comitfy.healtie.app.dto.requestDTO.*;
 import com.comitfy.healtie.app.entity.Article;
@@ -142,6 +143,18 @@ public class ArticleController extends BaseWithMultiLanguageCrudController<Artic
             articleClickService.save(articleClickRequestDTO);
 
             return new ResponseEntity<>(optionalT, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/user-api")
+    public ResponseEntity<PageDTO<ArticleDTO>> getByUser(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
+                                                              @RequestParam int pageNumber, @RequestParam int pageSize) {
+        User user=helperService.getUserFromSession();
+
+        if (user==null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(articleService.getArticleByUser(user,pageNumber,pageSize), HttpStatus.OK);
         }
     }
 
