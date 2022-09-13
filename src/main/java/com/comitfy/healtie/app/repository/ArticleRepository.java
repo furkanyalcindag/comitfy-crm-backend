@@ -3,6 +3,7 @@ package com.comitfy.healtie.app.repository;
 import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Category;
 import com.comitfy.healtie.app.entity.Doctor;
+import com.comitfy.healtie.app.entity.Experience;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.util.common.BaseWithMultiLanguageRepository;
@@ -19,9 +20,9 @@ public interface ArticleRepository extends BaseWithMultiLanguageRepository<Artic
 
 
     Page<Article> findAllByUserAndLanguageEnum(Pageable pageable, User user,LanguageEnum languageEnum);
+    Page<Article> findAllByUser(Pageable pageable, User user);
 
     Page<Article> findAllByCategoryListInAndLanguageEnum(Pageable pageable, Set<Category> category, LanguageEnum languageEnum);
-
 
     @Query("SELECT COUNT(likes) FROM Article article " +
             "inner join article.userLikes likes  WHERE article.uuid=?1")

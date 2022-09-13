@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.service;
 
+import com.comitfy.healtie.app.dto.AcademicInfoDTO;
 import com.comitfy.healtie.app.dto.ArticleDTO;
 import com.comitfy.healtie.app.dto.requestDTO.AcademicInfoRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ArticleLikeRequestDTO;
@@ -102,8 +103,6 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
         }
     }
 
-
-
     public ArticleRequestDTO saveArticleByUser(UUID id, ArticleRequestDTO dto) {
         Optional<User> user = userRepository.findByUuid(id);
         if (user.isPresent()) {
@@ -203,6 +202,16 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
 
     }
 
+    public PageDTO<ArticleDTO> getArticleByUser(User user, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
+        if (user!= null) {
+            return getMapper().pageEntityToPageDTO(articleRepository.findAllByUser(pageable,user));
+        } else
+            return null;
+    }
+
+
+
     @Override
     public PageDTO<ArticleDTO> findAll(BaseFilterRequestDTO filterRequestDTO, LanguageEnum languageEnum) {
         Pageable pageable = PageRequest.of(filterRequestDTO.getPageNumber(), filterRequestDTO.getPageSize(), Sort.by(Sort.Order.desc("id")));
@@ -236,6 +245,5 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
         return pageDTO;
 
     }
-
 
 }
