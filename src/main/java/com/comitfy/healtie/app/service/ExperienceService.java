@@ -94,7 +94,7 @@ public class ExperienceService extends BaseService<ExperienceDTO, ExperienceRequ
 
     public PageDTO<ExperienceDTO> getExperienceByUser(User user, int page, int size) {
         Optional<Doctor> doctor = doctorRepository.findByUser(user);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("takenDate")));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("endDate")));
         if (user!= null) {
             return getMapper().pageEntityToPageDTO(experienceRepository.findAllByDoctor(pageable, doctor.get()));
         } else {
