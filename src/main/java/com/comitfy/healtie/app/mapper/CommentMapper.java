@@ -1,8 +1,12 @@
 package com.comitfy.healtie.app.mapper;
 
+import com.comitfy.healtie.app.dto.CategoryDTOForArticle;
 import com.comitfy.healtie.app.dto.CommentDTO;
+import com.comitfy.healtie.app.dto.TagDTO;
 import com.comitfy.healtie.app.dto.requestDTO.CommentRequestDTO;
+import com.comitfy.healtie.app.entity.Category;
 import com.comitfy.healtie.app.entity.Comment;
+import com.comitfy.healtie.app.entity.Tag;
 import com.comitfy.healtie.app.repository.CommentRepository;
 import com.comitfy.healtie.app.service.CommentService;
 import com.comitfy.healtie.util.PageDTO;
@@ -12,7 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class CommentMapper implements BaseMapper<CommentDTO, CommentRequestDTO, Comment> {
@@ -31,6 +37,7 @@ public class CommentMapper implements BaseMapper<CommentDTO, CommentRequestDTO, 
         commentDTO.setCreationDateTime(entity.getCreationDate());
 
 
+
         if (entity.getUserLikes() != null) {
             commentDTO.setLikeCount(entity.getUserLikes().size());
         }
@@ -40,7 +47,6 @@ public class CommentMapper implements BaseMapper<CommentDTO, CommentRequestDTO, 
    /*     if (entity.getParent() == null) {
             commentDTO.setReplyCount(entity.getArticle().getCommentList().size()-1);
         }*/
-
         return commentDTO;
     }
 
