@@ -60,7 +60,7 @@ public class DoctorMapper implements BaseMapper<DoctorDTO, DoctorRequestDTO, Doc
         doctorDTO.setEmail(entity.getUser().getEmail());
         doctorDTO.setGenderEnum(entity.getUser().getGenderEnum());
         doctorDTO.setAgeRangeEnum(entity.getUser().getAgeRangeEnum());
-        doctorDTO.setPhone(entity.getUser().getPhotoLink());
+        doctorDTO.setProfileImage(entity.getUser().getPhotoLink());
         doctorDTO.setUserName(entity.getUser().getEmail());
 
 
@@ -169,6 +169,7 @@ public class DoctorMapper implements BaseMapper<DoctorDTO, DoctorRequestDTO, Doc
     }
 
     public Doctor requestDTOToExistEntityForPhone(Doctor doctor, DoctorPhoneRequestDTO dto) {
+      //  doctor.setUuid(dto.getUuid());
         doctor.setPhone(dto.getPhone());
         return doctor;
 
