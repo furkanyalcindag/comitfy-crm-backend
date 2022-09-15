@@ -1,5 +1,7 @@
 package com.comitfy.healtie.app.service;
 
+import com.comitfy.healtie.app.dto.requestDTO.DoctorProfileImageRequestDTO;
+import com.comitfy.healtie.app.entity.Doctor;
 import com.comitfy.healtie.app.repository.DoctorRepository;
 import com.comitfy.healtie.userModule.dto.UserDTO;
 import com.comitfy.healtie.userModule.dto.requestDTO.UserAgeRangeRequestDTO;
@@ -76,10 +78,10 @@ public class UserInfoService {
         }
     }
 
-    public UserNameRequestDTO updateName(UUID id, UserNameRequestDTO dto) {
-        Optional<User> user = userRepository.findByUuid(id);
-        if (user.isPresent()) {
-            User user1 = userMapper.requestDTOToExistEntityforName(user.get(), dto);
+    public UserNameRequestDTO updateName(UserNameRequestDTO dto,User user) {
+
+        if (user!=null) {
+            User user1 = userMapper.requestDTOToExistEntityforName(user, dto);
             user1.setFirstName(dto.getFirstName());
             user1.setLastName(dto.getLastName());
 
@@ -90,4 +92,5 @@ public class UserInfoService {
             return null;
         }
     }
+
 }

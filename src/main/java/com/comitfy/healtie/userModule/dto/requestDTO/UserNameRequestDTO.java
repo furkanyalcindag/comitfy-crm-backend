@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 public class UserNameRequestDTO extends BaseDTO {
 
-    private String userName;
     private String firstName;
     private String lastName;
 

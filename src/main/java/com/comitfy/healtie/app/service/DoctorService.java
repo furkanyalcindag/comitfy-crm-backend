@@ -84,7 +84,7 @@ public class DoctorService extends BaseService<DoctorDTO, DoctorRequestDTO, Doct
         Optional<Doctor> doctor = doctorRepository.findByUser(user);
         if (doctor.isPresent()) {
             Doctor doctor1 = doctorMapper.requestDTOToExistEntityForAddress(doctor.get(), dto);
-            doctor1.setAddress(dto.getAddress());
+          //  doctor1.setAddress(dto.getAddress());
             doctorRepository.save(doctor1);
             return dto;
 
