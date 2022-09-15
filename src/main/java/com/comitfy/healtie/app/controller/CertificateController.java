@@ -57,7 +57,7 @@ public class CertificateController extends BaseCrudController<CertificateDTO, Ce
                                                               @RequestBody CertificateRequestDTO certificateRequestDTO) {
         User user = helperService.getUserFromSession();
         if (user != null) {
-            certificateRequestDTO.setLanguageEnum(LanguageEnum.valueOf(certificateRequestDTO.getLanguage()));
+         //   certificateRequestDTO.setLanguageEnum(LanguageEnum.valueOf(certificateRequestDTO.getLanguage()));
             return new ResponseEntity<>(certificateService.saveCertificateByDoctor(user, certificateRequestDTO), HttpStatus.OK);
 
         } else {
@@ -83,7 +83,6 @@ public class CertificateController extends BaseCrudController<CertificateDTO, Ce
         if (certificateDTO == null || user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
         } else {
-            dto.setLanguageEnum(LanguageEnum.valueOf(dto.getLanguage()));
             certificateService.updateCertificate(certificateId, dto, user);
             return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
         }

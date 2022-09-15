@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.controller;
 
+import com.comitfy.healtie.app.dto.requestDTO.DoctorProfileImageRequestDTO;
 import com.comitfy.healtie.app.service.UserInfoService;
 import com.comitfy.healtie.userModule.dto.UserDTO;
 import com.comitfy.healtie.userModule.dto.requestDTO.UserAgeRangeRequestDTO;
@@ -63,19 +64,18 @@ public class UserInfoController {
         }
     }
 
-    @PutMapping("/name-update/{id}")
+    @PutMapping("/name-update")
     public ResponseEntity<String> updateName(@RequestBody UserNameRequestDTO dto) {
         User user = helperService.getUserFromSession();
-        UserDTO userDTO = userService.findByUUID(user.getUuid());
-        if (userDTO == null) {
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
         } else {
-            // dto.setGenderEnum(user.getGenderEnum());
-            userService.updateName(user.getUuid(), dto);
-            return new ResponseEntity<>("Object with the id " + user.getUuid() + " was updated.", HttpStatus.OK);
 
+            userService.updateName(dto,user);
+            return new ResponseEntity<>("Object was updated.", HttpStatus.OK);
 
         }
     }
+
 
 }
