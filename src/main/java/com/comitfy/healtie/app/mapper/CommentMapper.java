@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.mapper;
 
+import com.comitfy.healtie.app.dto.CategoryDTO;
 import com.comitfy.healtie.app.dto.CategoryDTOForArticle;
 import com.comitfy.healtie.app.dto.CommentDTO;
 import com.comitfy.healtie.app.dto.TagDTO;
@@ -36,6 +37,7 @@ public class CommentMapper implements BaseMapper<CommentDTO, CommentRequestDTO, 
         commentDTO.setUuid(entity.getUuid());
         commentDTO.setCreationDateTime(entity.getCreationDate());
 
+        
 
 
         if (entity.getUserLikes() != null) {

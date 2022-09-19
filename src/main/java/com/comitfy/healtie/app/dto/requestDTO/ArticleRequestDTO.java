@@ -23,9 +23,10 @@ public class ArticleRequestDTO extends BaseDTO {
     private String title;
     private LocalDate publishedDate;
 
-    private Set<TagDTO> tags;
+   // private Set<TagDTO> tags;
     @JsonIgnore
     private LanguageEnum languageEnum;
 
     private List<UUID> categoryList;
+    private List<UUID> tagList;
 }
