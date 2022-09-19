@@ -25,10 +25,10 @@ public abstract class BaseWithMultiLanguageService<DTO extends BaseDTO, RequestD
 
 
         if (filterRequestDTO.getLanguage() != null) {
-            SearchCriteria sc = new SearchCriteria("languageEnum", "=", "", LanguageEnum.valueOf(filterRequestDTO.getLanguage()));
+            SearchCriteria sc = new SearchCriteria("languageEnum", "lang", "", LanguageEnum.valueOf(filterRequestDTO.getLanguage()));
             filterRequestDTO.getFilters().add(sc);
         } else {
-            SearchCriteria sc = new SearchCriteria("languageEnum", "=", "", languageEnum);
+            SearchCriteria sc = new SearchCriteria("languageEnum", "lang", "", languageEnum);
             filterRequestDTO.getFilters().add(sc);
 
         }
