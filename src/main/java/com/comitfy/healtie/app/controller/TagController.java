@@ -12,6 +12,7 @@ import com.comitfy.healtie.app.service.TagService;
 import com.comitfy.healtie.app.specification.TagSpecification;
 import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.util.common.BaseCrudController;
+import com.comitfy.healtie.util.common.BaseWithMultiLanguageCrudController;
 import com.comitfy.healtie.util.common.HelperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("tag")
-public class TagController extends BaseCrudController<TagDTO, TagRequestDTO, Tag, TagRepository, TagMapper, TagSpecification, TagService> {
+public class TagController extends BaseWithMultiLanguageCrudController<TagDTO, TagRequestDTO, Tag, TagRepository, TagMapper, TagSpecification, TagService> {
 
     @Autowired
     TagService tagService;
@@ -44,7 +45,7 @@ public class TagController extends BaseCrudController<TagDTO, TagRequestDTO, Tag
     }
 
     @PostMapping("/user-api")
-    public ResponseEntity<TagRequestDTO> saveByUserId(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
+    public ResponseEntity<TagRequestDTO> saveByUser(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
                                                            @RequestBody TagRequestDTO tagRequestDTO) {
         User user = helperService.getUserFromSession();
         if (user != null) {
