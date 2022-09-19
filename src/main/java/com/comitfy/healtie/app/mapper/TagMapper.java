@@ -6,8 +6,10 @@ import com.comitfy.healtie.app.dto.requestDTO.SettingsRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.TagRequestDTO;
 import com.comitfy.healtie.app.entity.Settings;
 import com.comitfy.healtie.app.entity.Tag;
+import com.comitfy.healtie.app.repository.ArticleRepository;
 import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +19,18 @@ import java.util.List;
 @Component
 public class TagMapper implements BaseMapper<TagDTO, TagRequestDTO, Tag> {
 
+    @Autowired
+    ArticleRepository articleRepository;
+
     @Override
     public TagDTO entityToDTO(Tag entity) {
         TagDTO tagDTO = new TagDTO();
         tagDTO.setName(entity.getName());
         tagDTO.setUuid(entity.getUuid());
+        tagDTO.setLanguage(entity.getLanguageEnum().name());
+        if (entity.getArticleList() != null) {
+            tagDTO.setArticleCount(articleRepository.getCountOfArticleByTag(entity.getUuid()));
+        }
         return tagDTO;
     }
 
@@ -29,6 +38,9 @@ public class TagMapper implements BaseMapper<TagDTO, TagRequestDTO, Tag> {
     public Tag dtoToEntity(TagDTO dto) {
         Tag tag = new Tag();
         tag.setName(dto.getName());
+        tag.setUuid(dto.getUuid());
+        tag.setLanguageEnum(dto.getLanguageEnum());
+
         return tag;
     }
 
@@ -36,6 +48,7 @@ public class TagMapper implements BaseMapper<TagDTO, TagRequestDTO, Tag> {
     public Tag requestDTOToEntity(TagRequestDTO dto) {
         Tag tag = new Tag();
         tag.setName(dto.getName());
+        tag.setLanguageEnum(dto.getLanguageEnum());
         return tag;
 
     }
@@ -43,6 +56,7 @@ public class TagMapper implements BaseMapper<TagDTO, TagRequestDTO, Tag> {
     @Override
     public Tag requestDTOToExistEntity(Tag entity, TagRequestDTO dto) {
         entity.setName(dto.getName());
+        entity.setLanguageEnum(dto.getLanguageEnum());
         return entity;
     }
 

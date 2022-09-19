@@ -158,5 +158,16 @@ public class ArticleController extends BaseWithMultiLanguageCrudController<Artic
         }
     }
 
+    @GetMapping("get-all-by-tag/{tagId}")
+    public ResponseEntity<PageDTO<ArticleDTO>> getByTagId(@RequestHeader(value = "accept-language", required = true) String language,
+                                                               @PathVariable UUID tagId, @RequestParam int pageNumber, @RequestParam int pageSize) {
+        PageDTO<ArticleDTO> pageDTO = articleService.getArticleByTag(tagId, pageNumber, pageSize, LanguageEnum.valueOf(language));
+
+        return new ResponseEntity<>(pageDTO, HttpStatus.OK);
+
+    }
+
+
+
 
 }

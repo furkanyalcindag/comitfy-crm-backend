@@ -1,21 +1,16 @@
 package com.comitfy.healtie.app.service;
 
-import com.comitfy.healtie.app.dto.AcademicInfoDTO;
 import com.comitfy.healtie.app.dto.ArticleDTO;
-import com.comitfy.healtie.app.dto.requestDTO.AcademicInfoRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ArticleLikeRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ArticleRequestDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ArticleSaveRequestDTO;
-import com.comitfy.healtie.app.entity.AcademicInfo;
 import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Category;
 import com.comitfy.healtie.app.entity.Doctor;
+import com.comitfy.healtie.app.entity.Tag;
 import com.comitfy.healtie.app.mapper.ArticleMapper;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
-import com.comitfy.healtie.app.repository.ArticleRepository;
-import com.comitfy.healtie.app.repository.CategoryRepository;
-import com.comitfy.healtie.app.repository.CommentRepository;
-import com.comitfy.healtie.app.repository.DoctorRepository;
+import com.comitfy.healtie.app.repository.*;
 import com.comitfy.healtie.app.specification.ArticleSpecification;
 import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.userModule.repository.UserRepository;
@@ -59,9 +54,11 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
     @Autowired
     DoctorService doctorService;
 
-
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    TagRepository tagRepository;
 
     @Override
     public ArticleRepository getRepository() {
@@ -79,7 +76,6 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
     }
 
 
-
     public PageDTO<ArticleDTO> getArticleByDoctor(UUID id, int page, int size, LanguageEnum languageEnum) {
         Optional<Doctor> doctor = doctorRepository.findByUuid(id);
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
@@ -92,8 +88,8 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
                 pageDTO.getData().get(i).setLikeCount(getRepository().getCountOfArticleLike(pageDTO.getData().get(i).getUuid()));
                 pageDTO.getData().get(i).setSaveCount(getRepository().getCountOfArticleSave(pageDTO.getData().get(i).getUuid()));
                 pageDTO.getData().get(i).setCommentCount(getRepository().getCountOfComment(pageDTO.getData().get(i).getUuid()));
-                pageDTO.getData().get(i).setLike(isLikedArticleByUser( pageDTO.getData().get(i).getUuid(), id));
-                pageDTO.getData().get(i).setSave(isSavedArticleByUser( pageDTO.getData().get(i).getUuid(), id));
+                pageDTO.getData().get(i).setLike(isLikedArticleByUser(pageDTO.getData().get(i).getUuid(), id));
+                pageDTO.getData().get(i).setSave(isSavedArticleByUser(pageDTO.getData().get(i).getUuid(), id));
             }
 
 
@@ -148,7 +144,7 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
         }
     }
 
-    public PageDTO<ArticleDTO> getSavedArticleByUser(int page, int size, User user,LanguageEnum languageEnum) {
+    public PageDTO<ArticleDTO> getSavedArticleByUser(int page, int size, User user, LanguageEnum languageEnum) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
 
@@ -164,11 +160,11 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
 
     }
 
-    public PageDTO<ArticleDTO> getLikedArticleByUser(int page, int size, User user,LanguageEnum languageEnum) {
+    public PageDTO<ArticleDTO> getLikedArticleByUser(int page, int size, User user, LanguageEnum languageEnum) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
 
-      //  PageDTO<ArticleDTO> pageDTO = getMapper().pageEntityToPageDTO(getRepository().findAllByUser(pageable, user,languageEnum));
+        //  PageDTO<ArticleDTO> pageDTO = getMapper().pageEntityToPageDTO(getRepository().findAllByUser(pageable, user,languageEnum));
         PageDTO<ArticleDTO> pageDTO = getMapper().pageEntityToPageDTO(getRepository().getLikedArticleOfUser(pageable, user.getUuid()));
 
         for (ArticleDTO articleDTO : pageDTO.getData()) {
@@ -204,12 +200,11 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
 
     public PageDTO<ArticleDTO> getArticleByUser(User user, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
-        if (user!= null) {
-            return getMapper().pageEntityToPageDTO(articleRepository.findAllByUser(pageable,user));
+        if (user != null) {
+            return getMapper().pageEntityToPageDTO(articleRepository.findAllByUser(pageable, user));
         } else
             return null;
     }
-
 
 
     @Override
@@ -245,5 +240,18 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
         return pageDTO;
 
     }
+
+    public PageDTO<ArticleDTO> getArticleByTag(UUID id, int page, int size, LanguageEnum languageEnum) {
+        Optional<Tag> tag = tagRepository.findByUuid(id);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
+        if (tag.isPresent()) {
+            Set<Tag> tagSet = new HashSet<>();
+            tagSet.add(tag.get());
+            return getMapper().pageEntityToPageDTO(articleRepository.findAllByTagsInAndLanguageEnum(pageable, tagSet, languageEnum));
+        } else {
+            return null;
+        }
+    }
+
 
 }
