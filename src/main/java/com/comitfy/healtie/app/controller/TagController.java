@@ -64,8 +64,8 @@ public class TagController extends BaseWithMultiLanguageCrudController<TagDTO, T
         if (tagDTO == null || user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
         } else {
+            dto.setLanguageEnum(LanguageEnum.valueOf(tagDTO.getLanguage()));
             tagService.updateTag(tagId, dto, user);
-              dto.setLanguageEnum(LanguageEnum.valueOf(tagDTO.getLanguage()));
             return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
         }
 

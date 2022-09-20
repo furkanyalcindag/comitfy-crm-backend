@@ -56,28 +56,31 @@ public class CategoryController extends BaseWithMultiLanguageCrudController<Cate
     }
 
     @PutMapping("/user-api/{categoryId}")
-    public ResponseEntity<String> updateCategory(@PathVariable UUID categoryId, @RequestBody CategoryRequestDTO dto) {
+    public ResponseEntity<String> updateCategory(@RequestHeader(value = "accept-language", required = true) String acceptLanguage, @PathVariable UUID categoryId, @RequestBody CategoryRequestDTO dto) {
         User user = helperService.getUserFromSession();
         CategoryDTO categoryDTO = categoryService.findByUUID(categoryId);
         if (categoryDTO == null || user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
         } else {
+            dto.setLanguageEnum(LanguageEnum.valueOf(acceptLanguage));
             categoryService.updateCategory(categoryId, dto, user);
-            dto.setLanguageEnum(LanguageEnum.valueOf(categoryDTO.getLanguage()));
             return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
         }
 
     }
     /*
-    @PostMapping("/user-api")
-    public ResponseEntity<CategoryRequestDTO> saveByUserId(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
-                                                          @RequestBody CategoryRequestDTO categoryRequestDTO) {
-        User user = helperService.getUserFromSession();
-        if (user != null) {
-            {
-                return new ResponseEntity<>(categoryService.saveCategoryByUser(user.getUuid(), categoryRequestDTO,LanguageEnum.valueOf(acceptLanguage)), HttpStatus.OK);
-            }
-        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@RequestHeader(value = "accept-language", required = true) String acceptLanguage, @PathVariable UUID id, @RequestBody RequestDTO body) {
+        DTO optional = getService().findByUUID(id);
+
+        if (optional == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
+        } else {
+            body.setLanguageEnum(LanguageEnum.valueOf(body.getLanguage()));
+            getService().update(id, body);
+            return new ResponseEntity<>("Object with the id " + id + " was updated.", HttpStatus.OK);
+        }
+
     }
     */
     @PostMapping("/user-api")
