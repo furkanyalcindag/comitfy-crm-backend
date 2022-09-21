@@ -3,8 +3,10 @@ package com.comitfy.healtie.app.service;
 import com.comitfy.healtie.app.dto.AcademicInfoDTO;
 import com.comitfy.healtie.app.dto.NotificationDTO;
 import com.comitfy.healtie.app.dto.requestDTO.NotificationRequestDTO;
+import com.comitfy.healtie.app.dto.requestDTO.SettingsRequestDTO;
 import com.comitfy.healtie.app.entity.Doctor;
 import com.comitfy.healtie.app.entity.Notification;
+import com.comitfy.healtie.app.entity.Settings;
 import com.comitfy.healtie.app.mapper.NotificationMapper;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.app.repository.NotificationRepository;
@@ -72,6 +74,24 @@ public class NotificationService extends BaseService<NotificationDTO, Notificati
 
     }
 
+    public NotificationRequestDTO updateNotification(UUID id, NotificationRequestDTO dto, User user) {
+        Optional<Notification> notification = notificationRepository.findByUuid(id);
+        if (notification.isPresent()) {
+            Notification notification1 = notificationMapper.requestDTOToExistEntity(notification.get(), dto);
+            notification1.setTitle(dto.getTitle());
+            notification1.setMessage(dto.getMessage());
+            notification1.setLink(dto.getLink());
+            notification1.setBase64(dto.getBase64());
+            notification1.setSend(dto.isSend());
+
+            notificationRepository.save(notification1);
+
+            return dto;
+        } else {
+            return null;
+        }
+
+    }
 
 
 }

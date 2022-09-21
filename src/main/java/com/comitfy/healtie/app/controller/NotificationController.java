@@ -1,7 +1,9 @@
 package com.comitfy.healtie.app.controller;
 
 import com.comitfy.healtie.app.dto.NotificationDTO;
+import com.comitfy.healtie.app.dto.SettingsDTO;
 import com.comitfy.healtie.app.dto.requestDTO.NotificationRequestDTO;
+import com.comitfy.healtie.app.dto.requestDTO.SettingsRequestDTO;
 import com.comitfy.healtie.app.entity.Notification;
 import com.comitfy.healtie.app.mapper.NotificationMapper;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("notification")
@@ -60,6 +64,21 @@ public class NotificationController extends BaseCrudController<NotificationDTO, 
         } else {
             return new ResponseEntity<>(notificationService.getNotificationByUser(pageNumber, pageSize, user, LanguageEnum.valueOf(language)), HttpStatus.OK);
         }
+    }
+
+    @PutMapping("/user-api/{notificationId}")
+    public ResponseEntity<String> updateNotification(@PathVariable UUID notificationId, @RequestBody NotificationRequestDTO dto) {
+        User user = helperService.getUserFromSession();
+        NotificationDTO notificationDTO=notificationService.findByUUID(notificationId);
+
+        if (notificationDTO == null || user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
+        } else {
+            notificationService.updateNotification(notificationId, dto, user);
+            //   dto.setLanguageEnum(LanguageEnum.valueOf(categoryDTO.getLanguage()));
+            return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
+        }
+
     }
 
 }
