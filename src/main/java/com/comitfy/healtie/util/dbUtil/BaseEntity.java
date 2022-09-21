@@ -1,7 +1,9 @@
 package com.comitfy.healtie.util.dbUtil;
 
+import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedBy;
@@ -39,6 +41,8 @@ public class BaseEntity {
 
     @LastModifiedBy
     private String lastModifiedBy;
+
+
 
 
     @PrePersist
