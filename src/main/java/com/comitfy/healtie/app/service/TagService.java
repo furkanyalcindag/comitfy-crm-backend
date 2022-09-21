@@ -15,6 +15,7 @@ import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.userModule.repository.UserRepository;
 import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseService;
+import com.comitfy.healtie.util.common.BaseWithMultiLanguageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class TagService extends BaseService<TagDTO, TagRequestDTO, Tag, TagRepository, TagMapper, TagSpecification> {
+public class TagService extends BaseWithMultiLanguageService<TagDTO, TagRequestDTO, Tag, TagRepository, TagMapper, TagSpecification> {
 
     @Autowired
     TagRepository tagRepository;

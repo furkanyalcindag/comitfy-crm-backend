@@ -35,7 +35,7 @@ public abstract class BaseSpecification<Entity extends BaseEntity> implements Sp
                         root.<String>get(criteria.getKey()), criteria.getValue().toString());
             } else if (criteria.getOperation().equalsIgnoreCase("lang")) {
                 predicate = builder.equal(
-                        root.<String>get(criteria.getKey()), LanguageEnum.valueOf((String) criteria.getValue()));
+                        root.<String>get(criteria.getKey()), LanguageEnum.valueOf(criteria.getValue().toString()));
             } else if (criteria.getOperation().equalsIgnoreCase("<")) {
                 predicate = builder.lessThanOrEqualTo(
                         root.<String>get(criteria.getKey()), criteria.getValue().toString());
