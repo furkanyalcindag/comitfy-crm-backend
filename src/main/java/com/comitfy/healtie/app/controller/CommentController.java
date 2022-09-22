@@ -50,7 +50,7 @@ public class CommentController extends BaseCrudController<CommentDTO, CommentReq
     }
 
     @PostMapping("/{articleId}")
-    public ResponseEntity<CommentRequestDTO> save(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
+    public ResponseEntity<CommentDTO> save(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
                                                   @PathVariable UUID articleId, @RequestBody CommentRequestDTO commentRequestDTO) {
 
         Article article = articleService.findEntityByUUID(articleId);
