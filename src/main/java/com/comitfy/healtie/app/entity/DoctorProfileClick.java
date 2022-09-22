@@ -10,7 +10,7 @@ import java.util.UUID;
 @Entity
 @Table
 @Data
-@AttributeOverride(name = "uuid", column = @Column(name = "article_click_uuid"))
+@AttributeOverride(name = "uuid", column = @Column(name = "doctor_click_uuid"))
 public class DoctorProfileClick extends BaseEntity {
 
     @Column

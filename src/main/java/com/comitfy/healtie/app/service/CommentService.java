@@ -54,14 +54,14 @@ public class CommentService extends BaseService<CommentDTO, CommentRequestDTO, C
     }
 
 
-    public CommentRequestDTO saveCommentByArticle(UUID id, CommentRequestDTO dto, Article article, User user) {
+    public CommentDTO saveCommentByArticle(UUID id, CommentRequestDTO dto, Article article, User user) {
         Optional<Article> article1 = articleRepository.findByUuid(id);
         if (article1.isPresent()) {
-            Comment comment = getMapper().requestDTOToEntity(dto);
+            Comment comment = commentMapper.requestDTOToEntity(dto);
             comment.setArticle(article1.get());
             comment.setUser(user);
             commentRepository.save(comment);
-            return dto;
+            return getMapper().entityToDTO(comment);
         } else {
             return null;
         }
@@ -76,11 +76,11 @@ public class CommentService extends BaseService<CommentDTO, CommentRequestDTO, C
         commentRepository.save(comment);
     }
 
-    public PageDTO<CommentDTO> getCommentByArticle(UUID id, int page, int size, LanguageEnum languageEnum) {
+   public PageDTO<CommentDTO> getCommentByArticle(UUID id, int page, int size, LanguageEnum languageEnum) {
         Optional<Article> article = articleRepository.findByUuid(id);
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
         if (article.isPresent()) {
-            PageDTO<CommentDTO> pageDTO = getMapper().pageEntityToPageDTO(getRepository().findAllByArticleOrderByIdDesc(pageable, article.get()));
+            PageDTO<CommentDTO> pageDTO = getMapper().pageEntityToPageDTO(getRepository().findAllByArticleAndParentIsNull(pageable, article.get()));
             for (int i = 0; i < pageDTO.getData().size(); i++) {
                 pageDTO.getData().get(i).setLikeCount(getRepository().getCountOfCommentLike(pageDTO.getData().get(i).getUuid()));
                 pageDTO.getData().get(i). setReplyCount(getRepository().getCountOfCommentByParent(pageDTO.getData().get(i).getUuid()));
@@ -91,6 +91,7 @@ public class CommentService extends BaseService<CommentDTO, CommentRequestDTO, C
         }
 
     }
+    //findAllByArticleOrderByIdDesc
 
 
     public PageDTO<CommentDTO> getCommentByParent(UUID id, int page, int size) {

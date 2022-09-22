@@ -3,6 +3,7 @@ package com.comitfy.healtie.userModule.entity;
 
 import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Category;
+import com.comitfy.healtie.app.entity.ChatRoom;
 import com.comitfy.healtie.app.entity.Notification;
 import com.comitfy.healtie.app.model.enums.AgeRangeEnum;
 import com.comitfy.healtie.app.model.enums.GenderEnum;
@@ -51,6 +52,8 @@ public class User extends BaseEntity {
     @ManyToMany
     private Set<Notification> notificationList;
 
+    @ManyToMany
+    private Set<ChatRoom> chatRoomSet;
 
 
 
