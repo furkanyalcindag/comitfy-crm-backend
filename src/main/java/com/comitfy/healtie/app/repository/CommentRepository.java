@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public interface CommentRepository extends BaseRepository<Comment> {
 
-    Page<Comment> findAllByArticleOrderByIdDesc(Pageable pageable, Article article);
+    Page<Comment> findAllByArticleAndParentIsNull(Pageable pageable, Article article);
 
     Page<Comment> findCommentByParent(Pageable pageable, Comment parent);
 
