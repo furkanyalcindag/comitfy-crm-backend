@@ -4,7 +4,11 @@ import com.comitfy.healtie.app.dto.ArticleDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ArticleRequestDTO;
 import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Category;
+import com.comitfy.healtie.app.entity.ChatRoom;
+import com.comitfy.healtie.app.entity.UserApplyChatRoom;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
+import com.comitfy.healtie.app.repository.ChatRoomRepository;
+import com.comitfy.healtie.app.repository.UserApplyChatRoomRepository;
 import com.comitfy.healtie.userModule.dto.UserDTO;
 import com.comitfy.healtie.userModule.dto.requestDTO.UserRequestDTO;
 import com.comitfy.healtie.userModule.entity.Role;
@@ -42,6 +46,12 @@ public class UserService extends BaseService<UserDTO, UserRequestDTO, User, User
     RoleRepository roleRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    ChatRoomRepository chatRoomRepository;
+
+    @Autowired
+    UserApplyChatRoomRepository userApplyChatRoomRepository;
 
     @Override
     public UserRepository getRepository() {
@@ -96,4 +106,31 @@ public class UserService extends BaseService<UserDTO, UserRequestDTO, User, User
             return null;
         }
     }
+
+/*    public PageDTO<UserDTO> getUserByChatRoom(UUID id, int page, int size,LanguageEnum languageEnum) {
+        Optional<ChatRoom> chatRoom = chatRoomRepository.findByUuid(id);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
+        if (chatRoom.isPresent()) {
+            Set<ChatRoom> chatRoomSet=new HashSet<>();
+            chatRoomSet.add(chatRoom.get());
+            return getMapper().pageEntityToPageDTO(userRepository.getUserByChatRoom(pageable,id));
+        } else {
+            return null;
+        }
+    }*/
+
+
+
+
+/*    public UserDTO saveUserByChatRoom(UUID id, UserRequestDTO dto) {
+        Optional<ChatRoom> chatRoom = chatRoomRepository.findByUuid(id);
+        if (chatRoom.isPresent()) {
+            User user = getMapper().requestDTOToEntity(dto);
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+            userRepository.save(user);
+            return getMapper().entityToDTO(user);
+        } else {
+            return null;
+        }
+    }*/
 }

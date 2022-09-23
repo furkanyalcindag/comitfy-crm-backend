@@ -19,10 +19,11 @@ public class ChatRoomMapper implements BaseMapper<ChatRoomDTO, ChatRoomRequestDT
         chatRoomDTO.setName(entity.getName());
         chatRoomDTO.setUserLimit(entity.getUserLimit());
         chatRoomDTO.setColorCode(entity.getColorCode());
-        chatRoomDTO.setApproved(entity.getApproved());
+       // chatRoomDTO.setApproved(entity.getApproved());
         chatRoomDTO.setStartTime(entity.getStartTime());
         chatRoomDTO.setEndTime(entity.getEndTime());
         chatRoomDTO.setLanguage(entity.getLanguageEnum().name());
+        chatRoomDTO.setChatRoomStatusEnum(entity.getChatRoomStatusEnum());
         chatRoomDTO.setDoctorUUID(entity.getDoctorUUID());
         chatRoomDTO.setUuid(entity.getUuid());
         return chatRoomDTO;
@@ -34,10 +35,11 @@ public class ChatRoomMapper implements BaseMapper<ChatRoomDTO, ChatRoomRequestDT
         chatRoom.setName(dto.getName());
         chatRoom.setUserLimit(dto.getUserLimit());
         chatRoom.setColorCode(dto.getColorCode());
-        chatRoom.setApproved(dto.getApproved());
+      //  chatRoom.setApproved(dto.getApproved());
         chatRoom.setStartTime(dto.getStartTime());
         chatRoom.setEndTime(dto.getEndTime());
         chatRoom.setLanguageEnum(dto.getLanguageEnum());
+        chatRoom.setChatRoomStatusEnum(dto.getChatRoomStatusEnum());
         chatRoom.setDoctorUUID(dto.getDoctorUUID());
         chatRoom.setUuid(dto.getUuid());
         return chatRoom;
@@ -49,10 +51,11 @@ public class ChatRoomMapper implements BaseMapper<ChatRoomDTO, ChatRoomRequestDT
         chatRoom.setName(dto.getName());
         chatRoom.setUserLimit(dto.getUserLimit());
         chatRoom.setColorCode(dto.getColorCode());
-        chatRoom.setApproved(dto.getApproved());
+       // chatRoom.setApproved(dto.getApproved());
         chatRoom.setStartTime(dto.getStartTime());
         chatRoom.setEndTime(dto.getEndTime());
         chatRoom.setLanguageEnum(dto.getLanguageEnum());
+        chatRoom.setChatRoomStatusEnum(dto.getChatRoomStatusEnum());
         chatRoom.setDoctorUUID(dto.getDoctorUUID());
         return chatRoom;
     }
@@ -62,10 +65,11 @@ public class ChatRoomMapper implements BaseMapper<ChatRoomDTO, ChatRoomRequestDT
         chatRoom.setName(dto.getName());
         chatRoom.setUserLimit(dto.getUserLimit());
         chatRoom.setColorCode(dto.getColorCode());
-        chatRoom.setApproved(dto.getApproved());
+       // chatRoom.setApproved(dto.getApproved());
         chatRoom.setStartTime(dto.getStartTime());
         chatRoom.setEndTime(dto.getEndTime());
         chatRoom.setLanguageEnum(dto.getLanguageEnum());
+        chatRoom.setChatRoomStatusEnum(dto.getChatRoomStatusEnum());
         chatRoom.setDoctorUUID(dto.getDoctorUUID());
         return chatRoom;
     }

@@ -22,6 +22,7 @@ public interface UserRepository extends BaseRepository<User> {
 
     Optional<User> findByEmail(String email);
 
+
     @Query("SELECT COUNT(article.uuid) from Article article" +
             " inner join article.userLikes likes  where likes.uuid=?1")
     long getLikeCountByUser(UUID userUUID);
@@ -31,9 +32,24 @@ public interface UserRepository extends BaseRepository<User> {
     long getSaveCountByUser(UUID userUUID);
 
 
-
     @Query("SELECT user FROM User user" +
             " inner join user.roles role WHERE role.uuid=?1")
-    Page<User> getUserByRole(Pageable pageable,UUID roleUUID);
+    Page<User> getUserByRole(Pageable pageable, UUID roleUUID);
+
+/*    @Query("SELECT userApply.userUuid FROM UserApplyChatRoom userApply " +
+            " WHERE  userApply.chatRoomUuid =?1")
+    Page<User> getUserByChatRoom(Pageable pageable, UUID userApplyUUID);*/
+
+
+
+
+
+
+/*    @Query("SELECT userApply.uuid FROM UserApplyChatRoom userApply " +
+            " WHERE userApply.chatRoomUuid=?1")
+    Page<User> getUserByChatRoom(Pageable pageable, UUID userApplyUUID);*/
+
+
+
 
 }

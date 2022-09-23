@@ -1,6 +1,8 @@
 package com.comitfy.healtie.userModule.mapper;
 
+import com.comitfy.healtie.app.dto.CategoryDTOForArticle;
 import com.comitfy.healtie.app.dto.ContractActiveDTO;
+import com.comitfy.healtie.app.entity.Category;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.userModule.dto.ContractDTO;
 import com.comitfy.healtie.userModule.dto.RoleDTO;
@@ -31,8 +33,8 @@ public class ContractMapper implements BaseMapper<ContractDTO, ContractRequestDT
         contractDTO.setActive(entity.getActivated());
         contractDTO.setRequired(entity.getRequired());
         contractDTO.setUuid(entity.getUuid());
-
         contractDTO.setLanguageEnum(entity.getLanguageEnum());
+
         Set<RoleDTO> roleDTOS=new HashSet<>();
         for (Role role:entity.getRoleList()){
             RoleDTO roleDTO=new RoleDTO();
@@ -41,6 +43,7 @@ public class ContractMapper implements BaseMapper<ContractDTO, ContractRequestDT
             roleDTOS.add(roleDTO);
         }
 
+        contractDTO.setRoleSet(roleDTOS);
         return contractDTO;
 
 
@@ -51,6 +54,7 @@ public class ContractMapper implements BaseMapper<ContractDTO, ContractRequestDT
         UserContractDTO userContractDTO = new UserContractDTO();
         userContractDTO.setUuid(entity.getUuid());
         userContractDTO.setContractUuid(entity.getUuid());
+
         return userContractDTO;
 
     }
@@ -62,6 +66,8 @@ public class ContractMapper implements BaseMapper<ContractDTO, ContractRequestDT
         contractDTO.setRequired(entity.getRequired());
         contractDTO.setActive(entity.getActivated());
         contractDTO.setUuid(entity.getUuid());
+        contractDTO.setLanguageEnum(entity.getLanguageEnum());
+
         Set<RoleDTO> roleDTOS=new HashSet<>();
         for (Role role:entity.getRoleList()){
             RoleDTO roleDTO=new RoleDTO();
@@ -69,7 +75,7 @@ public class ContractMapper implements BaseMapper<ContractDTO, ContractRequestDT
             roleDTO.setUuid(role.getUuid());
             roleDTOS.add(roleDTO);
         }
-
+        contractDTO.setRoleSet(roleDTOS);
 
         return contractDTO;
 

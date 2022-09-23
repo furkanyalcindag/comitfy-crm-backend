@@ -1,6 +1,9 @@
 package com.comitfy.healtie.userModule.service;
 
 import com.comitfy.healtie.app.dto.ContractActiveDTO;
+import com.comitfy.healtie.app.dto.TagDTO;
+import com.comitfy.healtie.app.dto.requestDTO.TagRequestDTO;
+import com.comitfy.healtie.app.entity.Tag;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.userModule.dto.ContractDTO;
 import com.comitfy.healtie.userModule.dto.requestDTO.ContractRequestDTO;
@@ -90,5 +93,22 @@ public class ContractService extends BaseService<ContractDTO, ContractRequestDTO
         }
     }
 
+    public ContractDTO updateContract(UUID id, ContractRequestDTO dto, User user) {
+        Optional<Contract> contract = contractRepository.findByUuid(id);
+        if (contract.isPresent()) {
+            Contract contract1=contractMapper.requestDTOToExistEntity(contract.get(),dto);
+            contract1.setKey(dto.getKey());
+            contract1.setTitle(dto.getTitle());
+            contract1.setContent(dto.getContent());
+            contract1.setActivated(dto.isActive());
+            contract1.setRequired(dto.isRequired());
+            contractRepository.save(contract1);
+
+            return contractMapper.entityToDTO(contract1);
+        } else {
+            return null;
+        }
+
+    }
 
 }
