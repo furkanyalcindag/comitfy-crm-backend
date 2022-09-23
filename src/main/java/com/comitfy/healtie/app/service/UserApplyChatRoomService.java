@@ -59,14 +59,14 @@ public class UserApplyChatRoomService extends BaseService<UserApplyChatRoomDTO, 
                 UserApplyChatRoom userApplyChatRoom = getMapper().requestDTOToEntity(dto);
                 userApplyChatRoom.setUserUuid(user.getUuid());
                 userApplyChatRoom.setChatRoomUuid(chatRoomUUID);
-                userApplyChatRoom.setApproved(true);
+                userApplyChatRoom.setApproved(Boolean.TRUE);
                 userApplyChatRoomRepository.save(userApplyChatRoom);
                 return getMapper().entityToDTO(userApplyChatRoom);
             } else {
                 UserApplyChatRoom userApplyChatRoom = getMapper().requestDTOToEntity(dto);
                 userApplyChatRoom.setUserUuid(user.getUuid());
                 userApplyChatRoom.setChatRoomUuid(chatRoomUUID);
-                userApplyChatRoom.setApproved(false);
+                userApplyChatRoom.setApproved(Boolean.FALSE);
                 userApplyChatRoomRepository.save(userApplyChatRoom);
                 return getMapper().entityToDTO(userApplyChatRoom);
             }

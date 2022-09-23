@@ -123,6 +123,12 @@ public class ContractMapper implements BaseMapper<ContractDTO, ContractRequestDT
         contract.setRequired(dto.isRequired());
         contract.setLanguageEnum(LanguageEnum.valueOf(dto.getLanguage()));
 
+        contract.setRoleList(new HashSet<>());
+        for (UUID uuid:dto.getRoleList()){
+            Optional<Role> role=roleRepository.findByUuid(uuid);
+            role.ifPresent(value->contract.getRoleList().add(value));
+        }
+
         return contract;
     }
 
