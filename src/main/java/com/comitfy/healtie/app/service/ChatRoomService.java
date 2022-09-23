@@ -75,13 +75,15 @@ public class ChatRoomService extends BaseWithMultiLanguageService<ChatRoomDTO, C
 
     }
 
+/*
     public PageDTO<ChatRoomDTO> getApprovedTrueByUser(int page, int size,User user){
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
 
-        return getMapper().pageEntityToPageDTO(chatRoomRepository.getApprovedHighlightsOfUser(pageable, user));
+        return getMapper().pageEntityToPageDTO(chatRoomRepository.getApprovedChatRoomOfUser(pageable, user));
 
     }
+*/
 
 
 }

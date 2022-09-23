@@ -68,6 +68,7 @@ public class ChatRoomController extends BaseWithMultiLanguageCrudController<Chat
 
     }
 
+/*
     @GetMapping("/approved-user-api/")
     public ResponseEntity<PageDTO<ChatRoomDTO>> getApprovedTrueByUser(@RequestParam int pageNumber, @RequestParam int pageSize) {
         User user = helperService.getUserFromSession();
@@ -76,5 +77,6 @@ public class ChatRoomController extends BaseWithMultiLanguageCrudController<Chat
             return new ResponseEntity<>(dtoList, HttpStatus.OK);
         } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+*/
 
 }
