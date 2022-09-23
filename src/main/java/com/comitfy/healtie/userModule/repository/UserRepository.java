@@ -36,9 +36,9 @@ public interface UserRepository extends BaseRepository<User> {
             " inner join user.roles role WHERE role.uuid=?1")
     Page<User> getUserByRole(Pageable pageable, UUID roleUUID);
 
-/*    @Query("SELECT userApply.userUuid FROM UserApplyChatRoom userApply " +
+    @Query("SELECT userApply.userUuid FROM UserApplyChatRoom userApply " +
             " WHERE  userApply.chatRoomUuid =?1")
-    Page<User> getUserByChatRoom(Pageable pageable, UUID userApplyUUID);*/
+    Page<User> getUserByChatRoom(Pageable pageable, UUID userApplyUUID);
 
 
 
