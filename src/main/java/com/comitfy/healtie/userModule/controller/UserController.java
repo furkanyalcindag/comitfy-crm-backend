@@ -80,5 +80,30 @@ public class UserController extends BaseCrudController<UserDTO, UserRequestDTO, 
         } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+/*    @GetMapping("get-all-by-chat-room/{chatRoomId}")
+    public ResponseEntity<PageDTO<UserDTO>> getByChatRoomId(@RequestHeader(value = "accept-language", required = true) String language,
+                                                        @PathVariable UUID chatRoomId, @RequestParam int pageNumber, @RequestParam int pageSize) {
+        PageDTO<UserDTO> pageDTO = userService.getUserByChatRoom(chatRoomId, pageNumber, pageSize, LanguageEnum.valueOf(language));
+
+        return new ResponseEntity<>(pageDTO, HttpStatus.OK);
+    }
+    */
+
+
+
+/*
+    @PostMapping("/{chatRoomId}")
+    public ResponseEntity<UserDTO> saveByChatRoom(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
+                                                     @RequestBody UserRequestDTO userRequestDTO, @PathVariable UUID chatRoomId) {
+        User user = helperService.getUserFromSession();
+        if (user != null) {
+            {
+                return new ResponseEntity<>(userService.saveUserByChatRoom(chatRoomId, userRequestDTO), HttpStatus.OK);
+            }
+        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+*/
+
+
 
 }

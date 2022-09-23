@@ -1,6 +1,8 @@
 package com.comitfy.healtie.app.entity;
 
+import com.comitfy.healtie.app.model.enums.ChatRoomStatusEnum;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
+import com.comitfy.healtie.commercial.model.enums.PaymentStatusEnum;
 import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.util.dbUtil.BaseEntity;
 import lombok.Data;
@@ -32,8 +34,8 @@ public class ChatRoom extends BaseEntity {
     @Column
     private String colorCode;
 
-    @Column
-    private Boolean approved;
+ /*   @Column
+    private Boolean approved;*/
 
     @Column
     private LocalDateTime startTime;
@@ -49,8 +51,10 @@ public class ChatRoom extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LanguageEnum languageEnum;
 
-    @ManyToMany
-    private Set<User> userList;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ChatRoomStatusEnum chatRoomStatusEnum;
+
 
 
 }

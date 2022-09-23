@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.dto.requestDTO;
 
+import com.comitfy.healtie.app.model.enums.ChatRoomStatusEnum;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.util.common.BaseDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +19,7 @@ public class ChatRoomRequestDTO extends BaseDTO {
 
     private String colorCode;
 
-    private Boolean approved;
+    //private Boolean approved;
 
     private LocalDateTime startTime;
 
@@ -28,6 +29,9 @@ public class ChatRoomRequestDTO extends BaseDTO {
 
     @JsonIgnore
     private LanguageEnum languageEnum;
+
+
+    private ChatRoomStatusEnum chatRoomStatusEnum;
 
 
 }

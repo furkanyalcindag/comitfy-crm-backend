@@ -1,6 +1,8 @@
 package com.comitfy.healtie.userModule.controller;
 
 import com.comitfy.healtie.app.dto.ContractActiveDTO;
+import com.comitfy.healtie.app.dto.TagDTO;
+import com.comitfy.healtie.app.dto.requestDTO.TagRequestDTO;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.userModule.dto.ContractDTO;
 import com.comitfy.healtie.userModule.dto.requestDTO.ContractRequestDTO;
@@ -66,4 +68,18 @@ public class ContractController extends BaseCrudController<ContractDTO, Contract
         return new ResponseEntity<>(pageDTO, HttpStatus.OK);
     }
 
+    @PutMapping("/user-api/{contractId}")
+    public ResponseEntity<String> updateContract(@PathVariable UUID contractId, @RequestBody ContractRequestDTO dto) {
+        User user = helperService.getUserFromSession();
+        ContractDTO contractDTO=contractService.findByUUID(contractId);
+
+        if (contractDTO == null || user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
+        } else {
+           // dto.setLanguageEnum(LanguageEnum.valueOf(contractDTO.getLanguage()));
+            contractService.updateContract(contractId, dto, user);
+            return new ResponseEntity<>("The object was updated.", HttpStatus.OK);
+        }
+
+    }
 }

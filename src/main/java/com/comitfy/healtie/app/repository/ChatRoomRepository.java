@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatRoomRepository extends BaseWithMultiLanguageRepository<ChatRoom> {
 
-    @Query("SELECT c FROM ChatRoom c" +
+/*    @Query("SELECT c FROM ChatRoom c" +
             " WHERE c.approved = true")
-    Page<ChatRoom> getApprovedHighlightsOfUser(Pageable pageable, User user);
+    Page<ChatRoom> getApprovedChatRoomOfUser(Pageable pageable, User user);*/
 }
