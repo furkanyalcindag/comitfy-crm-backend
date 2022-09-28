@@ -3,13 +3,17 @@ package com.comitfy.healtie.app.mapper;
 import com.comitfy.healtie.app.dto.ChatRoomDTO;
 import com.comitfy.healtie.app.dto.requestDTO.ChatRoomRequestDTO;
 import com.comitfy.healtie.app.entity.ChatRoom;
+import com.comitfy.healtie.userModule.entity.Role;
+import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.util.PageDTO;
 import com.comitfy.healtie.util.common.BaseMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class ChatRoomMapper implements BaseMapper<ChatRoomDTO, ChatRoomRequestDTO, ChatRoom> {
@@ -26,6 +30,11 @@ public class ChatRoomMapper implements BaseMapper<ChatRoomDTO, ChatRoomRequestDT
         chatRoomDTO.setChatRoomStatusEnum(entity.getChatRoomStatusEnum());
         chatRoomDTO.setDoctorUUID(entity.getDoctorUUID());
         chatRoomDTO.setUuid(entity.getUuid());
+
+        if (entity.getUser() != null) {
+            chatRoomDTO.setUserCount(entity.getUser().stream().count());
+        }
+
         return chatRoomDTO;
     }
 

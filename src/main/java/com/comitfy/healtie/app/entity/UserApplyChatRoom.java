@@ -1,13 +1,12 @@
 package com.comitfy.healtie.app.entity;
 
+import com.comitfy.healtie.userModule.entity.User;
 import com.comitfy.healtie.util.dbUtil.BaseEntity;
 import lombok.Data;
+import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -24,5 +23,9 @@ public class UserApplyChatRoom extends BaseEntity {
     private UUID chatRoomUuid;
 
     @Column
-    private boolean approved;
+    private Boolean approved;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn()
+    private User user;
 }

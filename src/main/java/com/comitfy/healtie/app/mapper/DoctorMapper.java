@@ -126,6 +126,7 @@ public class DoctorMapper implements BaseMapper<DoctorDTO, DoctorRequestDTO, Doc
         doctor.setDiplomaNo(dto.getDiplomaNo());
         doctor.setAddress(dto.getAddress());
         doctor.setPhone(dto.getPhone());
+        doctor.setTitle(dto.getTitle());
         doctor.setBranch(dto.getBranch());
         doctor.setAbout(dto.getAbout());
         doctor.setClinicName(dto.getClinicName());

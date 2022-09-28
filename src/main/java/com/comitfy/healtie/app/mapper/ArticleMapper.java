@@ -63,7 +63,7 @@ public class ArticleMapper implements BaseMapper<ArticleDTO, ArticleRequestDTO, 
 
 
         Set<TagDTOForArticle> tagDTOS = new HashSet<>();
-        for (Tag tag : entity.getTags()) {
+        for (Tag tag : entity.getTagList()) {
 
             TagDTOForArticle tagDTO = new TagDTOForArticle();
             tagDTO.setName(tag.getName());
@@ -96,8 +96,8 @@ public class ArticleMapper implements BaseMapper<ArticleDTO, ArticleRequestDTO, 
         article.setPublishedDate(dto.getPublishedDate());
         article.setLanguageEnum(LanguageEnum.valueOf(dto.getLanguage()));
         article.setLanguageEnum(dto.getLanguageEnum());
-        Set<Tag> tags = new HashSet<>();
-/*        for (TagDTO tagDTO : dto.getTags()) {
+/*        Set<Tag> tags = new HashSet<>();
+       for (TagDTO tagDTO : dto.getTags()) {
 
             Tag tag = new Tag();
             tag.setName(tagDTO.getName());
@@ -116,27 +116,11 @@ public class ArticleMapper implements BaseMapper<ArticleDTO, ArticleRequestDTO, 
         article.setPublishedDate(dto.getPublishedDate());
         article.setLanguageEnum(LanguageEnum.valueOf(dto.getLanguage()));
 
-/*        Set<Tag> tags = new HashSet<>();
-        for (TagDTO tagDTO : dto.getTags()) {
 
-            Optional<Tag> optional = tagRepository.findByNameEquals(tagDTO.getName());
-            Tag tag;
-            if (optional.isPresent()) {
-                tag = optional.get();
-            } else {
-                tag = new Tag();
-                tag.setName(tagDTO.getName());
-                tagRepository.save(tag);
-            }
-            tags.add(tag);
-        }
-
-        article.setTags(tags);*/
-
-        article.setTags(new HashSet<>());
+        article.setTagList(new HashSet<>());
         for (UUID uuid : dto.getTagList()) {
             Optional<Tag> tag = tagRepository.findByUuid(uuid);
-            tag.ifPresent(value -> article.getTags().add(value));
+            tag.ifPresent(value -> article.getTagList().add(value));
         }
 
 
@@ -171,10 +155,10 @@ public class ArticleMapper implements BaseMapper<ArticleDTO, ArticleRequestDTO, 
             tags.add(tag);
         }*/
 
-        article.setTags(new HashSet<>());
+        article.setTagList(new HashSet<>());
         for (UUID uuid : dto.getTagList()) {
             Optional<Tag> tag = tagRepository.findByUuid(uuid);
-            tag.ifPresent(value -> article.getTags().add(value));
+            tag.ifPresent(value -> article.getTagList().add(value));
         }
 
 

@@ -10,4 +10,5 @@ public class UserApplyChatRoomDTO extends BaseDTO {
     private UUID userUUID;
     private UUID chatRoomUUID;
     private boolean approved;
+//    private String userName;
 }

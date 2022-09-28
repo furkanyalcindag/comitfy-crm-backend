@@ -6,6 +6,7 @@ import com.comitfy.healtie.util.common.BaseDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -30,5 +31,7 @@ public class ChatRoomDTO extends BaseDTO {
     private ChatRoomStatusEnum chatRoomStatusEnum;
 
     private Long messageCount;
+
+    private Long userCount;
 
 }

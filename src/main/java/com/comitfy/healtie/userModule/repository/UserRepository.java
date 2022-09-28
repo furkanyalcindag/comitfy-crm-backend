@@ -4,6 +4,7 @@ package com.comitfy.healtie.userModule.repository;
 import com.comitfy.healtie.app.entity.Article;
 import com.comitfy.healtie.app.entity.Category;
 import com.comitfy.healtie.app.entity.Comment;
+import com.comitfy.healtie.app.entity.UserApplyChatRoom;
 import com.comitfy.healtie.app.model.enums.LanguageEnum;
 import com.comitfy.healtie.userModule.entity.Role;
 import com.comitfy.healtie.userModule.entity.User;
@@ -11,6 +12,7 @@ import com.comitfy.healtie.util.common.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -36,19 +38,36 @@ public interface UserRepository extends BaseRepository<User> {
             " inner join user.roles role WHERE role.uuid=?1")
     Page<User> getUserByRole(Pageable pageable, UUID roleUUID);
 
-    @Query("SELECT userApply.userUuid FROM UserApplyChatRoom userApply " +
-            " WHERE  userApply.chatRoomUuid =?1")
-    Page<User> getUserByChatRoom(Pageable pageable, UUID userApplyUUID);
 
+    @Query(value = "SELECT usr.* " +
+            " FROM users usr " +
+            " INNER JOIN user_apply_chat_room applyChatRoom ON applyChatRoom.user_uuid = usr.uuid" +
+            " WHERE applyChatRoom.chat_room_uuid = :roomUUID",
 
+            countQuery = "SELECT COUNT(*) FROM user_apply_chat_room applyChatRoom " +
+                    "WHERE applyChatRoom.chat_room_uuid = :roomUUID",
+            nativeQuery = true)
+    Page<User> getUsersByChatRoom(@Param("roomUUID") String roomUUID, Pageable pageable);
 
+    @Query(value = "SELECT usr.* " +
+            " FROM users usr " +
+            " INNER JOIN user_apply_chat_room applyChatRoom ON applyChatRoom.user_uuid = usr.uuid" +
+            " WHERE applyChatRoom.chat_room_uuid = :roomUUID AND applyChatRoom.approved= true",
 
+            countQuery = "SELECT COUNT(*) FROM user_apply_chat_room applyChatRoom " +
+                    "WHERE applyChatRoom.chat_room_uuid = :roomUUID AND applyChatRoom.approved= true",
+            nativeQuery = true)
+    Page<User> getApprovedUsersByChatRoom(@Param("roomUUID") String roomUUID, Pageable pageable);
 
+    @Query(value = "SELECT usr.* " +
+            " FROM users usr " +
+            " INNER JOIN user_apply_chat_room applyChatRoom ON applyChatRoom.user_uuid = usr.uuid" +
+            " WHERE applyChatRoom.chat_room_uuid = :roomUUID AND applyChatRoom.approved= false",
 
-/*    @Query("SELECT userApply.uuid FROM UserApplyChatRoom userApply " +
-            " WHERE userApply.chatRoomUuid=?1")
-    Page<User> getUserByChatRoom(Pageable pageable, UUID userApplyUUID);*/
-
+            countQuery = "SELECT COUNT(*) FROM user_apply_chat_room applyChatRoom " +
+                    "WHERE applyChatRoom.chat_room_uuid = :roomUUID AND applyChatRoom.approved= false",
+            nativeQuery = true)
+    Page<User> getNonApprovedUsersByChatRoom(@Param("roomUUID") String roomUUID, Pageable pageable);
 
 
 

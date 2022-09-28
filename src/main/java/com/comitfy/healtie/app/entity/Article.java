@@ -28,7 +28,7 @@ public class Article extends BaseEntity {
     private LocalDate publishedDate;
 
     @ManyToMany
-    private Set<Tag> tags;
+    private Set<Tag> tagList;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -69,6 +69,5 @@ public class Article extends BaseEntity {
     public void addSave(User user) {
         this.userSaves.add(user);
     }
-
 
 }
