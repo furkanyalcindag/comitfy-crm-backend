@@ -247,7 +247,7 @@ public class ArticleService extends BaseWithMultiLanguageService<ArticleDTO, Art
         if (tag.isPresent()) {
             Set<Tag> tagSet = new HashSet<>();
             tagSet.add(tag.get());
-            return getMapper().pageEntityToPageDTO(articleRepository.findAllByTagsInAndLanguageEnum(pageable, tagSet, languageEnum));
+            return getMapper().pageEntityToPageDTO(articleRepository.findAllByTagListInAndLanguageEnum(pageable, tagSet, languageEnum));
         } else {
             return null;
         }

@@ -107,30 +107,42 @@ public class UserService extends BaseService<UserDTO, UserRequestDTO, User, User
         }
     }
 
-/*    public PageDTO<UserDTO> getUserByChatRoom(UUID id, int page, int size,LanguageEnum languageEnum) {
+
+    public PageDTO<UserDTO> getUserByChatRoom(UUID id, int page, int size,LanguageEnum languageEnum) {
         Optional<ChatRoom> chatRoom = chatRoomRepository.findByUuid(id);
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
         if (chatRoom.isPresent()) {
             Set<ChatRoom> chatRoomSet=new HashSet<>();
             chatRoomSet.add(chatRoom.get());
-            return getMapper().pageEntityToPageDTO(userRepository.getUserByChatRoom(pageable,id));
+            return getMapper().pageEntityToPageDTO(userRepository.getUsersByChatRoom(id.toString(),pageable));
         } else {
             return null;
         }
-    }*/
+    }
 
-
-
-
-/*    public UserDTO saveUserByChatRoom(UUID id, UserRequestDTO dto) {
+    public PageDTO<UserDTO> getApprovedUserByChatRoom(UUID id, int page, int size,LanguageEnum languageEnum) {
         Optional<ChatRoom> chatRoom = chatRoomRepository.findByUuid(id);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
         if (chatRoom.isPresent()) {
-            User user = getMapper().requestDTOToEntity(dto);
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
-            userRepository.save(user);
-            return getMapper().entityToDTO(user);
+            Set<ChatRoom> chatRoomSet=new HashSet<>();
+            chatRoomSet.add(chatRoom.get());
+            return getMapper().pageEntityToPageDTO(userRepository.getApprovedUsersByChatRoom(id.toString(),pageable));
         } else {
             return null;
         }
-    }*/
+    }
+
+    public PageDTO<UserDTO> getNonApprovedUserByChatRoom(UUID id, int page, int size,LanguageEnum languageEnum) {
+        Optional<ChatRoom> chatRoom = chatRoomRepository.findByUuid(id);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
+        if (chatRoom.isPresent()) {
+            Set<ChatRoom> chatRoomSet=new HashSet<>();
+            chatRoomSet.add(chatRoom.get());
+            return getMapper().pageEntityToPageDTO(userRepository.getNonApprovedUsersByChatRoom(id.toString(),pageable));
+        } else {
+            return null;
+        }
+    }
+
+
 }

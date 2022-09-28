@@ -1,5 +1,6 @@
 package com.comitfy.healtie.app.controller;
 
+import com.comitfy.healtie.app.dto.ContractActiveDTO;
 import com.comitfy.healtie.app.dto.UserApplyChatRoomDTO;
 import com.comitfy.healtie.app.dto.requestDTO.UserApplyChatRoomRequestDTO;
 import com.comitfy.healtie.app.entity.ChatRoom;
@@ -47,7 +48,7 @@ public class UserApplyChatRoomController extends BaseCrudController<UserApplyCha
     }
 
     @PostMapping("/{chatRoomId}")
-    public ResponseEntity<UserApplyChatRoomDTO> saveHighlightsByProduct(@PathVariable UUID chatRoomId, @RequestBody UserApplyChatRoomRequestDTO dto) {
+    public ResponseEntity<UserApplyChatRoomDTO> saveApplyByChatRoom(@PathVariable UUID chatRoomId, @RequestBody UserApplyChatRoomRequestDTO dto) {
 
         User user = helperService.getUserFromSession();
         ChatRoom chatRoom = chatRoomService.findEntityByUUID(chatRoomId);
@@ -61,8 +62,19 @@ public class UserApplyChatRoomController extends BaseCrudController<UserApplyCha
     @GetMapping("get-all-by-chat-room/{chatRoomId}")
     public ResponseEntity<PageDTO<UserApplyChatRoomDTO>> getByChatRoomId(@RequestHeader(value = "accept-language", required = true) String language,
                                                                          @PathVariable UUID chatRoomId, @RequestParam int pageNumber, @RequestParam int pageSize) {
-        PageDTO<UserApplyChatRoomDTO> pageDTO = userApplyChatRoomService.getUserByChatRoom(chatRoomId, pageNumber, pageSize, LanguageEnum.valueOf(language));
+        User user = helperService.getUserFromSession();
+        if (user !=null){
+            PageDTO<UserApplyChatRoomDTO> pageDTO = userApplyChatRoomService.getAllByChatRoom(chatRoomId, pageNumber, pageSize, LanguageEnum.valueOf(language));
+            return new ResponseEntity<>(pageDTO, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
-        return new ResponseEntity<>(pageDTO, HttpStatus.OK);
+    }
+    @GetMapping("/approved-apply/")
+    public ResponseEntity<PageDTO<UserApplyChatRoomDTO>> getApprovedApply(@RequestHeader(value = "accept-language", required = true) String language,
+                                                                        @RequestParam int pageNumber, @RequestParam int pageSize) {
+        PageDTO<UserApplyChatRoomDTO> dtoList = userApplyChatRoomService.getApprovedApply(pageNumber, pageSize);
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 }
