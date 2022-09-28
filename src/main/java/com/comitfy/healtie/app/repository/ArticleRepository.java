@@ -24,7 +24,7 @@ public interface ArticleRepository extends BaseWithMultiLanguageRepository<Artic
 
     Page<Article> findAllByCategoryListInAndLanguageEnum(Pageable pageable, Set<Category> category, LanguageEnum languageEnum);
 
-    Page<Article> findAllByTagsInAndLanguageEnum(Pageable pageable, Set<Tag> tags, LanguageEnum languageEnum);
+    Page<Article> findAllByTagListInAndLanguageEnum(Pageable pageable, Set<Tag> tags, LanguageEnum languageEnum);
 
 
     @Query("SELECT COUNT(likes) FROM Article article " +
@@ -60,7 +60,7 @@ public interface ArticleRepository extends BaseWithMultiLanguageRepository<Artic
     long getCountOfComment(UUID articleUUID);
 
     @Query("SELECT COUNT(article) FROM Article article" +
-            " inner join article.tags tag WHERE tag.uuid=?1")
+            " inner join article.tagList tag WHERE tag.uuid=?1")
     long getCountOfArticleByTag(UUID tagUUID);
 
 

@@ -11,6 +11,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -55,6 +56,14 @@ public class ChatRoom extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ChatRoomStatusEnum chatRoomStatusEnum;
 
+    @ManyToMany
+    private Set<User> user;
 
+    public void addUser(User user) {
+        this.user.add(user);
+    }
+    public void removeUser(User user) {
+        this.user.remove(user);
+    }
 
 }
