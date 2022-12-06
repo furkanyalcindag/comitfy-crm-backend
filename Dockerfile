@@ -2,7 +2,7 @@
 FROM adoptopenjdk/openjdk11:alpine-jre
 
 # Refer to Maven build -> finalName
-ARG JAR_FILE=target/spring-boot-web.jar
+ARG JAR_FILE=target/healtie-0.0.1-SNAPSHOT.jar
 
 # cd /opt/app
 WORKDIR /opt/app
@@ -11,4 +11,6 @@ WORKDIR /opt/app
 COPY ${JAR_FILE} app.jar
 
 # java -jar /opt/app/app.jar
+#ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar","app.jar"]
+
 ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar","app.jar"]
