@@ -1,0 +1,9 @@
+package com.comitfy.fair.app.repository;
+
+import com.comitfy.fair.app.entity.FairParticipant;
+import com.comitfy.fair.util.common.BaseRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface FairParticipantRepository extends BaseRepository<FairParticipant> {
+}
