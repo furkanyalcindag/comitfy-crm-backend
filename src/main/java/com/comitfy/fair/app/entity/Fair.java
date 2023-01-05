@@ -2,6 +2,7 @@ package com.comitfy.fair.app.entity;
 
 import com.comitfy.fair.util.dbUtil.BaseEntity;
 import lombok.Data;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;

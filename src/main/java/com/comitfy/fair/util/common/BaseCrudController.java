@@ -69,14 +69,17 @@ public abstract class BaseCrudController<DTO extends BaseDTO, RequestDTO extends
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         DTO optional = getService().findByUUID(id);
-        User user = helperService.getUserFromSession();
-        if (optional == null || user == null) {
+
+        if (optional == null) {
 
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } else {
-            getService().delete(optional.getUuid());
-            return new ResponseEntity<>("Object with the id " + id + " was deleted.", HttpStatus.NO_CONTENT);
-        }
+                   }
+
+
+        getService().delete(optional.getUuid());
+        return new ResponseEntity<>("Object with the id " + id + " was deleted.", HttpStatus.NO_CONTENT);
+
 
     }
 

@@ -57,11 +57,12 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
         Optional<Entity> optionalEntity = getRepository().findByUuid(uuid);
         if (optionalEntity.isPresent()) {
             Entity e = optionalEntity.get();
-            e.setDeleted(true);
+            //e.setDeleted(true);
             /*Entity e = optionalEntity.get();
             e.setDeleted(true);
             getRepository().save(e);*/
-            getRepository().save(e);
+            //getRepository().save(e);
+            getRepository().delete(e);
         }
 
     }
