@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class FairDTO extends BaseDTO {
 
     private String name;
+    private String place;
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean isActive=Boolean.FALSE;

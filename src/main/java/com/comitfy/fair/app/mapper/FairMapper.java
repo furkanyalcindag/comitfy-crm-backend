@@ -42,6 +42,7 @@ public class FairMapper implements BaseMapper<FairDTO, FairRequestDTO, Fair> {
     public Fair requestDTOToExistEntity(Fair entity, FairRequestDTO dto) {
         Fair fair = new Fair();
         BeanUtils.copyProperties(dto,fair);
+        fair.setId(entity.getId());
         return fair;
     }
 

@@ -34,4 +34,7 @@ public class Fair extends BaseEntity {
     @Column
     private boolean isActive=Boolean.FALSE;
 
+    @Column
+    private String place;
+
 }

@@ -11,6 +11,7 @@ public class FairRequestDTO extends BaseDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean isActive=Boolean.FALSE;
+    private String place;
 
 
 }
