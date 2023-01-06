@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FairRepository extends BaseRepository<Fair> {
 
-    Fair findFirstByActiveOrderByIdDesc(boolean isActive);
+    Fair findFirstByIsActiveOrderByIdDesc(boolean isActive);
 
 }

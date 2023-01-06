@@ -42,7 +42,7 @@ public class FairService extends BaseService<FairDTO, FairRequestDTO, Fair, Fair
 
 
     public FairDTO findActiveFair() {
-        Fair fair = getRepository().findFirstByActiveOrderByIdDesc(Boolean.TRUE);
+        Fair fair = getRepository().findFirstByIsActiveOrderByIdDesc(Boolean.TRUE);
         return  getMapper().entityToDTO(fair);
 
     }
