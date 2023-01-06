@@ -18,12 +18,21 @@ import com.comitfy.fair.util.PageDTO;
 import com.comitfy.fair.util.common.BaseCrudController;
 import com.comitfy.fair.util.common.BaseFilterRequestDTO;
 import com.comitfy.fair.util.common.SearchCriteria;
+import com.google.zxing.WriterException;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RestController
 @RequestMapping("fair-participant")
@@ -73,6 +82,94 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
+    @PostMapping("getqr")
+    public ResponseEntity<String> generateQR() {
+        FairParticipant fairParticipant = new FairParticipant();
+        fairParticipant.setUuid(java.util.UUID.randomUUID());
+        String x="";
+        try{
+            x=getService().qrGenerate(fairParticipant);
+        }
+        catch (Exception e){
+            System.out.println("sdmks");
+        }
+
+        return new ResponseEntity<>(x, HttpStatus.OK);
+    }
 
 
+    @GetMapping("generate")
+    public void getDocument(HttpServletResponse response) throws IOException, JRException, WriterException {
+
+        String sourceFileName = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "qr_ticket.jasper").getAbsolutePath();
+// creating our list of beans
+
+// creating datasource from bean list
+        JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(null);
+        Map parameters = new HashMap<>();
+        FairParticipant fairParticipant = new FairParticipant();
+        fairParticipant.setUuid(java.util.UUID.randomUUID());
+        parameters.put("qr",fairParticipantService.qrGenerate(fairParticipant));
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(sourceFileName, parameters, beanColDataSource);
+        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+        response.setContentType("application/pdf");
+        response.addHeader("Content-Disposition", "inline; filename=jasper.pdf;");
+    }
+
+
+    @GetMapping("/generate-ticket/{id}")
+    public ResponseEntity<byte[]> getEmployeeRecordReport(@PathVariable UUID id) {
+
+        try {
+
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+            List<FairParticipant> c = new ArrayList<>();
+            FairParticipant fairParticipant1 = fairParticipantService.findEntityByUUID(id);
+
+            //dynamic parameters required for report
+            Map<String, Object> empParams = new HashMap<String, Object>();
+
+
+            empParams.put("qr",fairParticipantService.qrGenerate(fairParticipant1));
+            empParams.put("name",fairParticipant1.getFirstName());
+            empParams.put("surname",fairParticipant1.getLastName());
+            empParams.put("company_name",fairParticipant1.getCompanyName());
+            empParams.put("fair_name",fairParticipant1.getFair().getName());
+            empParams.put("fair_start_date",fairParticipant1.getFair().getStartDate().format(formatter));
+            empParams.put("fair_end_date",fairParticipant1.getFair().getEndDate().format(formatter));
+            empParams.put("fair_place",fairParticipant1.getFair().getPlace());
+            c.add(fairParticipant1);
+
+            empParams.put("employeeData", new JRBeanCollectionDataSource(c));
+
+
+            JasperPrint empReport =
+                    JasperFillManager.fillReport
+                            (
+                                    JasperCompileManager.compileReport(
+                                            ResourceUtils.getFile("classpath:qr_ticket.jrxml")
+                                                    .getAbsolutePath()) // path of the jasper report
+                                    , empParams // dynamic parameters
+                                    , new JREmptyDataSource()
+                            );
+
+            HttpHeaders headers = new HttpHeaders();
+            //set the PDF format
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("filename", "ticket.pdf");
+            //create the report in PDF format
+            return new ResponseEntity<byte[]>
+                    (JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
+
+        } catch(Exception e) {
+            return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
+
+
+
+
