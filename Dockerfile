@@ -1,6 +1,8 @@
 # For Java 11, try this
 FROM adoptopenjdk/openjdk11:alpine-jre
 
+RUN apk add --update fontconfig freetype
+
 # Refer to Maven build -> finalName
 ARG JAR_FILE=target/fair-0.0.1-SNAPSHOT.jar
 
