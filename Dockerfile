@@ -1,7 +1,9 @@
 # For Java 11, try this
 FROM adoptopenjdk/openjdk11:alpine-jre
 
-RUN apk add --update fontconfig freetype
+#RUN apk add --update fontconfig freetype
+
+RUN apk --no-cache add msttcorefonts-installer fontconfig && update-ms-fonts && fc-cache -f
 
 # Refer to Maven build -> finalName
 ARG JAR_FILE=target/fair-0.0.1-SNAPSHOT.jar
