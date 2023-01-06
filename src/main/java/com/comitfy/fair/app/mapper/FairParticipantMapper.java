@@ -2,6 +2,7 @@ package com.comitfy.fair.app.mapper;
 
 import com.comitfy.fair.app.dto.FairParticipantDTO;
 import com.comitfy.fair.app.dto.requestDTO.FairParticipantRequestDTO;
+import com.comitfy.fair.app.entity.Fair;
 import com.comitfy.fair.app.entity.FairParticipant;
 import com.comitfy.fair.util.PageDTO;
 import com.comitfy.fair.util.common.BaseMapper;
@@ -45,8 +46,11 @@ public class FairParticipantMapper implements BaseMapper<FairParticipantDTO, Fai
 
     @Override
     public FairParticipant requestDTOToExistEntity(FairParticipant entity, FairParticipantRequestDTO dto) {
+
         FairParticipant fair = new FairParticipant();
         BeanUtils.copyProperties(dto,fair);
+        fair.setId(entity.getId());
+        fair.setUuid(entity.getUuid());
         return fair;
     }
 

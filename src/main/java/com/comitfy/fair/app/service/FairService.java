@@ -10,6 +10,9 @@ import com.comitfy.fair.util.common.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class FairService extends BaseService<FairDTO, FairRequestDTO, Fair, FairRepository, FairMapper, FairSpecification> {
 
@@ -35,5 +38,12 @@ public class FairService extends BaseService<FairDTO, FairRequestDTO, Fair, Fair
     @Override
     public FairSpecification getSpecification() {
         return fairSpecification;
+    }
+
+
+    public FairDTO findActiveFair() {
+        Fair fair = getRepository().findFirstByActiveOrderByIdDesc(Boolean.TRUE);
+        return  getMapper().entityToDTO(fair);
+
     }
 }

@@ -82,7 +82,25 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
-    @PostMapping("getqr")
+
+    @PostMapping("add-participant-by-fair")
+    public ResponseEntity<byte[]> addParticipantToActiveFair(@RequestBody FairParticipantRequestDTO fairParticipantRequestDTO) {
+
+        FairDTO fairDTO = fairService.findActiveFair();
+        fairParticipantRequestDTO.setFair(fairDTO);
+        FairParticipantDTO dtoList =getService().save(fairParticipantRequestDTO);
+
+        byte [] response = fairParticipantService.generateTicketByParticipant(dtoList.getUuid());
+
+        HttpHeaders headers = new HttpHeaders();
+        //set the PDF format
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("filename", "ticket.pdf");
+        return new ResponseEntity<byte[]>
+                (response, headers, HttpStatus.OK);
+    }
+
+   /* @PostMapping("getqr")
     public ResponseEntity<String> generateQR() {
         FairParticipant fairParticipant = new FairParticipant();
         fairParticipant.setUuid(java.util.UUID.randomUUID());
@@ -95,10 +113,10 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
         }
 
         return new ResponseEntity<>(x, HttpStatus.OK);
-    }
+    }*/
 
 
-    @GetMapping("generate")
+   /* @GetMapping("generate")
     public void getDocument(HttpServletResponse response) throws IOException, JRException, WriterException {
 
         String sourceFileName = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "qr_ticket.jasper").getAbsolutePath();
@@ -115,7 +133,7 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
         JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
         response.setContentType("application/pdf");
         response.addHeader("Content-Disposition", "inline; filename=jasper.pdf;");
-    }
+    }*/
 
 
     @GetMapping("/generate-ticket/{id}")
@@ -145,13 +163,19 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
 
             empParams.put("employeeData", new JRBeanCollectionDataSource(c));
 
+           /*
+
+           JasperCompileManager.compileReport(
+                                            ResourceUtils.getFile("classpath:qr_ticket.jrxml")
+                                                    .getAbsolutePath()) // path of the jasper report
+            */
+
+            JasperReport jasperReport = JasperCompileManager.compileReport( getClass().getResourceAsStream("/qr_ticket.jrxml"));
 
             JasperPrint empReport =
                     JasperFillManager.fillReport
                             (
-                                    JasperCompileManager.compileReport(
-                                            ResourceUtils.getFile("classpath:qr_ticket.jrxml")
-                                                    .getAbsolutePath()) // path of the jasper report
+                                    jasperReport
                                     , empParams // dynamic parameters
                                     , new JREmptyDataSource()
                             );

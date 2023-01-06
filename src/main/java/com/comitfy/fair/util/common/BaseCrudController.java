@@ -85,13 +85,12 @@ public abstract class BaseCrudController<DTO extends BaseDTO, RequestDTO extends
 
     @PutMapping("/{id}")
     public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody RequestDTO body) {
-        DTO optional = getService().findByUUID(id);
+        body = getService().update(id, body);
 
-        if (optional == null) {
+        if (body == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND);
         } else {
 
-            getService().update(id, body);
             return new ResponseEntity<>("Object with the id " + id + " was updated.", HttpStatus.OK);
         }
 
