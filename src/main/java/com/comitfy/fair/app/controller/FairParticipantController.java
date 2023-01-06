@@ -165,6 +165,7 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
                     (JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
 
         } catch(Exception e) {
+            System.err.println(e.getMessage());
             return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
