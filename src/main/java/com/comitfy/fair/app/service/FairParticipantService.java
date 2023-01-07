@@ -1,6 +1,7 @@
 package com.comitfy.fair.app.service;
 
 import com.comitfy.fair.app.dto.FairParticipantDTO;
+import com.comitfy.fair.app.dto.FairParticipantValidateDTO;
 import com.comitfy.fair.app.dto.requestDTO.FairParticipantRequestDTO;
 import com.comitfy.fair.app.entity.FairParticipant;
 import com.comitfy.fair.app.mapper.FairParticipantMapper;
@@ -35,9 +36,6 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
     @Autowired
     FairParticipantRepository fairRepository;
 
-
-
-
     @Autowired
     FairParticipantMapper fairMapper;
 
@@ -59,9 +57,6 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
         return fairSpecification;
     }
 
-
-
-
     public String qrGenerate(FairParticipant fairParticipant) throws IOException, WriterException, JRException {
         String url = fairParticipant.getUuid().toString();
 
@@ -74,23 +69,11 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
 
         // return QrInfo
         System.out.println(image);
-
-
-
-
-
         return image;
     }
 
-
-
-
-
     public byte[] generateTicketByParticipant(UUID id){
-
         try {
-
-
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
             List<FairParticipant> c = new ArrayList<>();
@@ -98,8 +81,6 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
 
             //dynamic parameters required for report
             Map<String, Object> empParams = new HashMap<String, Object>();
-
-
             empParams.put("qr",qrGenerate(fairParticipant1));
             empParams.put("name",fairParticipant1.getFirstName());
             empParams.put("surname",fairParticipant1.getLastName());
@@ -109,7 +90,6 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
             empParams.put("fair_end_date",fairParticipant1.getFair().getEndDate().format(formatter));
             empParams.put("fair_place",fairParticipant1.getFair().getPlace());
             c.add(fairParticipant1);
-
             empParams.put("employeeData", new JRBeanCollectionDataSource(c));
 
            /*
@@ -141,11 +121,25 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
             System.err.println(e.getMessage());
             return null;
         }
-
-
-
-
     }
 
+
+    public FairParticipantValidateDTO validateParticipant(UUID participantUUID){
+
+        FairParticipantValidateDTO fairParticipantValidateDTO = new FairParticipantValidateDTO();
+
+        FairParticipantDTO fairParticipantDTO = findByUUID(participantUUID);
+
+        if(fairParticipantDTO.getFairDTO().isActive()){
+            fairParticipantValidateDTO.setFairParticipantDTO(fairParticipantDTO);
+            fairParticipantValidateDTO.setValid(Boolean.TRUE);
+        }
+        else {
+            fairParticipantValidateDTO.setFairParticipantDTO(null);
+            fairParticipantValidateDTO.setValid(Boolean.FALSE);
+        }
+
+        return  fairParticipantValidateDTO;
+    }
 
 }

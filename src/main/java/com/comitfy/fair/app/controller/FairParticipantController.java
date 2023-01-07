@@ -2,6 +2,7 @@ package com.comitfy.fair.app.controller;
 
 import com.comitfy.fair.app.dto.FairDTO;
 import com.comitfy.fair.app.dto.FairParticipantDTO;
+import com.comitfy.fair.app.dto.FairParticipantValidateDTO;
 import com.comitfy.fair.app.dto.requestDTO.FairParticipantRequestDTO;
 import com.comitfy.fair.app.dto.requestDTO.FairRequestDTO;
 import com.comitfy.fair.app.entity.Fair;
@@ -68,7 +69,7 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
         searchCriteria.setOperation("=");
         searchCriteria.setValue(fairDTO.getId());
         filter.getFilters().add(searchCriteria);
-        PageDTO<FairParticipantDTO> dtoList =getService().findAll(filter);
+        PageDTO<FairParticipantDTO> dtoList = getService().findAll(filter);
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
@@ -78,7 +79,7 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
 
         FairDTO fairDTO = fairService.findByUUID(id);
         fairParticipantRequestDTO.setFair(fairDTO);
-        FairParticipantDTO dtoList =getService().save(fairParticipantRequestDTO);
+        FairParticipantDTO dtoList = getService().save(fairParticipantRequestDTO);
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
@@ -88,9 +89,9 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
 
         FairDTO fairDTO = fairService.findActiveFair();
         fairParticipantRequestDTO.setFair(fairDTO);
-        FairParticipantDTO dtoList =getService().save(fairParticipantRequestDTO);
+        FairParticipantDTO dtoList = getService().save(fairParticipantRequestDTO);
 
-        byte [] response = fairParticipantService.generateTicketByParticipant(dtoList.getUuid());
+        byte[] response = fairParticipantService.generateTicketByParticipant(dtoList.getUuid());
 
         HttpHeaders headers = new HttpHeaders();
         //set the PDF format
@@ -151,14 +152,14 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
             Map<String, Object> empParams = new HashMap<String, Object>();
 
 
-            empParams.put("qr",fairParticipantService.qrGenerate(fairParticipant1));
-            empParams.put("name",fairParticipant1.getFirstName());
-            empParams.put("surname",fairParticipant1.getLastName());
-            empParams.put("company_name",fairParticipant1.getCompanyName());
-            empParams.put("fair_name",fairParticipant1.getFair().getName());
-            empParams.put("fair_start_date",fairParticipant1.getFair().getStartDate().format(formatter));
-            empParams.put("fair_end_date",fairParticipant1.getFair().getEndDate().format(formatter));
-            empParams.put("fair_place",fairParticipant1.getFair().getPlace());
+            empParams.put("qr", fairParticipantService.qrGenerate(fairParticipant1));
+            empParams.put("name", fairParticipant1.getFirstName());
+            empParams.put("surname", fairParticipant1.getLastName());
+            empParams.put("company_name", fairParticipant1.getCompanyName());
+            empParams.put("fair_name", fairParticipant1.getFair().getName());
+            empParams.put("fair_start_date", fairParticipant1.getFair().getStartDate().format(formatter));
+            empParams.put("fair_end_date", fairParticipant1.getFair().getEndDate().format(formatter));
+            empParams.put("fair_place", fairParticipant1.getFair().getPlace());
             c.add(fairParticipant1);
 
             empParams.put("employeeData", new JRBeanCollectionDataSource(c));
@@ -170,7 +171,7 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
                                                     .getAbsolutePath()) // path of the jasper report
             */
 
-            JasperReport jasperReport = JasperCompileManager.compileReport( getClass().getResourceAsStream("/qr_ticket.jrxml"));
+            JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/qr_ticket.jrxml"));
 
             JasperPrint empReport =
                     JasperFillManager.fillReport
@@ -188,9 +189,21 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
             return new ResponseEntity<byte[]>
                     (JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("/validate-participant/{id}")
+    public ResponseEntity<FairParticipantValidateDTO> validateParticipant(@PathVariable UUID id) {
+        try {
+            return new ResponseEntity<FairParticipantValidateDTO>
+                    (fairParticipantService.validateParticipant(id), HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return new ResponseEntity<FairParticipantValidateDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

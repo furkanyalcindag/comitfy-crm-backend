@@ -23,9 +23,10 @@ public class FairParticipantMapper implements BaseMapper<FairParticipantDTO, Fai
     @Override
     public FairParticipantDTO entityToDTO(FairParticipant entity) {
 
-        FairParticipantDTO fairDTO = new FairParticipantDTO();
-        BeanUtils.copyProperties(entity,fairDTO);
-        return fairDTO;
+        FairParticipantDTO fairParticipantDTO = new FairParticipantDTO();
+        BeanUtils.copyProperties(entity,fairParticipantDTO);
+        fairParticipantDTO.setFairDTO(fairMapper.entityToDTO(entity.getFair()));
+        return fairParticipantDTO;
     }
 
     @Override
@@ -40,18 +41,20 @@ public class FairParticipantMapper implements BaseMapper<FairParticipantDTO, Fai
     public FairParticipant requestDTOToEntity(FairParticipantRequestDTO dto) {
         FairParticipant fair = new FairParticipant();
         BeanUtils.copyProperties(dto,fair);
-        fair.setFair(fairMapper.dtoToEntity(dto.getFair()));
+        //fair.setFair(fairMapper.dtoToEntity(dto.getFair()));
         return fair;
     }
 
     @Override
     public FairParticipant requestDTOToExistEntity(FairParticipant entity, FairParticipantRequestDTO dto) {
 
-        FairParticipant fair = new FairParticipant();
-        BeanUtils.copyProperties(dto,fair);
-        fair.setId(entity.getId());
-        fair.setUuid(entity.getUuid());
-        return fair;
+        Fair f = entity.getFair();
+        FairParticipant fairParticipant = new FairParticipant();
+        BeanUtils.copyProperties(dto,fairParticipant);
+        fairParticipant.setId(entity.getId());
+        fairParticipant.setUuid(entity.getUuid());
+        fairParticipant.setFair(f);
+        return fairParticipant;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.comitfy.fair.app.dto;
 
 import com.comitfy.fair.util.common.BaseDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
@@ -10,4 +11,6 @@ public class FairParticipantDTO extends BaseDTO {
     private String companyName;
     private String email;
     private String mobilePhone;
+    @JsonIgnore
+    private FairDTO fairDTO;
 }
