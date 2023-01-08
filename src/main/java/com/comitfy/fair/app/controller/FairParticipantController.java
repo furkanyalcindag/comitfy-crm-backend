@@ -84,7 +84,7 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
     }
 
 
-    @PostMapping("add-participant-by-fair")
+    @PostMapping("add-participant-by-active-fair")
     public ResponseEntity<byte[]> addParticipantToActiveFair(@RequestBody FairParticipantRequestDTO fairParticipantRequestDTO) {
 
         FairDTO fairDTO = fairService.findActiveFair();
