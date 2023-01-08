@@ -41,7 +41,7 @@ public class FairParticipantMapper implements BaseMapper<FairParticipantDTO, Fai
     public FairParticipant requestDTOToEntity(FairParticipantRequestDTO dto) {
         FairParticipant fair = new FairParticipant();
         BeanUtils.copyProperties(dto,fair);
-        //fair.setFair(fairMapper.dtoToEntity(dto.getFair()));
+        fair.setFair(dto.getFair()!=null?fairMapper.dtoToEntity(dto.getFair()):null);
         return fair;
     }
 
