@@ -19,4 +19,4 @@ COPY ${JAR_FILE} app.jar
 
 #ENTRYPOINT ["java",  " $JAVA_OPTS -Dfile.encoding=UTF-8 -jar","app.jar"]
 
-ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS}  -Dfile.encoding=UTF-8 -jar /app.jar"]
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS}  -Dfile.encoding=UTF-8 -jar app.jar"]
