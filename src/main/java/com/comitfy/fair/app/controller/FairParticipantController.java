@@ -210,7 +210,7 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
     }
 
 
-    @PostMapping("/generate-excel-participant by-fair/{id}")
+    @PostMapping("/generate-excel-participant-by-fair/{id}")
     void getExportExcelGenerateProforma(HttpServletResponse response, @PathVariable UUID id) throws IOException, NoSuchFieldException{
 
         ByteArrayInputStream byteArrayInputStream = fairParticipantService.getExportExcelParticipant(id);
