@@ -17,4 +17,4 @@ COPY ${JAR_FILE} app.jar
 # java -jar /opt/app/app.jar
 #ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar","app.jar"]
 
-ENTRYPOINT ["java",  "-jar","app.jar"]
+ENTRYPOINT ["java",  " $JAVA_OPTS -Dfile.encoding=UTF-8 -jar","app.jar"]

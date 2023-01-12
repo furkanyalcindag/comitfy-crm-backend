@@ -22,6 +22,7 @@ import com.comitfy.fair.util.common.SearchCriteria;
 import com.google.zxing.WriterException;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -206,6 +208,19 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
             return new ResponseEntity<FairParticipantValidateDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    @PostMapping("/generate-excel-participant by-fair/{id}")
+    void getExportExcelGenerateProforma(HttpServletResponse response, @PathVariable UUID id) throws IOException, NoSuchFieldException{
+
+        ByteArrayInputStream byteArrayInputStream = fairParticipantService.getExportExcelParticipant(id);
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=fuar_katilimci_listesi.xlsx");
+
+        IOUtils.copy(byteArrayInputStream, response.getOutputStream());
+
+    }
+
 }
 
 
