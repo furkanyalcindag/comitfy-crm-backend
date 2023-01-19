@@ -145,6 +145,60 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
     }
 
 
+
+
+    public byte[] generateTicketByParticipantNewVersion(UUID id) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+            List<FairParticipant> c = new ArrayList<>();
+            FairParticipant fairParticipant1 = findEntityByUUID(id);
+
+            //dynamic parameters required for report
+            Map<String, Object> empParams = new HashMap<String, Object>();
+            empParams.put("qr", qrGenerate(fairParticipant1));
+            empParams.put("name", fairParticipant1.getFirstName().toUpperCase(Locale.ENGLISH) + " " +fairParticipant1.getLastName().toUpperCase(Locale.ENGLISH));
+            empParams.put("surname", fairParticipant1.getLastName());
+            empParams.put("company_name", fairParticipant1.getCompanyName().toUpperCase(Locale.ENGLISH) + "-" + fairParticipant1.getCity().toUpperCase(Locale.ENGLISH) );
+            empParams.put("fair_name", fairParticipant1.getFair().getName());
+            empParams.put("fair_start_date", fairParticipant1.getFair().getStartDate().format(formatter));
+            empParams.put("fair_end_date", fairParticipant1.getFair().getEndDate().format(formatter));
+            empParams.put("fair_place", fairParticipant1.getFair().getPlace());
+            c.add(fairParticipant1);
+            empParams.put("employeeData", new JRBeanCollectionDataSource(c));
+
+           /*
+
+           JasperCompileManager.compileReport(
+                                            ResourceUtils.getFile("classpath:qr_ticket.jrxml")
+                                                    .getAbsolutePath()) // path of the jasper report
+            */
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/qr_ticket_a5.jrxml"));
+
+            JasperPrint empReport =
+                    JasperFillManager.fillReport
+                            (
+                                    jasperReport
+                                    , empParams // dynamic parameters
+                                    , new JREmptyDataSource()
+                            );
+
+            HttpHeaders headers = new HttpHeaders();
+            //set the PDF format
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("filename", "ticket.pdf");
+            //create the report in PDF format
+            return
+                    JasperExportManager.exportReportToPdf(empReport);
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+
     public FairParticipantValidateDTO validateParticipant(UUID participantUUID) {
 
         FairParticipantValidateDTO fairParticipantValidateDTO = new FairParticipantValidateDTO();
@@ -171,6 +225,7 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
         translate.put("companyName","Firma");
         translate.put("mobilePhone","Telefon");
         translate.put("email","Email");
+        translate.put("city","Şehir");
 
 
         List<ExportHeaderDTO> exportHeaderDTOS = new ArrayList<>();

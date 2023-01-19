@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="qr_ticket" pageWidth="595" pageHeight="420" orientation="Landscape" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="78506160-0a61-42b6-bc84-92cf59956145">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="qr" class="java.lang.String"/>
+	<parameter name="fair_name" class="java.lang.String"/>
+	<parameter name="fair_place" class="java.lang.String"/>
+	<parameter name="fair_start_date" class="java.lang.String"/>
+	<parameter name="fair_end_date" class="java.lang.String"/>
+	<parameter name="name" class="java.lang.String"/>
+	<parameter name="surname" class="java.lang.String"/>
+	<parameter name="company_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="330" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="170" y="10" width="222" height="54" uuid="51cdaae3-770b-420a-b27d-c31d535152c3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="206" y="120" width="150" height="150" uuid="0d868d39-ce8d-428b-ada2-79c58d301ef7">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode($P{qr}.getBytes()))]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="170" y="64" width="222" height="58" uuid="558480fe-3de9-4fb3-a078-00b920c7b33e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{company_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="148" y="290" width="259" height="30" uuid="ae201d70-b4a6-4e89-b72e-8697eba5f137"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BAŞKENT GLOBAL FUARCILIK]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</detail>
+</jasperReport>

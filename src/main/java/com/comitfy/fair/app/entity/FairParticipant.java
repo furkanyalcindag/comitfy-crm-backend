@@ -32,6 +32,9 @@ public class FairParticipant extends BaseEntity {
     @Column
     private String mobilePhone;
 
+    @Column
+    private String city;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private Fair fair;
 }

@@ -93,7 +93,7 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
         fairParticipantRequestDTO.setFair(fairDTO);
         FairParticipantDTO dtoList = getService().save(fairParticipantRequestDTO);
 
-        byte[] response = fairParticipantService.generateTicketByParticipant(dtoList.getUuid());
+        byte[] response = fairParticipantService.generateTicketByParticipantNewVersion(dtoList.getUuid());
 
         HttpHeaders headers = new HttpHeaders();
         //set the PDF format
@@ -140,48 +140,16 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
 
 
     @GetMapping("/generate-ticket/{id}")
-    public ResponseEntity<byte[]> getEmployeeRecordReport(@PathVariable UUID id) {
+    public ResponseEntity<byte[]> getGenerateTicket(@PathVariable UUID id) {
 
         try {
 
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            byte[] response = fairParticipantService.generateTicketByParticipantNewVersion(id);
 
-            List<FairParticipant> c = new ArrayList<>();
-            FairParticipant fairParticipant1 = fairParticipantService.findEntityByUUID(id);
+            if(response==null)
+                throw new Exception("response is null");
 
-            //dynamic parameters required for report
-            Map<String, Object> empParams = new HashMap<String, Object>();
-
-
-            empParams.put("qr", fairParticipantService.qrGenerate(fairParticipant1));
-            empParams.put("name", fairParticipant1.getFirstName());
-            empParams.put("surname", fairParticipant1.getLastName());
-            empParams.put("company_name", fairParticipant1.getCompanyName());
-            empParams.put("fair_name", fairParticipant1.getFair().getName());
-            empParams.put("fair_start_date", fairParticipant1.getFair().getStartDate().format(formatter));
-            empParams.put("fair_end_date", fairParticipant1.getFair().getEndDate().format(formatter));
-            empParams.put("fair_place", fairParticipant1.getFair().getPlace());
-            c.add(fairParticipant1);
-
-            empParams.put("employeeData", new JRBeanCollectionDataSource(c));
-
-           /*
-
-           JasperCompileManager.compileReport(
-                                            ResourceUtils.getFile("classpath:qr_ticket.jrxml")
-                                                    .getAbsolutePath()) // path of the jasper report
-            */
-
-            JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/qr_ticket.jrxml"));
-
-            JasperPrint empReport =
-                    JasperFillManager.fillReport
-                            (
-                                    jasperReport
-                                    , empParams // dynamic parameters
-                                    , new JREmptyDataSource()
-                            );
 
             HttpHeaders headers = new HttpHeaders();
             //set the PDF format
@@ -189,7 +157,7 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
             headers.setContentDispositionFormData("filename", "ticket.pdf");
             //create the report in PDF format
             return new ResponseEntity<byte[]>
-                    (JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
+                    (response, headers, HttpStatus.OK);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());

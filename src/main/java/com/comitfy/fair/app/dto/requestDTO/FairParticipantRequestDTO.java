@@ -13,6 +13,7 @@ public class FairParticipantRequestDTO extends BaseDTO {
     private String companyName;
     private String email;
     private String mobilePhone;
+    private String city;
     @JsonIgnore
     private FairDTO fair;
 }
