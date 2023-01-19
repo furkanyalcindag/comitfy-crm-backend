@@ -145,6 +145,15 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
     }
 
 
+    public static String clearTurkishChars(String str) {
+        String ret = str;
+        char[] turkishChars = new char[] {0x131, 0x130, 0xFC, 0xDC, 0xF6, 0xD6, 0x15F, 0x15E, 0xE7, 0xC7, 0x11F, 0x11E};
+        char[] englishChars = new char[] {'i', 'I', 'u', 'U', 'o', 'O', 's', 'S', 'c', 'C', 'g', 'G'};
+        for (int i = 0; i < turkishChars.length; i++) {
+            ret = ret.replaceAll(new String(new char[]{turkishChars[i]}), new String(new char[]{englishChars[i]}));
+        }
+        return ret;
+    }
 
 
     public byte[] generateTicketByParticipantNewVersion(UUID id) {
@@ -154,12 +163,13 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
             List<FairParticipant> c = new ArrayList<>();
             FairParticipant fairParticipant1 = findEntityByUUID(id);
 
+            Locale enLocale = Locale.forLanguageTag("en_US");
             //dynamic parameters required for report
             Map<String, Object> empParams = new HashMap<String, Object>();
             empParams.put("qr", qrGenerate(fairParticipant1));
-            empParams.put("name", fairParticipant1.getFirstName().toUpperCase(Locale.ENGLISH) + " " +fairParticipant1.getLastName().toUpperCase(Locale.ENGLISH));
+            empParams.put("name", clearTurkishChars(fairParticipant1.getFirstName()).toUpperCase(enLocale) + " " +clearTurkishChars(fairParticipant1.getLastName()).toUpperCase(enLocale));
             empParams.put("surname", fairParticipant1.getLastName());
-            empParams.put("company_name", fairParticipant1.getCompanyName().toUpperCase(Locale.ENGLISH) + "-" + fairParticipant1.getCity().toUpperCase(Locale.ENGLISH) );
+            empParams.put("company_name", clearTurkishChars(fairParticipant1.getCompanyName()).toUpperCase(enLocale) + "-" + clearTurkishChars(fairParticipant1.getCity()).toUpperCase(enLocale) );
             empParams.put("fair_name", fairParticipant1.getFair().getName());
             empParams.put("fair_start_date", fairParticipant1.getFair().getStartDate().format(formatter));
             empParams.put("fair_end_date", fairParticipant1.getFair().getEndDate().format(formatter));
