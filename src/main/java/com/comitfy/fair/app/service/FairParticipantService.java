@@ -184,7 +184,7 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
                                                     .getAbsolutePath()) // path of the jasper report
             */
 
-            JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/qr_ticket_a5.jrxml"));
+            JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/qr_ticket_a5_new.jrxml"));
 
             JasperPrint empReport =
                     JasperFillManager.fillReport
