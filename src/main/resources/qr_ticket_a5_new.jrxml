@@ -35,7 +35,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="16" isBold="true"/>
+					<font size="16" isBold="true" pdfEncoding="Cp1254"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
 			</textField>
@@ -52,14 +52,14 @@
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="16" isBold="true"/>
+					<font size="16" isBold="true" pdfEncoding="Cp1254"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{company_name}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="9" y="480" width="400" height="30" uuid="17c7f7f3-7e31-4f7a-ad27-06edb39af591"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="16" isBold="true"/>
+					<font size="16" isBold="true" pdfEncoding="Cp1254"/>
 				</textElement>
 				<text><![CDATA[BAŞKENT OPTİK FUARI]]></text>
 			</staticText>
