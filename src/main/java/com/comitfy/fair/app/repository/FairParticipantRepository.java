@@ -11,4 +11,6 @@ import java.util.List;
 public interface FairParticipantRepository extends BaseRepository<FairParticipant> {
 
     List<FairParticipant> findAllByFairOrderByIdDesc(Fair fair);
+
+    List<FairParticipant> findAllByFairAndIsParticipatedOrderByParticipationDateDesc(Fair fair,Boolean isParticipated);
 }

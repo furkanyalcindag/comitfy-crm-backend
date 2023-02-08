@@ -4,6 +4,9 @@ import com.comitfy.fair.util.common.BaseDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import javax.persistence.Column;
+import java.util.Date;
+
 @Data
 public class FairParticipantDTO extends BaseDTO {
     private String firstName;
@@ -14,4 +17,6 @@ public class FairParticipantDTO extends BaseDTO {
     private String city;
     @JsonIgnore
     private FairDTO fairDTO;
+    private Boolean isParticipated;
+    private Date participationDate;
 }

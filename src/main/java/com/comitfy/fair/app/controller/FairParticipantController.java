@@ -75,6 +75,28 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
+    @PostMapping("get-participateds-by-fair/{id}")
+    public ResponseEntity<PageDTO<FairParticipantDTO>> getParticipatedByFairUUID(@PathVariable UUID id, @RequestBody BaseFilterRequestDTO filter) {
+
+        FairDTO fairDTO = fairService.findByUUID(id);
+
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setKey("fair_id");
+        searchCriteria.setOperation("=");
+        searchCriteria.setValue(fairDTO.getId());
+
+        SearchCriteria searchCriteria2 = new SearchCriteria();
+        searchCriteria2.setKey("isParticipated");
+        searchCriteria2.setOperation("=");
+        searchCriteria2.setValue(Boolean.TRUE);
+
+
+        filter.getFilters().add(searchCriteria);
+        filter.getFilters().add(searchCriteria2);
+        PageDTO<FairParticipantDTO> dtoList = getService().findAll(filter);
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
 
     @PostMapping("add-participant-by-fair/{id}")
     public ResponseEntity<FairParticipantDTO> addParticipantToFair(@PathVariable UUID id, @RequestBody FairParticipantRequestDTO fairParticipantRequestDTO) {
@@ -146,11 +168,8 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
 
 
             byte[] response = fairParticipantService.generateTicketByParticipantNewVersion(id);
-
             if(response==null)
                 throw new Exception("response is null");
-
-
             HttpHeaders headers = new HttpHeaders();
             //set the PDF format
             headers.setContentType(MediaType.APPLICATION_PDF);
@@ -182,6 +201,18 @@ public class FairParticipantController extends BaseCrudController<FairParticipan
     void getExportExcelGenerateProforma(HttpServletResponse response, @PathVariable UUID id) throws IOException, NoSuchFieldException{
 
         ByteArrayInputStream byteArrayInputStream = fairParticipantService.getExportExcelParticipant(id);
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=fuar_katilimci_listesi.xlsx");
+
+        IOUtils.copy(byteArrayInputStream, response.getOutputStream());
+
+    }
+
+
+    @PostMapping("/generate-excel-participateds-by-fair/{id}")
+    void getExportExcelGenerateParticipateds(HttpServletResponse response, @PathVariable UUID id) throws IOException, NoSuchFieldException{
+
+        ByteArrayInputStream byteArrayInputStream = fairParticipantService.getExportExcelParticipateds(id);
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=fuar_katilimci_listesi.xlsx");
 

@@ -4,6 +4,7 @@ import com.comitfy.fair.util.dbUtil.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 @Entity
@@ -37,4 +38,11 @@ public class FairParticipant extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Fair fair;
+
+    @Column
+    private Boolean isParticipated=Boolean.FALSE;
+
+    @Column
+    private Date participationDate;
+
 }

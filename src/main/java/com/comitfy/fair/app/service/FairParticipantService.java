@@ -216,6 +216,11 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
         FairParticipantDTO fairParticipantDTO = findByUUID(participantUUID);
 
         if (fairParticipantDTO.getFairDTO().isActive()) {
+            fairParticipantDTO.setIsParticipated(Boolean.TRUE);
+            Date date = new Date();
+            fairParticipantDTO.setParticipationDate(date);
+            FairParticipant fp =getRepository().save(getMapper().dtoToEntity(fairParticipantDTO));;
+            fairParticipantDTO = getMapper().entityToDTO(fp);
             fairParticipantValidateDTO.setFairParticipantDTO(fairParticipantDTO);
             fairParticipantValidateDTO.setValid(Boolean.TRUE);
         } else {
@@ -236,6 +241,8 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
         translate.put("mobilePhone","Telefon");
         translate.put("email","Email");
         translate.put("city","Şehir");
+        translate.put("participationDate","Ziyaret Tarihi");
+        translate.put("isParticipated","Ziyaret Durumu");
 
 
         List<ExportHeaderDTO> exportHeaderDTOS = new ArrayList<>();
@@ -306,6 +313,156 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
 
             Fair fair = fairService.findEntityByUUID(uuid);
             List<FairParticipantDTO> fairParticipantDTOList = getMapper().entityListToDTOList(getRepository().findAllByFairOrderByIdDesc(fair));
+
+
+            Field[] allFields = FairParticipantDTO.class.getDeclaredFields();
+
+            // Header attributes
+            Map<String, String> hmHeaderAttributeNames = new HashMap<>();
+            exportHeaderDTOList = fillHeaderForProforma();
+            for (ExportHeaderDTO exportHeaderDTO : exportHeaderDTOList) {
+                hmHeaderAttributeNames.put(exportHeaderDTO.getName(), exportHeaderDTO.getName());
+            }
+
+
+            Map<FairParticipantDTO, Map<String, Object>> hmObjectValues = new HashMap<>();
+            Map<String, Integer> hmSizeOfColumnsByAttribute = new HashMap<>();
+            Class<?> clazz = null;
+            if (CollectionUtils.isNotEmpty(fairParticipantDTOList)) {
+                clazz = fairParticipantDTOList.get(0).getClass();
+                Map<String, Field> hmFields = new HashMap<>();
+                for (int i = 0; i < allFields.length; i++) {
+                    Field field = clazz.getDeclaredField(allFields[i].getName()); //Note, this can throw an exception if the field doesn't exist.
+                    field.setAccessible(true);
+                    hmFields.put(field.getName(), field);
+                }
+
+
+                for (FairParticipantDTO cmsServiceUsageExportDTO : fairParticipantDTOList) {
+                    Map<String, Object> hmAttributeValues = new HashMap<String, Object>();
+                    hmObjectValues.put(cmsServiceUsageExportDTO, hmAttributeValues);
+
+                    for (int i = 0; i < allFields.length; i++) {
+
+                        if (!hmHeaderAttributeNames.containsKey(allFields[i].getName())) {
+                            continue;
+                        }
+                        Field field = hmFields.get(allFields[i].getName());
+                        Object fieldValue = "-";
+                        if (field.get(cmsServiceUsageExportDTO) != null) {
+                            fieldValue = field.get(cmsServiceUsageExportDTO);
+                        }
+                        hmAttributeValues.put(field.getName(), fieldValue);
+                        if (!hmSizeOfColumnsByAttribute.containsKey(field.getName())) {
+                            hmSizeOfColumnsByAttribute.put(field.getName(), 0);
+                        }
+                        Integer sizeOfField = hmSizeOfColumnsByAttribute.get(field.getName());
+                        if (fieldValue != null && String.valueOf(fieldValue).length() > sizeOfField) {
+                            hmSizeOfColumnsByAttribute.put(field.getName(), String.valueOf(fieldValue).length());
+                        }
+                    }
+                }
+
+            }
+
+            XSSFFont defaultFontHeader = streamWorkbook.getXSSFWorkbook().createFont();
+            defaultFontHeader.setFontHeightInPoints((short) 10);
+            defaultFontHeader.setFontName("Arial");
+            defaultFontHeader.setColor(HSSFColor.WHITE.index);
+            defaultFontHeader.setBold(true);
+            defaultFontHeader.setItalic(false);
+
+
+            XSSFFont defaultFont = streamWorkbook.getXSSFWorkbook().createFont();
+            defaultFont.setFontHeightInPoints((short) 10);
+            defaultFont.setFontName("Arial");
+            defaultFont.setColor(IndexedColors.BLACK.getIndex());
+            defaultFont.setBold(true);
+            defaultFont.setItalic(false);
+
+            CellStyle style = streamWorkbook.getXSSFWorkbook().createCellStyle();
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            style.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+            style.setAlignment(CellStyle.ALIGN_CENTER);
+            // Setting font to style
+            style.setFont(defaultFontHeader);
+
+
+            int k = 0;
+            for (int i = 0; i < allFields.length; i++) {
+                for (ExportHeaderDTO exportHeaderDTO : exportHeaderDTOList) {
+                    if (allFields[i].getName().equals(exportHeaderDTO.getName())) {
+                        createCell(sheet, row, k, exportHeaderDTO.getLabel(), style, true, null);
+                        int columnWidth = exportHeaderDTO.getName().length() > hmSizeOfColumnsByAttribute
+                                .get(allFields[i].getName()) ? exportHeaderDTO.getName().length()
+                                : hmSizeOfColumnsByAttribute.get(allFields[i].getName());
+                        sheet.setColumnWidth(k, (columnWidth + 3) * 256);
+                        k++;
+                    }
+                }
+
+
+            }
+
+
+            for (FairParticipantDTO proformaExportDTO : fairParticipantDTOList) {
+
+                row = sheet.createRow(rowCount++);
+                int y = 0;
+                Map<String, Object> hmAttributeValues = hmObjectValues.get(proformaExportDTO);
+                for (int i = 0; i < allFields.length; i++) {
+                    if (!hmHeaderAttributeNames.containsKey(allFields[i].getName())) {
+                        continue;
+                    }
+                    Object fieldValue = hmAttributeValues.get(allFields[i].getName());
+                    if (nonNull(fieldValue))
+                        createCell(sheet, row, y, fieldValue, null,true,
+                                null);
+                    else
+                        createCell(sheet, row, y, "", null, true,
+                                null);
+                    y++;
+                }
+            }
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            streamWorkbook.write(outputStream);
+
+
+
+            return new ByteArrayInputStream(outputStream.toByteArray());
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
+
+
+
+    public ByteArrayInputStream getExportExcelParticipateds(UUID uuid) {
+
+        try {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            List<ExportHeaderDTO> exportHeaderDTOList = new ArrayList<>();
+
+            SXSSFWorkbook streamWorkbook = new SXSSFWorkbook(wb, 100);
+            streamWorkbook.setCompressTempFiles(true);
+
+            XSSFSheet sheet = streamWorkbook.getXSSFWorkbook().createSheet("fuar_katilimci_listesi");
+
+            Row row = sheet.createRow(0);
+
+            int rowCount = 1;
+            long starttime = System.currentTimeMillis();
+
+
+            Fair fair = fairService.findEntityByUUID(uuid);
+            List<FairParticipantDTO> fairParticipantDTOList = getMapper().entityListToDTOList(getRepository().findAllByFairAndIsParticipatedOrderByParticipationDateDesc(fair,Boolean.TRUE));
 
 
             Field[] allFields = FairParticipantDTO.class.getDeclaredFields();
