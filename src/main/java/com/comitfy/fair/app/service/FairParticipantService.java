@@ -120,7 +120,7 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
                                                     .getAbsolutePath()) // path of the jasper report
             */
 
-            JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/qr_ticket.jrxml"));
+            JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/qr_ticket_a5_new_3.jrxml"));
 
             JasperPrint empReport =
                     JasperFillManager.fillReport
@@ -184,7 +184,7 @@ public class FairParticipantService extends BaseService<FairParticipantDTO, Fair
                                                     .getAbsolutePath()) // path of the jasper report
             */
 
-            JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/qr_ticket_a5_new.jrxml"));
+            JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/qr_ticket_a5_new_3.jrxml"));
 
             JasperPrint empReport =
                     JasperFillManager.fillReport
