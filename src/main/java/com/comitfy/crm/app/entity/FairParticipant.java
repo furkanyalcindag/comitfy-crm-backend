@@ -1,0 +1,48 @@
+package com.comitfy.crm.app.entity;
+
+import com.comitfy.crm.util.dbUtil.BaseEntity;
+import lombok.Data;
+
+import jakarta.persistence.*;
+import java.util.Date;
+
+
+@Entity
+@Table
+@Data
+@AttributeOverride(
+        name = "uuid",
+        column = @Column(
+                name = "fair_participant_uuid"
+        )
+)
+public class FairParticipant extends BaseEntity {
+
+    @Column
+    private String firstName;
+
+    @Column
+    private String lastName;
+
+    @Column
+    private String companyName;
+
+    @Column
+    private String email;
+
+    @Column
+    private String mobilePhone;
+
+    @Column
+    private String city;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Fair fair;
+
+    @Column
+    private Boolean isParticipated=Boolean.FALSE;
+
+    @Column
+    private Date participationDate;
+
+}
