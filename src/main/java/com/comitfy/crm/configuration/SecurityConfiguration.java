@@ -7,11 +7,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -43,6 +46,46 @@ public class SecurityConfiguration {
 
 	 */
 
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.headers().frameOptions().disable();
+		http.csrf().disable()
+				.httpBasic().disable()
+				.cors()
+				.configurationSource(request-> {
+					CorsConfiguration configuration = new CorsConfiguration();
+					configuration.setAllowedOrigins(List.of("*"));
+					configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+					configuration.setAllowedHeaders(List.of("*"));
+					return configuration;
+				}).and()
+				.authorizeHttpRequests()
+				.requestMatchers("/swagger-ui/**").permitAll()
+				.requestMatchers("/v3/**").permitAll()
+				.requestMatchers("/h2-console/**").permitAll()
+				.requestMatchers("/auth/**").permitAll()
+				.requestMatchers("/user-api/**").permitAll()
+				//.requestMatchers("/api/user/**").hasRole("USER")
+				.requestMatchers("/deneme/**").hasRole("USER")
+				.and()
+
+				.userDetailsService(uds)
+				.exceptionHandling()
+				.authenticationEntryPoint(
+						(request, response, authException) ->
+								response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+				)
+				.and()
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+
+		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
+
+
 	protected void configure(HttpSecurity http) throws Exception {
 		http.headers().frameOptions().disable();
 		http.csrf().disable()
@@ -60,7 +103,7 @@ public class SecurityConfiguration {
 				.requestMatchers("/swagger-ui/**").permitAll()
 				.requestMatchers("/h2-console/**").permitAll()
 				.requestMatchers("/api/auth/**").permitAll()
-				.requestMatchers("/api/user/**").hasRole("USER")
+				.requestMatchers("/user-api/**").anonymous()
 				.requestMatchers("/deneme/**").hasRole("USER")
 				.and()
 				.userDetailsService(uds)
@@ -79,5 +122,10 @@ public class SecurityConfiguration {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
 	}
 }

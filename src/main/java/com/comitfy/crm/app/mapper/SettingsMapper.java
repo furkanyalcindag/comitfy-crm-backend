@@ -5,16 +5,17 @@ import com.comitfy.crm.app.dto.requestDTO.SettingsRequestDTO;
 import com.comitfy.crm.app.entity.Settings;
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.common.BaseMapper;
+import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class SettingsMapper implements BaseMapper<SettingsDTO, SettingsRequestDTO, Settings> {
+@Mapper(componentModel = "spring")
+public interface SettingsMapper extends BaseMapper<SettingsDTO, SettingsRequestDTO, Settings> {
 
-    @Override
+   /* @Override
     public SettingsDTO entityToDTO(Settings entity) {
         SettingsDTO settingsDTO = new SettingsDTO();
         settingsDTO.setKey(entity.getKey());
@@ -79,5 +80,5 @@ public class SettingsMapper implements BaseMapper<SettingsDTO, SettingsRequestDT
         List<SettingsDTO> settingsDTOList = entityListToDTOList(entityList);
         pageDTO.setStart(pageEntity, settingsDTOList);
         return pageDTO;
-    }
+    }*/
 }

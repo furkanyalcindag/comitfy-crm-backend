@@ -2,12 +2,14 @@ package com.comitfy.crm.util.common;
 
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.dbUtil.BaseEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDTO, Entity extends BaseEntity, Repository extends BaseRepository<Entity>, Mapper extends BaseMapper<DTO, RequestDTO, Entity>, Specification extends BaseSpecification<Entity>> {
 
@@ -19,20 +21,35 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
     public abstract Specification getSpecification();
 
 
-
     public PageDTO<DTO> findAll(BaseFilterRequestDTO filterRequestDTO) {
         Pageable pageable = PageRequest.of(filterRequestDTO.getPageNumber(), filterRequestDTO.getPageSize(), Sort.by("id"));
 
         getSpecification().setCriterias(filterRequestDTO.getFilters());
         //return getMapper().pageEntityToPageDTO(getRepository().findAllByLanguageEnum(pageable,languageEnum));
-        return getMapper().pageEntityToPageDTO(getRepository().findAll(getSpecification(), pageable));
 
+        Page<Entity> pageEntity = getRepository().findAll(getSpecification(), pageable);
+        PageDTO<DTO> pageDTO = new PageDTO<>();
+        pageDTO.setNumber(pageEntity.getNumber());
+        pageDTO.setSize(pageEntity.getSize());
+        pageDTO.setTotalPage(pageEntity.getTotalPages());
+        pageDTO.setSort(pageEntity.getSort());
+        pageDTO.setData(pageEntity.toList().stream().map(getMapper()::entityToDTO).collect(Collectors.toList()));
+
+
+        return pageDTO;
     }
 
 
     public PageDTO<DTO> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        return getMapper().pageEntityToPageDTO(getRepository().findAll(pageable));
+        Page<Entity> pageEntity = getRepository().findAll(pageable);
+        PageDTO<DTO> pageDTO = new PageDTO<>();
+        pageDTO.setNumber(pageEntity.getNumber());
+        pageDTO.setSize(pageEntity.getSize());
+        pageDTO.setTotalPage(pageEntity.getTotalPages());
+        pageDTO.setSort(pageEntity.getSort());
+        pageDTO.setData(pageEntity.toList().stream().map(getMapper()::entityToDTO).collect(Collectors.toList()));
+        return pageDTO;
     }
 
     public DTO findByUUID(UUID uuid) {
@@ -46,8 +63,8 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
         return optionalEntity.orElse(null);
     }
 
-    public DTO save(RequestDTO requestDTO) {
-        Entity entity = getMapper().requestDTOToEntity(requestDTO);
+    public DTO save(DTO requestDTO) {
+        Entity entity = getMapper().dtoToEntity(requestDTO);
         getRepository().save(entity);
         return getMapper().entityToDTO(entity);
     }
@@ -66,11 +83,11 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
 
     }
 
-    public RequestDTO update(UUID id, RequestDTO dto) {
+    public DTO update(UUID id, DTO dto) {
         Optional<Entity> entity = getRepository().findByUuid(id);
 
         if (entity.isPresent()) {
-            Entity entity1 = getMapper().requestDTOToExistEntity(entity.get(), dto);
+            Entity entity1 = getMapper().dtoToEntity(dto);
             getRepository().save(entity1);
             return dto;
         } else {

@@ -9,21 +9,17 @@ import com.comitfy.crm.userModule.entity.User;
 import com.comitfy.crm.userModule.repository.RoleRepository;
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.common.BaseMapper;
+import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-@Component
-public class UserMapper implements BaseMapper<UserDTO, UserRequestDTO, User> {
+@Mapper(componentModel = "spring")
+public interface UserMapper extends BaseMapper<UserDTO, UserRequestDTO, User> {
 
-
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Override
+    /*@Override
     public UserDTO entityToDTO(User entity) {
 
         UserDTO userDTO = new UserDTO();
@@ -47,7 +43,7 @@ public class UserMapper implements BaseMapper<UserDTO, UserRequestDTO, User> {
             roleDTOS.add(roleDTO);
         }
 
-      */
+
         return userDTO;
     }
 
@@ -141,5 +137,5 @@ public class UserMapper implements BaseMapper<UserDTO, UserRequestDTO, User> {
         pageDTO.setStart(pageEntity, userDTOList);
 
         return pageDTO;
-    }
+    }*/
 }

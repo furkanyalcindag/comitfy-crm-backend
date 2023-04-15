@@ -2,7 +2,7 @@ package com.comitfy.crm.util.helper;
 
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+//import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class EmailHelper {
 
 
-    private final JavaMailSender javaMailSender;
+    //private final JavaMailSender javaMailSender;
 
     void sendEmail(String to, String subject, String text) {
 

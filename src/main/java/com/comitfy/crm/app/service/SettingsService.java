@@ -60,7 +60,8 @@ public class SettingsService extends BaseService<SettingsDTO, SettingsRequestDTO
     public SettingsRequestDTO updateSettings(UUID id, SettingsRequestDTO dto, User user) {
         Optional<Settings> settings = settingsRepository.findByUuid(id);
         if (settings.isPresent()) {
-            Settings settings1 = settingsMapper.requestDTOToExistEntity(settings.get(), dto);
+            //Settings settings1 = settingsMapper.requestDTOToExistEntity(settings.get(), dto);
+            Settings settings1 = new Settings();
             settings1.setKey(dto.getKey());
             settings1.setValue(dto.getValue());
             settings1.setCurrent(dto.isCurrent());

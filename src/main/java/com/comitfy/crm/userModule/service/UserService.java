@@ -12,6 +12,7 @@ import com.comitfy.crm.userModule.specification.UserSpecification;
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.common.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,6 +23,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService extends BaseService<UserDTO, UserRequestDTO, User, UserRepository, UserMapper, UserSpecification> {
@@ -78,7 +80,21 @@ public class UserService extends BaseService<UserDTO, UserRequestDTO, User, User
         if (role.isPresent()) {
             Set<Role> roleSet = new HashSet<>();
             roleSet.add(role.get());
-            return getMapper().pageEntityToPageDTO(userRepository.getUserByRole(pageable,id));
+
+            Page<User> pageEntity = userRepository.getUserByRole(pageable,id);
+            PageDTO<UserDTO> pageDTO = new PageDTO<>();
+            pageDTO.setNumber(pageEntity.getNumber());
+            pageDTO.setSize(pageEntity.getSize());
+            pageDTO.setTotalPage(pageEntity.getTotalPages());
+            pageDTO.setSort(pageEntity.getSort());
+            pageDTO.setData(pageEntity.toList().stream().map(getMapper()::entityToDTO).collect(Collectors.toList()));
+
+
+
+
+
+
+            return pageDTO;
         } else {
             return null;
         }

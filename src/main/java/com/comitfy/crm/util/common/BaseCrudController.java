@@ -59,7 +59,7 @@ public abstract class BaseCrudController<DTO extends BaseDTO, RequestDTO extends
     }
 
     @PostMapping("/")
-    public ResponseEntity<DTO> save(@RequestBody RequestDTO body) {
+    public ResponseEntity<DTO> save(@RequestBody DTO body) {
 
         return new ResponseEntity<>(getService().save(body), HttpStatus.CREATED);
     }
@@ -82,7 +82,7 @@ public abstract class BaseCrudController<DTO extends BaseDTO, RequestDTO extends
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody RequestDTO body) {
+    public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody DTO body) {
         body = getService().update(id, body);
 
         if (body == null) {

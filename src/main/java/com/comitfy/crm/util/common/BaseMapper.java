@@ -14,13 +14,13 @@ public interface BaseMapper<DTO extends BaseDTO, RequestDTO extends BaseDTO, Ent
 
     Entity requestDTOToEntity(RequestDTO dto);
 
-    Entity requestDTOToExistEntity(Entity entity, RequestDTO dto);
+    //Entity requestDTOToExistEntity(Entity entity, RequestDTO dto);*/
 
     List<Entity> dtoListToEntityList(List<DTO> dtoList);
 
     List<DTO> entityListToDTOList(List<Entity> entityList);
 
-    PageDTO<DTO> pageEntityToPageDTO(Page<Entity> pageEntity);
+    //PageDTO<DTO> pageEntityToPageDTO(Page<Entity> pageEntity);
 
 
 }

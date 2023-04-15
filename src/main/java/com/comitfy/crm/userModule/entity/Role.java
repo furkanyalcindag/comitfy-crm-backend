@@ -16,7 +16,7 @@ public class Role extends BaseEntity {
     @Column
     private String description;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
 

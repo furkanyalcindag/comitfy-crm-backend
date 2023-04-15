@@ -7,6 +7,8 @@ import com.comitfy.crm.util.dbUtil.BaseEntity;
 import lombok.Data;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Set;
 
@@ -49,7 +51,9 @@ public class User extends BaseEntity {
     private List<Group> group;*/
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    @JoinColumn(name="role_id", nullable = false)
     private Set<Role> roles;
 
 

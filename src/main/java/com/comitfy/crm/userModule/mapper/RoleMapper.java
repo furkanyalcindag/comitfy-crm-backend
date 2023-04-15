@@ -5,6 +5,7 @@ import com.comitfy.crm.userModule.dto.requestDTO.RoleRequestDTO;
 import com.comitfy.crm.userModule.entity.Role;
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.common.BaseMapper;
+import org.mapstruct.Mapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -12,9 +13,9 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class RoleMapper implements BaseMapper<RoleDTO, RoleRequestDTO, Role> {
-    @Override
+@Mapper(componentModel = "spring")
+public interface RoleMapper extends BaseMapper<RoleDTO, RoleRequestDTO, Role> {
+    /*@Override
     public RoleDTO entityToDTO(Role entity) {
         RoleDTO roleDTO = new RoleDTO();
 
@@ -87,7 +88,7 @@ public class RoleMapper implements BaseMapper<RoleDTO, RoleRequestDTO, Role> {
             //return new ModelMapper().map(t, BookDto.class);
         });
 
-        return dtoPage;*/
+        return dtoPage;//
 
         PageDTO<RoleDTO> pageDTO = new PageDTO<RoleDTO>();
         List<Role> entityList = pageEntity.toList();
@@ -95,5 +96,5 @@ public class RoleMapper implements BaseMapper<RoleDTO, RoleRequestDTO, Role> {
         pageDTO.setStart(pageEntity, languageDTOList);
 
         return pageDTO;
-    }
+    }*/
 }
