@@ -2,6 +2,7 @@ package com.comitfy.crm.util.common;
 
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.dbUtil.BaseEntity;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -88,7 +89,8 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
 
         if (entity.isPresent()) {
             Entity entity1 = getMapper().dtoToEntity(dto);
-            getRepository().save(entity1);
+            getMapper().update(entity.get(), entity1);
+            getRepository().save(entity.get());
             return dto;
         } else {
             return null;

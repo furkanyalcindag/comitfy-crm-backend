@@ -62,7 +62,7 @@ public class SecurityConfiguration {
 				.authorizeHttpRequests()
 				.requestMatchers("/swagger-ui/**").permitAll()
 				.requestMatchers("/v3/**").permitAll()
-				.requestMatchers("/h2-console/**").permitAll()
+				.requestMatchers("/currency/**").permitAll()
 				.requestMatchers("/auth/**").permitAll()
 				.requestMatchers("/user-api/**").permitAll()
 				//.requestMatchers("/api/user/**").hasRole("USER")

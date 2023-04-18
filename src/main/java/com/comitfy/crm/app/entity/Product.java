@@ -11,15 +11,13 @@ import java.util.Set;
 @Entity
 @Table
 @Data
-@AttributeOverride(
-        name = "uuid",
-        column = @Column(
-                name = "product_uuid"
-        )
-)
+@AttributeOverride(name = "uuid", column = @Column(name = "product_uuid"))
 public class Product extends BaseEntity {
 
+    @Column
     private String name;
+
+    @Column
     private String code;
 
     @Column(columnDefinition = "JSON")

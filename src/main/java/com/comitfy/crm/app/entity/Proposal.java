@@ -15,12 +15,12 @@ import lombok.Data;
 )
 public class Proposal extends BaseEntity {
 
-    @Column
-    @OneToOne
+
+    @ManyToOne
     private Customer customer;
 
-    @Column
-    @OneToOne
+
+    @ManyToOne
     private Product product;
 
 

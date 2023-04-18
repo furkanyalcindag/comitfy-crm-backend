@@ -60,7 +60,7 @@ public class BaseEntity {
             username="anonymous";
         }
         else {
-            username = ((UserDetails) authentication.getPrincipal()).getUsername();
+            username =  authentication.getPrincipal().toString();
         }
 
 
