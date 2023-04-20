@@ -62,6 +62,7 @@ public class SecurityConfiguration {
 				.authorizeHttpRequests()
 				.requestMatchers("/swagger-ui/**").permitAll()
 				.requestMatchers("/v3/**").permitAll()
+				.requestMatchers("/measurement-unit/**").permitAll()
 				.requestMatchers("/currency/**").permitAll()
 				.requestMatchers("/auth/**").permitAll()
 				.requestMatchers("/user-api/**").permitAll()
