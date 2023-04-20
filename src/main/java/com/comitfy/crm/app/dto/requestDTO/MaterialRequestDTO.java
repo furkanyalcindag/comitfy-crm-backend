@@ -1,20 +1,14 @@
-package com.comitfy.crm.app.dto;
+package com.comitfy.crm.app.dto.requestDTO;
 
 
-import com.comitfy.crm.app.entity.ProductMaterial;
 import com.comitfy.crm.util.common.BaseDTO;
-import com.comitfy.crm.util.dbUtil.BaseEntity;
-import jakarta.persistence.*;
 import lombok.Data;
-import net.minidev.json.annotate.JsonIgnore;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Data
-public class MaterialDTO extends BaseDTO {
+public class MaterialRequestDTO extends BaseDTO {
 
     private String name;
     private String code;

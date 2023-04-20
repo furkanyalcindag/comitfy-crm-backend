@@ -33,7 +33,7 @@ public class Material extends BaseEntity {
     private BigDecimal purchaseNetPrice;
 
     @Column
-    private Integer saleNetPrice;
+    private BigDecimal saleNetPrice;
 
 
     @OneToMany(mappedBy = "material", cascade = CascadeType.ALL)
