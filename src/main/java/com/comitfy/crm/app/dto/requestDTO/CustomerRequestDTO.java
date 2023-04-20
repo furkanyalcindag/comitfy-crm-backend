@@ -1,12 +1,11 @@
-package com.comitfy.crm.app.dto;
+package com.comitfy.crm.app.dto.requestDTO;
 
 import com.comitfy.crm.util.common.BaseDTO;
-import com.comitfy.crm.util.dbUtil.BaseEntity;
 import lombok.Data;
 
 
 @Data
-public class CustomerDTO extends BaseDTO {
+public class CustomerRequestDTO extends BaseDTO {
 
 
     private String companyName;
