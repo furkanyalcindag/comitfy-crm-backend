@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("Customer")
+@RequestMapping("customer")
 public class CustomerController extends BaseCrudController<CustomerDTO, CustomerRequestDTO, Customer, CustomerRepository, CustomerMapper, CustomerSpecification, CustomerService> {
 
     @Autowired

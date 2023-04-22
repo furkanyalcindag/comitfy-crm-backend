@@ -65,6 +65,7 @@ public class SecurityConfiguration {
 				.requestMatchers("/measurement-unit/**").permitAll()
 				.requestMatchers("/currency/**").permitAll()
 				.requestMatchers("/material/**").permitAll()
+				.requestMatchers("/product/**").permitAll()
 				.requestMatchers("/auth/**").permitAll()
 				.requestMatchers("/user-api/**").permitAll()
 				//.requestMatchers("/api/user/**").hasRole("USER")
