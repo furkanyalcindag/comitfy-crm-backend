@@ -1,7 +1,9 @@
 package com.comitfy.crm.app.mapper;
 
+import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.app.dto.MaterialDTO;
 import com.comitfy.crm.app.dto.requestDTO.MaterialRequestDTO;
+import com.comitfy.crm.app.entity.Currency;
 import com.comitfy.crm.app.entity.Material;
 import com.comitfy.crm.util.common.BaseMapper;
 import org.mapstruct.Mapper;
@@ -24,6 +26,13 @@ public interface MaterialMapper extends BaseMapper<MaterialDTO, MaterialRequestD
     })
     @Override
     void update(@MappingTarget Material entity, Material updateEntity);
+
+
+    @Mappings({@Mapping(source = "uuid", target = "value"),
+            @Mapping(source = "name", target = "label")
+
+    })
+    AutoCompleteDTO entityToAutoCompleteDTO(Material entity);
 
 
 }

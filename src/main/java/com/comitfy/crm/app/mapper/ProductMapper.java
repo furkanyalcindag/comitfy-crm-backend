@@ -1,8 +1,10 @@
 package com.comitfy.crm.app.mapper;
 
+import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.app.dto.ProductDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProductMaterialRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProductRequestDTO;
+import com.comitfy.crm.app.entity.Currency;
 import com.comitfy.crm.app.entity.Material;
 import com.comitfy.crm.app.entity.Product;
 import com.comitfy.crm.app.entity.ProductMaterial;
@@ -11,6 +13,8 @@ import com.comitfy.crm.app.repository.ProductRepository;
 import com.comitfy.crm.util.common.BaseMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -114,5 +118,14 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
     @Override
     public void update(Product entity, Product updateEntity) {
 
+    }
+
+    @Override
+    public AutoCompleteDTO entityToAutoCompleteDTO(Product entity) {
+
+        AutoCompleteDTO autoCompleteDTO = new AutoCompleteDTO();
+        autoCompleteDTO.setLabel(entity.getName());
+        autoCompleteDTO.setValue(entity.getUuid());
+        return autoCompleteDTO;
     }
 }

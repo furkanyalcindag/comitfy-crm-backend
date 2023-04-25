@@ -1,5 +1,6 @@
 package com.comitfy.crm.util.common;
 
+import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.dbUtil.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,18 @@ public abstract class BaseCrudController<DTO extends BaseDTO, RequestDTO extends
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
+
+
+
+
+    @PostMapping("search-autocomplete-filter")
+    public ResponseEntity<List<AutoCompleteDTO>> searchAutoCompleteByFilter(@RequestBody BaseFilterRequestDTO filter) {
+
+        List<AutoCompleteDTO> dtoList = getService().autoComplete(filter);
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
 
     @GetMapping("/")
     public ResponseEntity<PageDTO<DTO>> getAll(@RequestParam int pageNumber, @RequestParam int pageSize) {

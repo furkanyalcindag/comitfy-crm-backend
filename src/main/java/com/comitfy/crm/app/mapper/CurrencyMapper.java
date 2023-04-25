@@ -1,5 +1,6 @@
 package com.comitfy.crm.app.mapper;
 
+import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.app.dto.CurrencyDTO;
 import com.comitfy.crm.app.dto.requestDTO.CurrencyRequestDTO;
 import com.comitfy.crm.app.entity.Currency;
@@ -26,6 +27,11 @@ public interface CurrencyMapper extends BaseMapper<CurrencyDTO, CurrencyRequestD
     void update(@MappingTarget Currency entity, Currency updateEntity);
 
 
+    @Mappings({@Mapping(source = "uuid", target = "value"),
+            @Mapping(source = "name", target = "label")
+
+    })
+    AutoCompleteDTO entityToAutoCompleteDTO(Currency entity);
 
 
 }

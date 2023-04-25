@@ -1,9 +1,11 @@
 package com.comitfy.crm.app.mapper;
 
+import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.app.dto.CustomerDTO;
 import com.comitfy.crm.app.dto.MeasurementUnitDTO;
 import com.comitfy.crm.app.dto.requestDTO.CustomerRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.MeasurementUnitRequestDTO;
+import com.comitfy.crm.app.entity.Currency;
 import com.comitfy.crm.app.entity.Customer;
 import com.comitfy.crm.app.entity.MeasurementUnit;
 import com.comitfy.crm.util.common.BaseMapper;
@@ -27,6 +29,12 @@ public interface CustomerMapper extends BaseMapper<CustomerDTO, CustomerRequestD
     })
     @Override
     void update(@MappingTarget Customer entity, Customer updateEntity);
+
+    @Mappings({@Mapping(source = "uuid", target = "value"),
+            @Mapping(source = "companyName", target = "label")
+
+    })
+    AutoCompleteDTO entityToAutoCompleteDTO(Customer entity);
 
 
 }

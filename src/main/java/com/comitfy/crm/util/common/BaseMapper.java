@@ -1,5 +1,6 @@
 package com.comitfy.crm.util.common;
 
+import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.dbUtil.BaseEntity;
 import jakarta.persistence.Entity;
@@ -29,6 +30,10 @@ public interface BaseMapper<DTO extends BaseDTO, RequestDTO extends BaseDTO, Ent
 
 
     void update(@MappingTarget Entity entity, Entity updateEntity);
+
+
+
+    AutoCompleteDTO entityToAutoCompleteDTO(Entity entity);
 
     //PageDTO<DTO> pageEntityToPageDTO(Page<Entity> pageEntity);
 

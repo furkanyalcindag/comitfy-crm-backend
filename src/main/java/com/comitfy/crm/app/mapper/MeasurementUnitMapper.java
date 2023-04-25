@@ -1,5 +1,6 @@
 package com.comitfy.crm.app.mapper;
 
+import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.app.dto.CurrencyDTO;
 import com.comitfy.crm.app.dto.MeasurementUnitDTO;
 import com.comitfy.crm.app.dto.requestDTO.CurrencyRequestDTO;
@@ -27,6 +28,13 @@ public interface MeasurementUnitMapper extends BaseMapper<MeasurementUnitDTO, Me
     })
     @Override
     void update(@MappingTarget MeasurementUnit entity, MeasurementUnit updateEntity);
+
+
+    @Mappings({@Mapping(source = "uuid", target = "value"),
+            @Mapping(source = "name", target = "label")
+
+    })
+    AutoCompleteDTO entityToAutoCompleteDTO(MeasurementUnit entity);
 
 
 }

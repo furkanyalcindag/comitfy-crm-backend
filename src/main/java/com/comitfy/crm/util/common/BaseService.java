@@ -1,5 +1,6 @@
 package com.comitfy.crm.util.common;
 
+import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.dbUtil.BaseEntity;
 import org.apache.commons.beanutils.BeanUtils;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,6 +41,30 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
 
 
         return pageDTO;
+    }
+
+    public List<AutoCompleteDTO> autoComplete(BaseFilterRequestDTO filterRequestDTO) {
+        AutoCompleteDTO autoCompleteDTO = new AutoCompleteDTO();
+        Pageable pageable = PageRequest.of(filterRequestDTO.getPageNumber(), filterRequestDTO.getPageSize(), Sort.by("id"));
+
+        getSpecification().setCriterias(filterRequestDTO.getFilters());
+        //return getMapper().pageEntityToPageDTO(getRepository().findAllByLanguageEnum(pageable,languageEnum));
+
+        Page<Entity> pageEntity = getRepository().findAll(getSpecification(), pageable);
+        PageDTO<DTO> pageDTO = new PageDTO<>();
+        pageDTO.setNumber(pageEntity.getNumber());
+        pageDTO.setSize(pageEntity.getSize());
+        pageDTO.setTotalPage(pageEntity.getTotalPages());
+        pageDTO.setSort(pageEntity.getSort());
+      //  pageDTO.setData(pageEntity.toList().stream().map(getMapper()::entityToDTO).collect(Collectors.toList()));
+
+        List<AutoCompleteDTO> autoCompleteDTOList = new ArrayList<>();
+        autoCompleteDTOList = pageEntity.toList().stream().map(getMapper()::entityToAutoCompleteDTO).collect(Collectors.toList());
+
+
+
+
+        return autoCompleteDTOList;
     }
 
 
