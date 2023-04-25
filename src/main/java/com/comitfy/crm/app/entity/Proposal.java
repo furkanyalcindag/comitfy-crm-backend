@@ -4,6 +4,8 @@ import com.comitfy.crm.util.dbUtil.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table
 @Data
@@ -19,11 +21,23 @@ public class Proposal extends BaseEntity {
     @ManyToOne
     private Customer customer;
 
-
     @ManyToOne
     private Product product;
 
+    @Column
+    private BigDecimal costFee;
 
+    @Column
+    private BigDecimal offerFee;
+
+    @Column
+    private BigDecimal discountPercentage;
+
+    @Column
+    private BigDecimal discountFee;
+
+    @Column
+    private BigDecimal lastOfferFee;
 
 
 }
