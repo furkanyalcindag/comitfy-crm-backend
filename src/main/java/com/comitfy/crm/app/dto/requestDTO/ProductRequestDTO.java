@@ -9,6 +9,6 @@ import java.util.List;
 public class ProductRequestDTO extends BaseDTO {
     private String name;
     private String code;
-    private String receipt;
+    private List<ReceiptDTO> receipt;
     private List<ProductMaterialRequestDTO> materialList;
 }

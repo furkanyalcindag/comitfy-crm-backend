@@ -11,6 +11,7 @@ import com.comitfy.crm.app.entity.ProductMaterial;
 import com.comitfy.crm.app.repository.MaterialRepository;
 import com.comitfy.crm.app.repository.ProductRepository;
 import com.comitfy.crm.util.common.BaseMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.mapstruct.Mapping;
@@ -65,26 +66,36 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
     @Override
     public Product requestDTOToEntity(ProductRequestDTO dto) {
 
-        Product product = new Product();
 
-        product.setCode(dto.getCode());
-        product.setName(dto.getName());
-        product.setReceipt(dto.getReceipt());
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            Product product = new Product();
+            product.setCode(dto.getCode());
+            product.setName(dto.getName());
+            product.setReceipt(mapper.writeValueAsString(dto.getReceipt()));
 
-        product = productRepository.save(product);
-        Set<ProductMaterial> productMaterialSet = new HashSet<>();
-        for (ProductMaterialRequestDTO pmrDto : dto.getMaterialList()) {
-            Material material = materialRepository.findByUuid(pmrDto.getMaterialUUID()).get();
-            ProductMaterial productMaterial = new ProductMaterial();
-            productMaterial.setProduct(product);
-            productMaterial.setMaterial(material);
-            productMaterial.setQuantity(pmrDto.getQuantity());
-            productMaterialSet.add(productMaterial);
+            product = productRepository.save(product);
+            Set<ProductMaterial> productMaterialSet = new HashSet<>();
+            for (ProductMaterialRequestDTO pmrDto : dto.getMaterialList()) {
+                Material material = materialRepository.findByUuid(pmrDto.getMaterialUUID()).get();
+                ProductMaterial productMaterial = new ProductMaterial();
+                productMaterial.setProduct(product);
+                productMaterial.setMaterial(material);
+                productMaterial.setQuantity(pmrDto.getQuantity());
+                productMaterialSet.add(productMaterial);
+            }
+            product.setProductMaterials(productMaterialSet);
+            product = productRepository.save(product);
+
+            return product;
         }
-        product.setProductMaterials(productMaterialSet);
-        product = productRepository.save(product);
+        catch (Exception e){
 
-        return product;
+            e.printStackTrace();
+
+            return null;
+        }
+
     }
 
     @Override
