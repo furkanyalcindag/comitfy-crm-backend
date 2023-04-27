@@ -28,11 +28,18 @@ public interface MaterialMapper extends BaseMapper<MaterialDTO, MaterialRequestD
     void update(@MappingTarget Material entity, Material updateEntity);
 
 
-    @Mappings({@Mapping(source = "uuid", target = "value"),
-            @Mapping(source = "name", target = "label")
+    @Mappings({
+            @Mapping(source = "uuid", target = "value"),
 
+            @Mapping(target = "label", expression = "java(setLabelFullDetail(entity))")
     })
     AutoCompleteDTO entityToAutoCompleteDTO(Material entity);
+
+
+    default String setLabelFullDetail(Material entity) {
+        return entity.getCode() + ":-:" + entity.getName() + ":-:" + entity.getPurchaseNetPrice() + ":-:" + entity.getSaleNetPrice();
+
+    }
 
 
 }
