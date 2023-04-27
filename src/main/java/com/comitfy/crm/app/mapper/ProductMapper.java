@@ -4,25 +4,21 @@ import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.app.dto.ProductDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProductMaterialRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProductRequestDTO;
-import com.comitfy.crm.app.entity.Currency;
 import com.comitfy.crm.app.entity.Material;
 import com.comitfy.crm.app.entity.Product;
 import com.comitfy.crm.app.entity.ProductMaterial;
 import com.comitfy.crm.app.repository.MaterialRepository;
+import com.comitfy.crm.app.repository.ProductMaterialRepository;
 import com.comitfy.crm.app.repository.ProductRepository;
 import com.comitfy.crm.util.common.BaseMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Component
 @Slf4j
@@ -33,6 +29,9 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
 
     @Autowired
     MaterialRepository materialRepository;
+
+    @Autowired
+    ProductMaterialRepository productMaterialRepository;
 
     @Override
     public ProductDTO entityToDTO(Product entity) {
@@ -67,7 +66,7 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
     public Product requestDTOToEntity(ProductRequestDTO dto) {
 
 
-        try{
+        try {
             ObjectMapper mapper = new ObjectMapper();
             Product product = new Product();
             product.setCode(dto.getCode());
@@ -75,21 +74,17 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
             product.setReceipt(mapper.writeValueAsString(dto.getReceipt()));
 
             product = productRepository.save(product);
-            Set<ProductMaterial> productMaterialSet = new HashSet<>();
             for (ProductMaterialRequestDTO pmrDto : dto.getMaterialList()) {
                 Material material = materialRepository.findByUuid(pmrDto.getMaterialUUID()).get();
                 ProductMaterial productMaterial = new ProductMaterial();
                 productMaterial.setProduct(product);
                 productMaterial.setMaterial(material);
                 productMaterial.setQuantity(pmrDto.getQuantity());
-                productMaterialSet.add(productMaterial);
-            }
-            product.setProductMaterials(productMaterialSet);
-            product = productRepository.save(product);
+                productMaterialRepository.save(productMaterial);
 
+            }
             return product;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
             e.printStackTrace();
 
