@@ -4,10 +4,12 @@ import com.comitfy.crm.util.common.BaseDTO;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Data
-public class ProposalDTO extends BaseDTO {
+public class
+ProposalDTO extends BaseDTO {
 
     private CustomerDTO customer;
     private ProductDTO product;
@@ -16,5 +18,7 @@ public class ProposalDTO extends BaseDTO {
     private BigDecimal discountPercentage;
     private BigDecimal discountFee;
     private BigDecimal lastOfferFee;
+
+    private List<MaterialDTO> materialList;
 
 }

@@ -71,7 +71,7 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
             Product product = new Product();
             product.setCode(dto.getCode());
             product.setName(dto.getName());
-            product.setReceipt(mapper.writeValueAsString(dto.getReceipt()));
+            product.setReceipts(mapper.writeValueAsString(dto.getReceipts()));
 
             product = productRepository.save(product);
             for (ProductMaterialRequestDTO pmrDto : dto.getMaterialList()) {
