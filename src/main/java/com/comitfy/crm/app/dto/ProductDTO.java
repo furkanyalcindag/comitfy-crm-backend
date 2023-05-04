@@ -18,7 +18,7 @@ public class ProductDTO extends BaseDTO {
 
     private String name;
     private String code;
-    private List<ReceiptDTO> receipts;
+    private String receipts;
     private Set<ProductMaterialDTO> productMaterials;
 
 }
