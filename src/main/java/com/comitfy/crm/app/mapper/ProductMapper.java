@@ -2,6 +2,7 @@ package com.comitfy.crm.app.mapper;
 
 import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.app.dto.ProductDTO;
+import com.comitfy.crm.app.dto.ProductMaterialDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProductMaterialRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProductRequestDTO;
 import com.comitfy.crm.app.entity.Material;
@@ -33,11 +34,31 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
     @Autowired
     ProductMaterialRepository productMaterialRepository;
 
+    @Autowired
+    MaterialMapper mapper;
+
     @Override
     public ProductDTO entityToDTO(Product entity) {
         try {
             ProductDTO productDTO = new ProductDTO();
+
+
+            List<ProductMaterial> productMaterials = productMaterialRepository.findAllByProduct(entity);
+
+
+
             BeanUtils.copyProperties(productDTO, entity);
+            for (ProductMaterial productMaterial : productMaterials) {
+
+
+                ProductMaterialDTO productMaterialDTO = new ProductMaterialDTO();
+                productMaterialDTO.setMaterial(mapper.entityToDTO(productMaterial.getMaterial()));
+                productMaterialDTO.setQuantity(productMaterial.getQuantity());
+                productMaterialDTO.setProduct(null);
+                productDTO.getProductMaterials().add(productMaterialDTO);
+
+            }
+
             return productDTO;
         } catch (Exception e) {
             log.error(e.getMessage());

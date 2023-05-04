@@ -12,13 +12,12 @@ import java.util.List;
 import java.util.Set;
 
 
-
 @Data
 public class ProductDTO extends BaseDTO {
 
     private String name;
     private String code;
     private String receipts;
-    private Set<ProductMaterialDTO> productMaterials;
+    private Set<ProductMaterialDTO> productMaterials = new HashSet<>();
 
 }
