@@ -47,7 +47,13 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
 
 
 
-            BeanUtils.copyProperties(productDTO, entity);
+            //BeanUtils.copyProperties(productDTO, entity);
+            productDTO.setCode(entity.getCode());
+            productDTO.setName(entity.getName());
+            productDTO.setUuid(entity.getUuid());
+            productDTO.setReceipts(entity.getReceipts());
+            productDTO.setId(entity.getId());
+
             for (ProductMaterial productMaterial : productMaterials) {
 
 
