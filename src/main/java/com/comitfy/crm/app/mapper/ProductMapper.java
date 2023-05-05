@@ -46,7 +46,6 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
             List<ProductMaterial> productMaterials = productMaterialRepository.findAllByProduct(entity);
 
 
-
             //BeanUtils.copyProperties(productDTO, entity);
             productDTO.setCode(entity.getCode());
             productDTO.setName(entity.getName());
@@ -109,6 +108,37 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
                 productMaterial.setQuantity(pmrDto.getQuantity());
                 productMaterialRepository.save(productMaterial);
 
+            }
+            return product;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return null;
+        }
+
+    }
+
+
+    public Product requestDTOToExistEntity(ProductRequestDTO dto, Product product) {
+
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            product.setCode(dto.getCode());
+            product.setName(dto.getName());
+            product.setReceipts(mapper.writeValueAsString(dto.getReceipts()));
+            product = productRepository.save(product);
+
+            productMaterialRepository.deleteByProduct(product);
+
+            for (ProductMaterialRequestDTO pmrDto : dto.getMaterialList()) {
+                Material material = materialRepository.findByUuid(pmrDto.getMaterialUUID()).get();
+                ProductMaterial productMaterial = new ProductMaterial();
+                productMaterial.setProduct(product);
+                productMaterial.setMaterial(material);
+                productMaterial.setQuantity(pmrDto.getQuantity());
+                productMaterialRepository.save(productMaterial);
             }
             return product;
         } catch (Exception e) {

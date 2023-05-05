@@ -11,8 +11,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
-public class ProductService extends BaseService<ProductDTO, ProductRequestDTO, Product, ProductRepository, ProductMapper,ProductSpecification> {
+public class ProductService extends BaseService<ProductDTO, ProductRequestDTO, Product, ProductRepository, ProductMapper, ProductSpecification> {
 
     @Autowired
     ProductRepository productRepository;
@@ -45,4 +47,16 @@ public class ProductService extends BaseService<ProductDTO, ProductRequestDTO, P
 
         return getMapper().entityToDTO(entity);
     }
+
+
+    @Transactional
+    public ProductDTO update(ProductRequestDTO requestDTO, UUID uuid) {
+
+        Product product = productRepository.findByUuid(uuid).get();
+        Product entity = getMapper().requestDTOToExistEntity(requestDTO, product);
+
+        return getMapper().entityToDTO(entity);
+    }
+
+
 }

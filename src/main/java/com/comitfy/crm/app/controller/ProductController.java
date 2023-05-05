@@ -11,10 +11,9 @@ import com.comitfy.crm.util.common.BaseCrudController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("product")
@@ -44,4 +43,13 @@ public class ProductController extends BaseCrudController<ProductDTO, ProductReq
 
         return new ResponseEntity<>(getService().save(body), HttpStatus.CREATED);
     }
+
+
+    @PutMapping("put-all/{id}")
+    public ResponseEntity<ProductDTO> update(@PathVariable UUID id, @RequestBody ProductRequestDTO body) {
+
+        return new ResponseEntity<>(getService().update(body, id), HttpStatus.OK);
+    }
+
+
 }
