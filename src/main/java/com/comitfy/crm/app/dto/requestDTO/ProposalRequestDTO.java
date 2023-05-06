@@ -9,10 +9,6 @@ import java.util.UUID;
 public class ProposalRequestDTO extends BaseDTO {
 
     private UUID productUUID;
-
-
-
-
-
+    private UUID customerUUID;
 
 }

@@ -36,8 +36,5 @@ public class Proposal extends BaseEntity {
     @Column
     private BigDecimal discountFee;
 
-    @Column
-    private BigDecimal lastOfferFee;
-
 
 }
