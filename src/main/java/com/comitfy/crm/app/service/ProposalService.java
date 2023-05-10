@@ -3,11 +3,15 @@ package com.comitfy.crm.app.service;
 import com.comitfy.crm.app.dto.MaterialDTO;
 import com.comitfy.crm.app.dto.ProposalDTO;
 import com.comitfy.crm.app.dto.ProposalPreparingDTO;
+import com.comitfy.crm.app.dto.requestDTO.DiscountRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProposalRequestDTO;
+import com.comitfy.crm.app.entity.Material;
 import com.comitfy.crm.app.entity.Product;
 import com.comitfy.crm.app.entity.ProductMaterial;
 import com.comitfy.crm.app.entity.Proposal;
 import com.comitfy.crm.app.mapper.ProposalMapper;
+import com.comitfy.crm.app.model.enums.DiscountTypeEnum;
+import com.comitfy.crm.app.repository.MaterialRepository;
 import com.comitfy.crm.app.repository.ProductMaterialRepository;
 import com.comitfy.crm.app.repository.ProductRepository;
 import com.comitfy.crm.app.repository.ProposalRepository;
@@ -38,6 +42,9 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
     @Autowired
     ProductMaterialRepository productMaterialRepository;
+
+    @Autowired
+    MaterialRepository materialRepository;
 
     @Override
     public ProposalRepository getRepository() {
@@ -94,6 +101,35 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         proposalPreparingDTO.setSellTotalPrice(sellPrice);
 
         return proposalPreparingDTO;
+    }
+
+
+    public BigDecimal calculateDiscountByProduct(DiscountRequestDTO discountRequestDTO) {
+
+
+        Material material = materialRepository.findByUuid(discountRequestDTO.getMaterialUUID()).get();
+
+        BigDecimal salePrice = material.getSaleNetPrice();
+
+        BigDecimal discountedPrice = BigDecimal.ZERO;
+
+
+        if (discountRequestDTO.getDiscountType().equals(DiscountTypeEnum.NET)) {
+
+            discountedPrice = salePrice.subtract(discountRequestDTO.getAmount());
+
+        } else if (discountRequestDTO.getDiscountType().equals(DiscountTypeEnum.PERCENT)) {
+
+            BigDecimal calculated = salePrice.multiply(discountRequestDTO.getAmount()).divide(BigDecimal.valueOf(100));
+
+            discountedPrice = salePrice.subtract(calculated);
+
+        }
+
+
+        return discountedPrice;
+
+
     }
 
 
