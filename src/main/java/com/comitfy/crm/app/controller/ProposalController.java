@@ -48,7 +48,7 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
     }
 
 
-    @GetMapping("prepare-proposal/calculate-material-discount/")
+    @PostMapping("prepare-proposal/calculate-material-discount/")
     public ResponseEntity<BigDecimal> prepareProposalMaterialDiscount(@RequestBody DiscountRequestDTO requestDTO) {
 
         return new ResponseEntity<>(getService().calculateDiscountByProduct(requestDTO), HttpStatus.OK);
