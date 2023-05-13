@@ -9,6 +9,7 @@ import java.util.UUID;
 @Data
 public class DiscountRequestDTO {
 
+    private UUID productUUID;
     private UUID materialUUID;
     private DiscountTypeEnum discountType;
     private BigDecimal amount;

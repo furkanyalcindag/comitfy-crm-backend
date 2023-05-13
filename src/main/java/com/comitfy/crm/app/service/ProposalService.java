@@ -1,5 +1,6 @@
 package com.comitfy.crm.app.service;
 
+import com.comitfy.crm.app.dto.DiscountDTO;
 import com.comitfy.crm.app.dto.MaterialDTO;
 import com.comitfy.crm.app.dto.ProposalDTO;
 import com.comitfy.crm.app.dto.ProposalPreparingDTO;
@@ -110,12 +111,17 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
     }
 
 
-    public BigDecimal calculateDiscountByProduct(DiscountRequestDTO discountRequestDTO) {
+    public DiscountDTO calculateDiscountByProduct(DiscountRequestDTO discountRequestDTO) {
 
+        DiscountDTO discountDTO = new DiscountDTO();
+
+        Product product = productRepository.findByUuid(discountRequestDTO.getProductUUID()).get();
 
         Material material = materialRepository.findByUuid(discountRequestDTO.getMaterialUUID()).get();
 
-        BigDecimal salePrice = material.getSaleNetPrice();
+        ProductMaterial productMaterial = productMaterialRepository.findByProductAndMaterial(product,material);
+
+        BigDecimal salePrice = material.getSaleNetPrice().multiply(BigDecimal.valueOf(productMaterial.getQuantity()));
 
         BigDecimal discountedPrice = BigDecimal.ZERO;
 
@@ -123,16 +129,20 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         if (discountRequestDTO.getDiscountType().equals(DiscountTypeEnum.NET)) {
 
             discountedPrice = salePrice.subtract(discountRequestDTO.getAmount());
+            discountDTO.setDiscountedPrice(discountedPrice);
+            discountDTO.setDiscountAmount(discountRequestDTO.getAmount());
 
         } else if (discountRequestDTO.getDiscountType().equals(DiscountTypeEnum.PERCENT)) {
 
             BigDecimal calculated = salePrice.multiply(discountRequestDTO.getAmount()).divide(BigDecimal.valueOf(100));
 
             discountedPrice = salePrice.subtract(calculated);
+            discountDTO.setDiscountedPrice(discountedPrice);
+            discountDTO.setDiscountAmount(calculated);
 
         }
 
-        return discountedPrice;
+        return discountDTO;
 
     }
 
@@ -176,19 +186,18 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             proposalMaterial.setQuantity(productMaterialRequestDTO.getQuantity());
             proposalMaterial.setPurchaseTotalPrice(material.getPurchaseNetPrice().multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
             proposalMaterial.setSaleTotalPrice(material.getSaleNetPrice().multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
-            proposalMaterial.setDiscountType((productMaterialRequestDTO.getDiscountType()));
+            proposalMaterial.setDiscountType(productMaterialRequestDTO.getDiscountType());
 
             DiscountRequestDTO discountRequestDTO = new DiscountRequestDTO();
             discountRequestDTO.setDiscountType(productMaterialRequestDTO.getDiscountType());
             discountRequestDTO.setMaterialUUID(material.getUuid());
             discountRequestDTO.setAmount(productMaterialRequestDTO.getDiscountAmount());
 
-            BigDecimal discountPrice = calculateDiscountByProduct(discountRequestDTO);
+            DiscountDTO discountDTO = calculateDiscountByProduct(discountRequestDTO);
 
-            proposalMaterial.setDiscountPrice(discountPrice);
-            proposalMaterial.setDiscountPriceTotal(discountPrice.multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
-            proposalMaterial.setOfferPrice(proposalMaterial.getSaleTotalPrice().
-                    subtract(discountPrice.multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity()))));
+            proposalMaterial.setDiscountPrice(discountDTO.getDiscountAmount());
+            proposalMaterial.setDiscountPriceTotal(discountDTO.getDiscountedPrice());
+            proposalMaterial.setOfferPrice(discountDTO.getDiscountedPrice());
 
             proposalMaterialRepository.save(proposalMaterial);
 
@@ -256,12 +265,13 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             discountRequestDTO.setMaterialUUID(material.getUuid());
             discountRequestDTO.setAmount(productMaterialRequestDTO.getDiscountAmount());
 
-            BigDecimal discountPrice = calculateDiscountByProduct(discountRequestDTO);
+            DiscountDTO discountDTO = calculateDiscountByProduct(discountRequestDTO);
 
-            proposalMaterial.setDiscountPrice(discountPrice);
-            proposalMaterial.setDiscountPriceTotal(discountPrice.multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
-            proposalMaterial.setOfferPrice(proposalMaterial.getSaleTotalPrice().
-                    subtract(discountPrice.multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity()))));
+            proposalMaterial.setDiscountPrice(discountDTO.getDiscountAmount());
+            proposalMaterial.setDiscountPriceTotal(discountDTO.getDiscountedPrice());
+            proposalMaterial.setOfferPrice(discountDTO.getDiscountedPrice());
+
+
 
             proposalMaterialRepository.save(proposalMaterial);
 
