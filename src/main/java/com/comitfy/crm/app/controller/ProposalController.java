@@ -1,5 +1,6 @@
 package com.comitfy.crm.app.controller;
 
+import com.comitfy.crm.app.dto.DiscountDTO;
 import com.comitfy.crm.app.dto.ProposalDTO;
 import com.comitfy.crm.app.dto.ProposalPreparingDTO;
 import com.comitfy.crm.app.dto.requestDTO.DiscountRequestDTO;
@@ -49,7 +50,7 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
 
 
     @PostMapping("prepare-proposal/calculate-material-discount/")
-    public ResponseEntity<BigDecimal> prepareProposalMaterialDiscount(@RequestBody DiscountRequestDTO requestDTO) {
+    public ResponseEntity<DiscountDTO> prepareProposalMaterialDiscount(@RequestBody DiscountRequestDTO requestDTO) {
 
         return new ResponseEntity<>(getService().calculateDiscountByProduct(requestDTO), HttpStatus.OK);
 
