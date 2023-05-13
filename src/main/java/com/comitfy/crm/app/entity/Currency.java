@@ -27,5 +27,7 @@ public class Currency extends BaseEntity {
     private String symbol;
     @Column
     private BigDecimal exchangeRate;
+    @Column
+    private Boolean isDefault = Boolean.FALSE;
 
 }

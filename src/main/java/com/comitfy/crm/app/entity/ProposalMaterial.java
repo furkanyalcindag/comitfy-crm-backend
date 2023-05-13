@@ -1,10 +1,8 @@
 package com.comitfy.crm.app.entity;
 
+import com.comitfy.crm.app.model.enums.DiscountTypeEnum;
 import com.comitfy.crm.util.dbUtil.BaseEntity;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -34,13 +32,28 @@ public class ProposalMaterial extends BaseEntity {
     private BigDecimal purchasePrice;
 
     @Column
-    private BigDecimal sellPrice;
+    private BigDecimal salePrice;
+
+    @Column
+    private BigDecimal saleTotalPrice;
+
+    @Column
+    private BigDecimal purchaseTotalPrice;
+
+    @Column
+    private Integer quantity;
+
+    @Enumerated(EnumType.STRING)
+    private DiscountTypeEnum discountType;
+
+    @Column
+    private BigDecimal discountAmount;
 
     @Column
     private BigDecimal discountPrice;
 
     @Column
-    private BigDecimal discountPercentage;
+    private BigDecimal discountPriceTotal;
 
     @Column
     private BigDecimal offerPrice;

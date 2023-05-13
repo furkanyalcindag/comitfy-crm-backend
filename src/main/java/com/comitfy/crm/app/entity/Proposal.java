@@ -1,5 +1,6 @@
 package com.comitfy.crm.app.entity;
 
+import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.util.dbUtil.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,16 +26,22 @@ public class Proposal extends BaseEntity {
     private Product product;
 
     @Column
-    private BigDecimal costFee;
+    private BigDecimal costPrice; //maaliyet
 
     @Column
-    private BigDecimal offerFee;
+    private BigDecimal salePrice;
 
     @Column
-    private BigDecimal discountPercentage;
+    private BigDecimal offerPrice;
 
     @Column
-    private BigDecimal discountFee;
+    private BigDecimal discountPrice;
+
+    @Column
+    private Integer currentVersion;
+
+    @Enumerated(EnumType.STRING)
+    private ProposalStatusEnum proposalStatus;
 
 
 }

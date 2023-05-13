@@ -15,9 +15,11 @@ import com.comitfy.crm.app.specification.SettingsSpecification;
 import com.comitfy.crm.userModule.entity.User;
 import com.comitfy.crm.userModule.repository.UserRepository;
 import com.comitfy.crm.util.common.BaseService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,6 +51,46 @@ public class CurrencyService extends BaseService<CurrencyDTO, CurrencyRequestDTO
     @Override
     public CurrencySpecification getSpecification() {
         return currencySpecification;
+    }
+
+
+
+    @Override
+    @Transactional
+    public CurrencyDTO save(CurrencyDTO requestDTO) {
+        Currency entity = getMapper().dtoToEntity(requestDTO);
+        if(entity.getIsDefault()){
+            updateDefaultCurrency();
+        }
+        getRepository().save(entity);
+        return getMapper().entityToDTO(entity);
+    }
+
+    @Override
+    @Transactional
+    public CurrencyDTO update(UUID id, CurrencyDTO dto) {
+        Optional<Currency> entity = getRepository().findByUuid(id);
+
+        if (entity.isPresent()) {
+            Currency entity1 = getMapper().dtoToEntity(dto);
+            getMapper().update(entity.get(), entity1);
+            if(entity1.getIsDefault()){
+                updateDefaultCurrency();
+            }
+            getRepository().save(entity.get());
+            return dto;
+        } else {
+            return null;
+        }
+    }
+
+    public void updateDefaultCurrency(){
+        List<Currency> currencyList = currencyRepository.findAll();
+        for (Currency currency:currencyList) {
+            currency.setIsDefault(Boolean.FALSE);
+            currencyRepository.save(currency);
+        }
+
     }
 
 

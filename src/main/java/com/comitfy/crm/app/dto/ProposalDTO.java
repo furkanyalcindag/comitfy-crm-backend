@@ -1,5 +1,6 @@
 package com.comitfy.crm.app.dto;
 
+import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.util.common.BaseDTO;
 import lombok.Data;
 
@@ -13,12 +14,13 @@ ProposalDTO extends BaseDTO {
 
     private CustomerDTO customer;
     private ProductDTO product;
-    private BigDecimal costFee;
-    private BigDecimal offerFee;
-    private BigDecimal discountPercentage;
-    private BigDecimal discountFee;
-    private BigDecimal lastOfferFee;
+    private BigDecimal costPrice;
+    private BigDecimal purchasePrice;
+    private BigDecimal offerPrice;
+    private BigDecimal discountPrice;
+    private Integer currentVersion;
+    private ProposalStatusEnum proposalStatus;
 
-    private List<MaterialDTO> materialList;
+
 
 }

@@ -4,19 +4,17 @@ import com.comitfy.crm.app.dto.MaterialDTO;
 import com.comitfy.crm.app.dto.ProposalDTO;
 import com.comitfy.crm.app.dto.ProposalPreparingDTO;
 import com.comitfy.crm.app.dto.requestDTO.DiscountRequestDTO;
+import com.comitfy.crm.app.dto.requestDTO.ProductMaterialRequestDTO;
+import com.comitfy.crm.app.dto.requestDTO.ProposalMaterialRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProposalRequestDTO;
-import com.comitfy.crm.app.entity.Material;
-import com.comitfy.crm.app.entity.Product;
-import com.comitfy.crm.app.entity.ProductMaterial;
-import com.comitfy.crm.app.entity.Proposal;
+import com.comitfy.crm.app.entity.*;
 import com.comitfy.crm.app.mapper.ProposalMapper;
 import com.comitfy.crm.app.model.enums.DiscountTypeEnum;
-import com.comitfy.crm.app.repository.MaterialRepository;
-import com.comitfy.crm.app.repository.ProductMaterialRepository;
-import com.comitfy.crm.app.repository.ProductRepository;
-import com.comitfy.crm.app.repository.ProposalRepository;
+import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
+import com.comitfy.crm.app.repository.*;
 import com.comitfy.crm.app.specification.ProposalSpecification;
 import com.comitfy.crm.util.common.BaseService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +43,12 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
     @Autowired
     MaterialRepository materialRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
+    ProposalMaterialRepository proposalMaterialRepository;
 
     @Override
     public ProposalRepository getRepository() {
@@ -126,11 +130,154 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
         }
 
-
         return discountedPrice;
-
 
     }
 
+
+    @Transactional
+    public void createProposal(ProposalRequestDTO proposalRequestDTO) {
+
+        Proposal proposal = new Proposal();
+
+        int version = 1;
+        BigDecimal proposalTotalOfferPrice = BigDecimal.ZERO;
+        BigDecimal proposalTotalPurchasePrice = BigDecimal.ZERO;
+        BigDecimal proposalTotalSalePrice = BigDecimal.ZERO;
+        BigDecimal proposalTotalDiscountPrice = BigDecimal.ZERO;
+
+        Customer customer = customerRepository.findByUuid(proposalRequestDTO.getCustomerUUID()).get();
+        Product product = productRepository.findByUuid(proposalRequestDTO.getProductUUID()).get();
+
+        proposal.setCustomer(customer);
+        proposal.setProduct(product);
+        proposal.setCostPrice(proposalTotalPurchasePrice);
+        proposal.setDiscountPrice(proposalTotalDiscountPrice);
+        proposal.setSalePrice(proposalTotalSalePrice);
+        proposal.setOfferPrice(proposalTotalOfferPrice);
+        proposal.setCurrentVersion(version);
+
+        proposal = proposalRepository.save(proposal);
+
+
+        for (ProposalMaterialRequestDTO productMaterialRequestDTO : proposalRequestDTO.getProductMaterialRequestDTOList()) {
+
+            Material material = materialRepository.findByUuid(productMaterialRequestDTO.getMaterialUUID()).get();
+
+            ProposalMaterial proposalMaterial = new ProposalMaterial();
+            proposalMaterial.setProposalId(proposal.getId());
+            proposalMaterial.setVersion(version);
+            proposalMaterial.setProductId(product.getId());
+            proposalMaterial.setMaterialId(material.getId());
+            proposalMaterial.setPurchasePrice(material.getPurchaseNetPrice());
+            proposalMaterial.setSalePrice(material.getSaleNetPrice());
+            proposalMaterial.setQuantity(productMaterialRequestDTO.getQuantity());
+            proposalMaterial.setPurchaseTotalPrice(material.getPurchaseNetPrice().multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
+            proposalMaterial.setSaleTotalPrice(material.getSaleNetPrice().multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
+            proposalMaterial.setDiscountType((productMaterialRequestDTO.getDiscountType()));
+
+            DiscountRequestDTO discountRequestDTO = new DiscountRequestDTO();
+            discountRequestDTO.setDiscountType(productMaterialRequestDTO.getDiscountType());
+            discountRequestDTO.setMaterialUUID(material.getUuid());
+            discountRequestDTO.setAmount(productMaterialRequestDTO.getDiscountAmount());
+
+            BigDecimal discountPrice = calculateDiscountByProduct(discountRequestDTO);
+
+            proposalMaterial.setDiscountPrice(discountPrice);
+            proposalMaterial.setDiscountPriceTotal(discountPrice.multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
+            proposalMaterial.setOfferPrice(proposalMaterial.getSaleTotalPrice().
+                    subtract(discountPrice.multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity()))));
+
+            proposalMaterialRepository.save(proposalMaterial);
+
+            proposalTotalPurchasePrice.add(proposalMaterial.getPurchaseTotalPrice());
+            proposalTotalSalePrice.add(proposalMaterial.getSaleTotalPrice());
+            proposalTotalDiscountPrice.add(proposalMaterial.getDiscountPriceTotal());
+            proposalTotalOfferPrice.add(proposalMaterial.getOfferPrice());
+
+        }
+
+        proposal.setCostPrice(proposalTotalPurchasePrice);
+        proposal.setDiscountPrice(proposalTotalDiscountPrice);
+        proposal.setSalePrice(proposalTotalSalePrice);
+        proposal.setOfferPrice(proposalTotalOfferPrice);
+        proposal.setProposalStatus(ProposalStatusEnum.CREATED);
+
+        proposalRepository.save(proposal);
+
+    }
+
+
+    @Transactional
+    public void updateProposal(ProposalRequestDTO proposalRequestDTO, UUID proposalUUID) {
+
+        Proposal proposal = proposalRepository.findByUuid(proposalUUID).get();
+
+        int version = proposal.getCurrentVersion()+1;
+        BigDecimal proposalTotalOfferPrice = BigDecimal.ZERO;
+        BigDecimal proposalTotalPurchasePrice = BigDecimal.ZERO;
+        BigDecimal proposalTotalSalePrice = BigDecimal.ZERO;
+        BigDecimal proposalTotalDiscountPrice = BigDecimal.ZERO;
+
+        Customer customer = customerRepository.findByUuid(proposalRequestDTO.getCustomerUUID()).get();
+        Product product = productRepository.findByUuid(proposalRequestDTO.getProductUUID()).get();
+
+        proposal.setCustomer(customer);
+        proposal.setProduct(product);
+        proposal.setCostPrice(proposalTotalPurchasePrice);
+        proposal.setDiscountPrice(proposalTotalDiscountPrice);
+        proposal.setSalePrice(proposalTotalSalePrice);
+        proposal.setOfferPrice(proposalTotalOfferPrice);
+        proposal.setCurrentVersion(version);
+
+        proposal = proposalRepository.saveAndFlush(proposal);
+
+
+        for (ProposalMaterialRequestDTO productMaterialRequestDTO : proposalRequestDTO.getProductMaterialRequestDTOList()) {
+
+            Material material = materialRepository.findByUuid(productMaterialRequestDTO.getMaterialUUID()).get();
+
+            ProposalMaterial proposalMaterial = new ProposalMaterial();
+            proposalMaterial.setProposalId(proposal.getId());
+            proposalMaterial.setVersion(version);
+            proposalMaterial.setProductId(product.getId());
+            proposalMaterial.setMaterialId(material.getId());
+            proposalMaterial.setPurchasePrice(material.getPurchaseNetPrice());
+            proposalMaterial.setSalePrice(material.getSaleNetPrice());
+            proposalMaterial.setQuantity(productMaterialRequestDTO.getQuantity());
+            proposalMaterial.setPurchaseTotalPrice(material.getPurchaseNetPrice().multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
+            proposalMaterial.setSaleTotalPrice(material.getSaleNetPrice().multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
+            proposalMaterial.setDiscountType((productMaterialRequestDTO.getDiscountType()));
+
+            DiscountRequestDTO discountRequestDTO = new DiscountRequestDTO();
+            discountRequestDTO.setDiscountType(productMaterialRequestDTO.getDiscountType());
+            discountRequestDTO.setMaterialUUID(material.getUuid());
+            discountRequestDTO.setAmount(productMaterialRequestDTO.getDiscountAmount());
+
+            BigDecimal discountPrice = calculateDiscountByProduct(discountRequestDTO);
+
+            proposalMaterial.setDiscountPrice(discountPrice);
+            proposalMaterial.setDiscountPriceTotal(discountPrice.multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
+            proposalMaterial.setOfferPrice(proposalMaterial.getSaleTotalPrice().
+                    subtract(discountPrice.multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity()))));
+
+            proposalMaterialRepository.save(proposalMaterial);
+
+            proposalTotalPurchasePrice.add(proposalMaterial.getPurchaseTotalPrice());
+            proposalTotalSalePrice.add(proposalMaterial.getSaleTotalPrice());
+            proposalTotalDiscountPrice.add(proposalMaterial.getDiscountPriceTotal());
+            proposalTotalOfferPrice.add(proposalMaterial.getOfferPrice());
+
+        }
+
+        proposal.setCostPrice(proposalTotalPurchasePrice);
+        proposal.setDiscountPrice(proposalTotalDiscountPrice);
+        proposal.setSalePrice(proposalTotalSalePrice);
+        proposal.setOfferPrice(proposalTotalOfferPrice);
+        proposal.setProposalStatus(ProposalStatusEnum.REVISION);
+
+        proposalRepository.save(proposal);
+
+    }
 
 }
