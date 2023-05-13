@@ -21,6 +21,8 @@ public class MaterialDTO extends BaseDTO {
     private Integer quantity;
     private BigDecimal purchaseNetPrice;
     private BigDecimal saleNetPrice;
+    private BigDecimal totalPurchaseNetPrice;
+    private BigDecimal totalSaleNetPrice;
     //private Set<ProductMaterialDTO> productMaterials;
 
 }

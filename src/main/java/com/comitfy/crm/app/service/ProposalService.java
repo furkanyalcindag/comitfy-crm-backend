@@ -94,6 +94,8 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             materialDTO.setQuantity(productMaterial.getQuantity());
             materialDTO.setPurchaseNetPrice(productMaterial.getMaterial().getPurchaseNetPrice());
             materialDTO.setSaleNetPrice(productMaterial.getMaterial().getSaleNetPrice());
+            materialDTO.setTotalPurchaseNetPrice(productMaterial.getMaterial().getPurchaseNetPrice().multiply(BigDecimal.valueOf(productMaterial.getQuantity())));
+            materialDTO.setTotalSaleNetPrice(productMaterial.getMaterial().getSaleNetPrice().multiply(BigDecimal.valueOf(productMaterial.getQuantity())));
             purchasePrice = purchasePrice.add(materialDTO.getPurchaseNetPrice().multiply(BigDecimal.valueOf(productMaterial.getQuantity())));
             sellPrice = sellPrice.add(materialDTO.getSaleNetPrice().multiply(BigDecimal.valueOf(productMaterial.getQuantity())));
             materialDTOList.add(materialDTO);
@@ -213,7 +215,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
         Proposal proposal = proposalRepository.findByUuid(proposalUUID).get();
 
-        int version = proposal.getCurrentVersion()+1;
+        int version = proposal.getCurrentVersion() + 1;
         BigDecimal proposalTotalOfferPrice = BigDecimal.ZERO;
         BigDecimal proposalTotalPurchasePrice = BigDecimal.ZERO;
         BigDecimal proposalTotalSalePrice = BigDecimal.ZERO;
