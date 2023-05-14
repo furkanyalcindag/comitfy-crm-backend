@@ -1,5 +1,7 @@
 package com.comitfy.crm.component;
 
+import com.comitfy.crm.app.entity.Currency;
+import com.comitfy.crm.app.repository.CurrencyRepository;
 import com.comitfy.crm.userModule.entity.Role;
 import com.comitfy.crm.userModule.entity.User;
 import com.comitfy.crm.userModule.repository.RoleRepository;
@@ -10,6 +12,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,12 +30,15 @@ public class InitializeDatabase implements CommandLineRunner {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    CurrencyRepository currencyRepository;
+
     @Override
     public void run(String... args) throws Exception {
         loadRoleData();
         loadUserData();
+        loadCurrency();
     }
-
 
 
     private void loadRoleData() {
@@ -39,6 +46,19 @@ public class InitializeDatabase implements CommandLineRunner {
             Role role = new Role();
             role.setName("ADMIN");
             roleRepository.save(role);
+        }
+
+
+    }
+
+    private void loadCurrency() {
+        if (currencyRepository.count() == 0) {
+            Currency currency = new Currency();
+            currency.setIsDefault(Boolean.TRUE);
+            currency.setName("TL");
+            currency.setSymbol("₺");
+            currency.setExchangeRate(BigDecimal.ONE);
+            currencyRepository.save(currency);
         }
 
 

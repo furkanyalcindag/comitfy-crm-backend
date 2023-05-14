@@ -54,12 +54,11 @@ public class CurrencyService extends BaseService<CurrencyDTO, CurrencyRequestDTO
     }
 
 
-
     @Override
     @Transactional
     public CurrencyDTO save(CurrencyDTO requestDTO) {
         Currency entity = getMapper().dtoToEntity(requestDTO);
-        if(entity.getIsDefault()){
+        if (entity.getIsDefault()) {
             updateDefaultCurrency();
         }
         getRepository().save(entity);
@@ -71,7 +70,7 @@ public class CurrencyService extends BaseService<CurrencyDTO, CurrencyRequestDTO
     public CurrencyDTO update(UUID id, CurrencyDTO dto) {
 
         Currency entity1 = getMapper().dtoToEntity(dto);
-        if(entity1.getIsDefault()){
+        if (entity1.getIsDefault()) {
             updateDefaultCurrency();
         }
         Optional<Currency> entity = getRepository().findByUuid(id);
@@ -88,13 +87,20 @@ public class CurrencyService extends BaseService<CurrencyDTO, CurrencyRequestDTO
         }
     }
 
-    public void updateDefaultCurrency(){
+    public void updateDefaultCurrency() {
         List<Currency> currencyList = currencyRepository.findAll();
-        for (Currency currency:currencyList) {
+        for (Currency currency : currencyList) {
             currency.setIsDefault(Boolean.FALSE);
             currencyRepository.save(currency);
         }
 
+    }
+
+    public CurrencyDTO activeCurrency() {
+
+        Currency currency = currencyRepository.findFirstByIsDefault(Boolean.TRUE);
+
+        return getMapper().entityToDTO(currency);
     }
 
 

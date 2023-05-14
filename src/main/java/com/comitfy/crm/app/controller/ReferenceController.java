@@ -1,5 +1,6 @@
 package com.comitfy.crm.app.controller;
 
+import com.comitfy.crm.app.dto.CurrencyDTO;
 import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.app.service.ReferenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,16 @@ public class ReferenceController {
     ReferenceService referenceService;
 
     @GetMapping("get-proposal-status")
-    public ResponseEntity<List<ProposalStatusEnum>> getProposalStatuses(){
+    public ResponseEntity<List<ProposalStatusEnum>> getProposalStatuses() {
 
         return new ResponseEntity<>(referenceService.getProposalStatuses(), HttpStatus.OK);
+
+    }
+
+    @GetMapping("get-default-currency")
+    public ResponseEntity<CurrencyDTO> getDefaultCurrency() {
+
+        return new ResponseEntity<>(referenceService.getDefaultCurrency(), HttpStatus.OK);
 
     }
 

@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CurrencyRepository extends BaseRepository<Currency> {
+
+    Currency findFirstByIsDefault(Boolean isDefault);
 }
