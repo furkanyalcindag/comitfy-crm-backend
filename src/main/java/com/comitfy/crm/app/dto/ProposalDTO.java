@@ -15,7 +15,7 @@ ProposalDTO extends BaseDTO {
     private CustomerDTO customer;
     private ProductDTO product;
     private BigDecimal costPrice;
-    private BigDecimal purchasePrice;
+    private BigDecimal salePrice;
     private BigDecimal offerPrice;
     private BigDecimal discountPrice;
     private Integer currentVersion;
