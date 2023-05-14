@@ -29,4 +29,5 @@ public class ProductMaterial extends BaseEntity {
     private Integer quantity;
 
 
+
 }

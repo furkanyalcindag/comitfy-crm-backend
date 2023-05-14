@@ -69,17 +69,21 @@ public class CurrencyService extends BaseService<CurrencyDTO, CurrencyRequestDTO
     @Override
     @Transactional
     public CurrencyDTO update(UUID id, CurrencyDTO dto) {
+
+        Currency entity1 = getMapper().dtoToEntity(dto);
+        if(entity1.getIsDefault()){
+            updateDefaultCurrency();
+        }
         Optional<Currency> entity = getRepository().findByUuid(id);
 
         if (entity.isPresent()) {
-            Currency entity1 = getMapper().dtoToEntity(dto);
+
             getMapper().update(entity.get(), entity1);
-            if(entity1.getIsDefault()){
-                updateDefaultCurrency();
-            }
+
             getRepository().save(entity.get());
             return dto;
         } else {
+            entity.get();
             return null;
         }
     }

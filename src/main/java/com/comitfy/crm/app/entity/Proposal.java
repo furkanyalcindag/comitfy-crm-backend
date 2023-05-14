@@ -20,9 +20,11 @@ public class Proposal extends BaseEntity {
 
 
     @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @Column

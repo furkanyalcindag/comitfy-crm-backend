@@ -119,7 +119,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
         Material material = materialRepository.findByUuid(discountRequestDTO.getMaterialUUID()).get();
 
-        ProductMaterial productMaterial = productMaterialRepository.findByProductAndMaterial(product,material);
+        ProductMaterial productMaterial = productMaterialRepository.findByProductAndMaterial(product, material);
 
         BigDecimal salePrice = material.getSaleNetPrice().multiply(BigDecimal.valueOf(productMaterial.getQuantity()));
 
@@ -169,7 +169,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         proposal.setOfferPrice(proposalTotalOfferPrice);
         proposal.setCurrentVersion(version);
 
-        proposal = proposalRepository.save(proposal);
+        proposal = proposalRepository.saveAndFlush(proposal);
 
 
         for (ProposalMaterialRequestDTO productMaterialRequestDTO : proposalRequestDTO.getProductMaterialRequestDTOList()) {
@@ -192,6 +192,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             discountRequestDTO.setDiscountType(productMaterialRequestDTO.getDiscountType());
             discountRequestDTO.setMaterialUUID(material.getUuid());
             discountRequestDTO.setAmount(productMaterialRequestDTO.getDiscountAmount());
+            discountRequestDTO.setProductUUID(product.getUuid());
 
             DiscountDTO discountDTO = calculateDiscountByProduct(discountRequestDTO);
 
@@ -201,10 +202,10 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
             proposalMaterialRepository.save(proposalMaterial);
 
-            proposalTotalPurchasePrice.add(proposalMaterial.getPurchaseTotalPrice());
-            proposalTotalSalePrice.add(proposalMaterial.getSaleTotalPrice());
-            proposalTotalDiscountPrice.add(proposalMaterial.getDiscountPriceTotal());
-            proposalTotalOfferPrice.add(proposalMaterial.getOfferPrice());
+            proposalTotalPurchasePrice = proposalTotalPurchasePrice.add(proposalMaterial.getPurchaseTotalPrice());
+            proposalTotalSalePrice = proposalTotalSalePrice.add(proposalMaterial.getSaleTotalPrice());
+            proposalTotalDiscountPrice = proposalTotalDiscountPrice.add(proposalMaterial.getDiscountPriceTotal());
+            proposalTotalOfferPrice = proposalTotalOfferPrice.add(proposalMaterial.getOfferPrice());
 
         }
 
@@ -264,13 +265,13 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             discountRequestDTO.setDiscountType(productMaterialRequestDTO.getDiscountType());
             discountRequestDTO.setMaterialUUID(material.getUuid());
             discountRequestDTO.setAmount(productMaterialRequestDTO.getDiscountAmount());
+            discountRequestDTO.setProductUUID(product.getUuid());
 
             DiscountDTO discountDTO = calculateDiscountByProduct(discountRequestDTO);
 
             proposalMaterial.setDiscountPrice(discountDTO.getDiscountAmount());
             proposalMaterial.setDiscountPriceTotal(discountDTO.getDiscountedPrice());
             proposalMaterial.setOfferPrice(discountDTO.getDiscountedPrice());
-
 
 
             proposalMaterialRepository.save(proposalMaterial);
