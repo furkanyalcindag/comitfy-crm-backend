@@ -4,10 +4,7 @@ import com.comitfy.crm.app.dto.DiscountDTO;
 import com.comitfy.crm.app.dto.MaterialDTO;
 import com.comitfy.crm.app.dto.ProposalDTO;
 import com.comitfy.crm.app.dto.ProposalPreparingDTO;
-import com.comitfy.crm.app.dto.requestDTO.DiscountRequestDTO;
-import com.comitfy.crm.app.dto.requestDTO.ProductMaterialRequestDTO;
-import com.comitfy.crm.app.dto.requestDTO.ProposalMaterialRequestDTO;
-import com.comitfy.crm.app.dto.requestDTO.ProposalRequestDTO;
+import com.comitfy.crm.app.dto.requestDTO.*;
 import com.comitfy.crm.app.entity.*;
 import com.comitfy.crm.app.mapper.ProposalMapper;
 import com.comitfy.crm.app.model.enums.DiscountTypeEnum;
@@ -290,6 +287,23 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         proposal.setProposalStatus(ProposalStatusEnum.REVISION);
 
         proposalRepository.save(proposal);
+
+    }
+
+
+    public ProposalStatusEnum updateProposalStatus(ProposalStatusRequestDTO requestDTO, UUID proposalUUID) {
+
+
+        Proposal proposal = proposalRepository.findByUuid(proposalUUID).get();
+
+        if (!proposal.getProposalStatus().equals(ProposalStatusEnum.CANCELED)) {
+            proposal.setProposalStatus(requestDTO.getProposalStatusEnum());
+            proposal = proposalRepository.save(proposal);
+            return proposal.getProposalStatus();
+        } else {
+            return null;
+        }
+
 
     }
 

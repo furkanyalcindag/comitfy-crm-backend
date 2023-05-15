@@ -5,8 +5,10 @@ import com.comitfy.crm.app.dto.ProposalDTO;
 import com.comitfy.crm.app.dto.ProposalPreparingDTO;
 import com.comitfy.crm.app.dto.requestDTO.DiscountRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProposalRequestDTO;
+import com.comitfy.crm.app.dto.requestDTO.ProposalStatusRequestDTO;
 import com.comitfy.crm.app.entity.Proposal;
 import com.comitfy.crm.app.mapper.ProposalMapper;
+import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.app.repository.ProposalRepository;
 import com.comitfy.crm.app.service.ProposalService;
 import com.comitfy.crm.app.specification.ProposalSpecification;
@@ -68,19 +70,22 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
     @PostMapping("/update-proposal/{proposalUUID}")
     public ResponseEntity<Boolean> updateProposal(@RequestBody ProposalRequestDTO requestDTO, @PathVariable UUID proposalUUID) {
 
-        getService().updateProposal(requestDTO,proposalUUID);
+        getService().updateProposal(requestDTO, proposalUUID);
         return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
 
     }
 
+    @PostMapping("/update-proposal-status/{proposalUUID}")
+    public ResponseEntity<String> updateProposalStatus(@RequestBody ProposalStatusRequestDTO requestDTO, @PathVariable UUID proposalUUID) {
 
+        ProposalStatusEnum status = getService().updateProposalStatus(requestDTO, proposalUUID);
 
+        if (status != null)
+            return new ResponseEntity<>("Successful", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Cannot change status for cancelled proposal", HttpStatus.BAD_REQUEST);
 
-
-
-
-
-
+    }
 
 
 }
