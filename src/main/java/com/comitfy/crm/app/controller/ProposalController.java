@@ -2,6 +2,7 @@ package com.comitfy.crm.app.controller;
 
 import com.comitfy.crm.app.dto.DiscountDTO;
 import com.comitfy.crm.app.dto.ProposalDTO;
+import com.comitfy.crm.app.dto.ProposalMaterialDTO;
 import com.comitfy.crm.app.dto.ProposalPreparingDTO;
 import com.comitfy.crm.app.dto.requestDTO.DiscountRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProposalRequestDTO;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -84,6 +86,14 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
             return new ResponseEntity<>("Successful", HttpStatus.OK);
         else
             return new ResponseEntity<>("Cannot change status for cancelled proposal", HttpStatus.BAD_REQUEST);
+
+    }
+
+
+    @GetMapping("get-materials-by-proposal/{proposalUUID}")
+    public ResponseEntity<List<ProposalMaterialDTO>> getMaterialsByProposal(@PathVariable UUID productUUID) {
+
+        return new ResponseEntity<>(getService().getMaterialsByProposal(productUUID), HttpStatus.OK);
 
     }
 

@@ -1,12 +1,13 @@
 package com.comitfy.crm.app.service;
 
-import com.comitfy.crm.app.dto.DiscountDTO;
-import com.comitfy.crm.app.dto.MaterialDTO;
-import com.comitfy.crm.app.dto.ProposalDTO;
-import com.comitfy.crm.app.dto.ProposalPreparingDTO;
-import com.comitfy.crm.app.dto.requestDTO.*;
+import com.comitfy.crm.app.dto.*;
+import com.comitfy.crm.app.dto.requestDTO.DiscountRequestDTO;
+import com.comitfy.crm.app.dto.requestDTO.ProposalMaterialRequestDTO;
+import com.comitfy.crm.app.dto.requestDTO.ProposalRequestDTO;
+import com.comitfy.crm.app.dto.requestDTO.ProposalStatusRequestDTO;
 import com.comitfy.crm.app.entity.*;
 import com.comitfy.crm.app.mapper.ProposalMapper;
+import com.comitfy.crm.app.mapper.ProposalMaterialMapper;
 import com.comitfy.crm.app.model.enums.DiscountTypeEnum;
 import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.app.repository.*;
@@ -47,6 +48,9 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
     @Autowired
     ProposalMaterialRepository proposalMaterialRepository;
+
+    @Autowired
+    ProposalMaterialMapper proposalMaterialMapper;
 
     @Override
     public ProposalRepository getRepository() {
@@ -304,6 +308,17 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             return null;
         }
 
+
+    }
+
+
+    public List<ProposalMaterialDTO> getMaterialsByProposal(UUID proposalUUID) {
+
+        Proposal proposal = proposalRepository.findByUuid(proposalUUID).get();
+
+        List<ProposalMaterialDTO> proposalMaterialDTOList = proposalMaterialMapper.entityListToDTOList(proposalMaterialRepository.findAllByVersionAndProposalId(proposal.getCurrentVersion(), proposal.getId()));
+
+        return proposalMaterialDTOList;
 
     }
 
