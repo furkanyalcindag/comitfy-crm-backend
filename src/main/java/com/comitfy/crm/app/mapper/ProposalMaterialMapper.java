@@ -11,17 +11,13 @@ import com.comitfy.crm.app.service.MaterialService;
 import com.comitfy.crm.app.service.ProductService;
 import com.comitfy.crm.app.service.ProposalService;
 import com.comitfy.crm.util.common.BaseMapper;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface ProposalMaterialMapper extends BaseMapper<ProposalMaterialDTO, ProposalMaterialRequestDTO, ProposalMaterial> {
-
-
 
     @Mappings({
             @Mapping(target = "id", ignore = true),
@@ -50,32 +46,30 @@ public interface ProposalMaterialMapper extends BaseMapper<ProposalMaterialDTO, 
     }
 
 
-
-
     @Mappings({
-            @Mapping(target = "proposalUUID", expression = "java(setProposalUUID(entity))"),
+            @Mapping(target = "proposalUUID", expression = "java(setProposalUUID(entity,proposalService))"),
 
-            @Mapping(target = "productDTO", expression = "java(setProduct(entity))"),
+            @Mapping(target = "productDTO", expression = "java(setProduct(entity,productService))"),
 
-            @Mapping(target = "materialDTO", expression = "java(setMaterial(entity))")
+            @Mapping(target = "materialDTO", expression = "java(setMaterial(entity,materialService))")
     })
-    @Override
-    ProposalMaterialDTO entityToDTO(ProposalMaterial entity);
+    ProposalMaterialDTO entityToDTONew(ProposalMaterial entity,
+                                       @Context ProposalService proposalService, @Context ProductService productService, @Context MaterialService materialService);
 
 
-    default UUID setProposalUUID(ProposalMaterial entity) {
+    default UUID setProposalUUID(ProposalMaterial entity,ProposalService proposalService) {
 
-        ProposalService proposalService = new ProposalService();
-        Proposal proposal =proposalService.findEntityById(entity.getProposalId());
+
+        Proposal proposal = proposalService.findEntityById(entity.getProposalId());
 
         return proposal.getUuid();
 
     }
 
-    default ProductDTO setProduct(ProposalMaterial entity) {
+    default ProductDTO setProduct(ProposalMaterial entity, ProductService productService) {
 
-        ProductService productService = new ProductService();
-        Product product =productService.findEntityById(entity.getProposalId());
+
+        Product product = productService.findEntityById(entity.getProductId());
 
         ProductDTO productDTO = new ProductDTO();
 
@@ -89,10 +83,10 @@ public interface ProposalMaterialMapper extends BaseMapper<ProposalMaterialDTO, 
 
     }
 
-    default MaterialDTO setMaterial(ProposalMaterial entity) {
+    default MaterialDTO setMaterial(ProposalMaterial entity, MaterialService materialService) {
 
-        MaterialService materialService = new MaterialService();
-        Material material =materialService.findEntityById(entity.getMaterialId());
+
+        Material material = materialService.findEntityById(entity.getMaterialId());
 
         MaterialDTO materialDTO = new MaterialDTO();
 

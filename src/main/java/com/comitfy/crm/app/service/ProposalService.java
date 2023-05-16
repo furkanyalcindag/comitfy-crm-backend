@@ -52,6 +52,14 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
     @Autowired
     ProposalMaterialMapper proposalMaterialMapper;
 
+    @Autowired
+    ProductService productService;
+
+    @Autowired
+    MaterialService materialService;
+
+
+
     @Override
     public ProposalRepository getRepository() {
         return proposalRepository;
@@ -138,7 +146,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             BigDecimal calculated = salePrice.multiply(discountRequestDTO.getAmount()).divide(BigDecimal.valueOf(100));
 
             discountedPrice = salePrice.subtract(calculated);
-            discountDTO.setDiscountedPrice(discountedPrice);
+            discountDTO.setDiscountedPrice(discountedPrice);//indirim yapılmış tutar
             discountDTO.setDiscountAmount(calculated);
 
         }
@@ -197,6 +205,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
             DiscountDTO discountDTO = calculateDiscountByProduct(discountRequestDTO);
 
+            proposalMaterial.setDiscountAmount(discountRequestDTO.getAmount());
             proposalMaterial.setDiscountPrice(discountDTO.getDiscountAmount());
             proposalMaterial.setDiscountPriceTotal(discountDTO.getDiscountedPrice());
             proposalMaterial.setOfferPrice(discountDTO.getDiscountedPrice());
@@ -270,6 +279,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
             DiscountDTO discountDTO = calculateDiscountByProduct(discountRequestDTO);
 
+            proposalMaterial.setDiscountAmount(discountRequestDTO.getAmount());
             proposalMaterial.setDiscountPrice(discountDTO.getDiscountAmount());
             proposalMaterial.setDiscountPriceTotal(discountDTO.getDiscountedPrice());
             proposalMaterial.setOfferPrice(discountDTO.getDiscountedPrice());
@@ -316,7 +326,15 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
         Proposal proposal = proposalRepository.findByUuid(proposalUUID).get();
 
-        List<ProposalMaterialDTO> proposalMaterialDTOList = proposalMaterialMapper.entityListToDTOList(proposalMaterialRepository.findAllByVersionAndProposalId(proposal.getCurrentVersion(), proposal.getId()));
+        List<ProposalMaterial> proposalMaterialList = proposalMaterialRepository.findAllByVersionAndProposalId(proposal.getCurrentVersion(), proposal.getId());
+
+        List<ProposalMaterialDTO> proposalMaterialDTOList = new ArrayList<>();
+        for (ProposalMaterial proposalMaterial: proposalMaterialList) {
+
+            ProposalMaterialDTO proposalMaterialDTO = proposalMaterialMapper.entityToDTONew(proposalMaterial,this,productService,materialService);
+            proposalMaterialDTOList.add(proposalMaterialDTO);
+
+        }
 
         return proposalMaterialDTOList;
 
