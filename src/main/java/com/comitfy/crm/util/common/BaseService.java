@@ -56,12 +56,10 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
         pageDTO.setSize(pageEntity.getSize());
         pageDTO.setTotalPage(pageEntity.getTotalPages());
         pageDTO.setSort(pageEntity.getSort());
-      //  pageDTO.setData(pageEntity.toList().stream().map(getMapper()::entityToDTO).collect(Collectors.toList()));
+        //  pageDTO.setData(pageEntity.toList().stream().map(getMapper()::entityToDTO).collect(Collectors.toList()));
 
         List<AutoCompleteDTO> autoCompleteDTOList = new ArrayList<>();
         autoCompleteDTOList = pageEntity.toList().stream().map(getMapper()::entityToAutoCompleteDTO).collect(Collectors.toList());
-
-
 
 
         return autoCompleteDTOList;
@@ -88,6 +86,11 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
 
     public Entity findEntityByUUID(UUID uuid) {
         Optional<Entity> optionalEntity = getRepository().findByUuid(uuid);
+        return optionalEntity.orElse(null);
+    }
+
+    public Entity findEntityById(Long id) {
+        Optional<Entity> optionalEntity = getRepository().findById(id);
         return optionalEntity.orElse(null);
     }
 

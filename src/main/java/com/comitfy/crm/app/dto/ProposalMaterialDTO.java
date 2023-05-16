@@ -7,20 +7,20 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-
+import java.util.UUID;
 
 
 @Data
 public class ProposalMaterialDTO extends BaseDTO {
 
     
-    private Long proposalId;
+    private UUID proposalUUID;
 
     
-    private Long productId;
+    private ProductDTO productDTO;
 
     
-    private Long materialId;
+    private MaterialDTO materialDTO;
 
     
     private BigDecimal purchasePrice;
