@@ -23,7 +23,7 @@ public class ReferenceService {
                 .collect(Collectors.toList());
 
 
-        list.remove(ProposalStatusEnum.APPROVED);
+        //list.remove(ProposalStatusEnum.APPROVED);
 
         return  list;
 
