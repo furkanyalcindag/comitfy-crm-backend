@@ -69,6 +69,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/settings/**").permitAll()
                 .requestMatchers("/reference/**").permitAll()
                 .requestMatchers("/proposal/**").permitAll()
+                .requestMatchers("/dashboard/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/user-api/**").permitAll()
                 //.requestMatchers("/api/user/**").hasRole("USER")

@@ -100,4 +100,10 @@ public class OrderService extends BaseService<OrderDTO, OrderRequestDTO, Order, 
     }
 
 
+    public List<Object[]> groupByOrderStatus() {
+
+        return orderRepository.countTotalOrderStatus();
+    }
+
+
 }

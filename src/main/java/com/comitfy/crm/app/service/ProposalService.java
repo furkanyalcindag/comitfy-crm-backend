@@ -371,4 +371,11 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
     }
 
+
+
+    public List<Object[]> groupByProposalStatus() {
+
+        return proposalRepository.countTotalProposalStatus();
+    }
+
 }
