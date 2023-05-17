@@ -1,6 +1,7 @@
 package com.comitfy.crm.app.controller;
 
 import com.comitfy.crm.app.dto.CurrencyDTO;
+import com.comitfy.crm.app.model.enums.OrderStatusEnum;
 import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.app.service.ReferenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,13 @@ public class ReferenceController {
     public ResponseEntity<List<ProposalStatusEnum>> getProposalStatuses() {
 
         return new ResponseEntity<>(referenceService.getProposalStatuses(), HttpStatus.OK);
+
+    }
+    @GetMapping("get-order-status")
+
+    public ResponseEntity<List<OrderStatusEnum>> getOrderStatuses() {
+
+        return new ResponseEntity<>(referenceService.getOrderStatuses(), HttpStatus.OK);
 
     }
 

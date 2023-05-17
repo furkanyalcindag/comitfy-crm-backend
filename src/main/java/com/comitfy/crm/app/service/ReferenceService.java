@@ -1,6 +1,7 @@
 package com.comitfy.crm.app.service;
 
 import com.comitfy.crm.app.dto.CurrencyDTO;
+import com.comitfy.crm.app.model.enums.OrderStatusEnum;
 import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,19 @@ public class ReferenceService {
 
     public CurrencyDTO getDefaultCurrency() {
         return  currencyService.activeCurrency();
+
+    }
+
+    public List<OrderStatusEnum> getOrderStatuses() {
+
+        List<OrderStatusEnum> list = Stream.of(OrderStatusEnum.values())
+
+                .collect(Collectors.toList());
+
+
+        //list.remove(ProposalStatusEnum.APPROVED);
+
+        return  list;
 
     }
 
