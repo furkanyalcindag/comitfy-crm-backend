@@ -9,6 +9,7 @@ import com.comitfy.crm.app.entity.*;
 import com.comitfy.crm.app.mapper.ProposalMapper;
 import com.comitfy.crm.app.mapper.ProposalMaterialMapper;
 import com.comitfy.crm.app.model.enums.DiscountTypeEnum;
+import com.comitfy.crm.app.model.enums.OrderStatusEnum;
 import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.app.repository.*;
 import com.comitfy.crm.app.specification.ProposalSpecification;
@@ -58,7 +59,11 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
     @Autowired
     MaterialService materialService;
 
+    @Autowired
+    OrderService orderService;
 
+    @Autowired
+    OrderRepository orderRepository;
 
     @Override
     public ProposalRepository getRepository() {
@@ -231,9 +236,12 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
 
     @Transactional
-    public void updateProposal(ProposalRequestDTO proposalRequestDTO, UUID proposalUUID) {
+    public void updateProposal(ProposalRequestDTO proposalRequestDTO, UUID proposalUUID) throws Exception {
 
         Proposal proposal = proposalRepository.findByUuid(proposalUUID).get();
+
+        if (proposal.getProposalStatus().equals(ProposalStatusEnum.CANCELED) || proposal.getProposalStatus().equals(ProposalStatusEnum.APPROVED) || proposal.getProposalStatus().equals(ProposalStatusEnum.SENT_CUSTOMER))
+            throw new Exception("Güncelleme Yapılamaz");
 
         int version = proposal.getCurrentVersion() + 1;
         BigDecimal proposalTotalOfferPrice = BigDecimal.ZERO;
@@ -281,7 +289,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
             proposalMaterial.setDiscountAmount(discountRequestDTO.getAmount());
             proposalMaterial.setDiscountPrice(discountDTO.getDiscountAmount());
-            proposalMaterial.setDiscountPriceTotal(discountDTO.getDiscountedPrice());
+            proposalMaterial.setDiscountPriceTotal(discountDTO.getDiscountAmount());
             proposalMaterial.setOfferPrice(discountDTO.getDiscountedPrice());
 
 
@@ -305,14 +313,37 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
     }
 
 
+    @Transactional
     public ProposalStatusEnum updateProposalStatus(ProposalStatusRequestDTO requestDTO, UUID proposalUUID) {
 
 
         Proposal proposal = proposalRepository.findByUuid(proposalUUID).get();
 
+        //burada sipariş ve cari oluştur
         if (!proposal.getProposalStatus().equals(ProposalStatusEnum.CANCELED)) {
+
             proposal.setProposalStatus(requestDTO.getProposalStatusEnum());
             proposal = proposalRepository.save(proposal);
+
+
+            if (requestDTO.getProposalStatusEnum().equals(ProposalStatusEnum.APPROVED)) {
+
+                Order order = new Order();
+                order.setOrderStatus(OrderStatusEnum.WAITING);
+                order.setCustomerId(proposal.getCustomer().getId());
+                order.setProductId(proposal.getProduct().getId());
+                order.setProposalId(proposal.getId());
+                order.setCostPrice(proposal.getCostPrice());
+                order.setSalePrice(proposal.getSalePrice());
+                order.setDiscountPrice(proposal.getDiscountPrice());
+                order.setOfferPrice(proposal.getOfferPrice());
+
+
+                orderRepository.save(order);
+
+            }
+
+
             return proposal.getProposalStatus();
         } else {
             return null;
@@ -329,9 +360,9 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         List<ProposalMaterial> proposalMaterialList = proposalMaterialRepository.findAllByVersionAndProposalId(proposal.getCurrentVersion(), proposal.getId());
 
         List<ProposalMaterialDTO> proposalMaterialDTOList = new ArrayList<>();
-        for (ProposalMaterial proposalMaterial: proposalMaterialList) {
+        for (ProposalMaterial proposalMaterial : proposalMaterialList) {
 
-            ProposalMaterialDTO proposalMaterialDTO = proposalMaterialMapper.entityToDTONew(proposalMaterial,this,productService,materialService);
+            ProposalMaterialDTO proposalMaterialDTO = proposalMaterialMapper.entityToDTONew(proposalMaterial, this, productService, materialService);
             proposalMaterialDTOList.add(proposalMaterialDTO);
 
         }

@@ -70,7 +70,7 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
     }
 
     @PostMapping("/update-proposal/{proposalUUID}")
-    public ResponseEntity<Boolean> updateProposal(@RequestBody ProposalRequestDTO requestDTO, @PathVariable UUID proposalUUID) {
+    public ResponseEntity<Boolean> updateProposal(@RequestBody ProposalRequestDTO requestDTO, @PathVariable UUID proposalUUID) throws Exception {
 
         getService().updateProposal(requestDTO, proposalUUID);
         return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
