@@ -60,7 +60,7 @@ public class ReferenceController {
     }
 
 
-    @GetMapping("get-district-by-city{id}")
+    @GetMapping("get-district-by-city/{id}")
     public ResponseEntity<List<District>> getCity(@PathVariable Integer id) {
         return new ResponseEntity<>(referenceService.getDistricts(id), HttpStatus.OK);
     }
