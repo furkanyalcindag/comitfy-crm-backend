@@ -8,6 +8,9 @@ import lombok.Data;
 public class CustomerDTO extends BaseDTO {
 
     private String companyName;
+    private String email;
+    private String city;
+    private String district;
     private String taxNumber;
     private String taxOffice;
     private String telephoneNumber;

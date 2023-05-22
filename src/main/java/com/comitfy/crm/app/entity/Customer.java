@@ -33,6 +33,12 @@ public class Customer extends BaseEntity {
     private String iban;
     @Column
     private String authorizedPerson;
+    @Column
+    private String email;
+    @Column
+    private String city;
+    @Column
+    private String district;
 
 
 }
