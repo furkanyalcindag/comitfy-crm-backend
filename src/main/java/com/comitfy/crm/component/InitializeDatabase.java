@@ -1,20 +1,34 @@
 package com.comitfy.crm.component;
 
+import com.comitfy.crm.app.entity.City;
 import com.comitfy.crm.app.entity.Currency;
+import com.comitfy.crm.app.entity.District;
+import com.comitfy.crm.app.repository.CityRepository;
 import com.comitfy.crm.app.repository.CurrencyRepository;
+import com.comitfy.crm.app.repository.DistrictRepository;
 import com.comitfy.crm.userModule.entity.Role;
 import com.comitfy.crm.userModule.entity.User;
 import com.comitfy.crm.userModule.repository.RoleRepository;
 import com.comitfy.crm.userModule.repository.UserRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -33,11 +47,75 @@ public class InitializeDatabase implements CommandLineRunner {
     @Autowired
     CurrencyRepository currencyRepository;
 
+    @Autowired
+    CityRepository cityRepository;
+
+    @Autowired
+    DistrictRepository districtRepository;
+
+
     @Override
     public void run(String... args) throws Exception {
         loadRoleData();
         loadUserData();
         loadCurrency();
+        loadCity();
+        loadDistrict();
+    }
+
+    private void loadCity() throws FileNotFoundException {
+
+
+        if (cityRepository.count() > 0) {
+
+        } else {
+            ObjectMapper mapper = new ObjectMapper();
+            TypeReference<List<City>> typeReference = new TypeReference<List<City>>() {
+            };
+            InputStream inputStream = TypeReference.class.getResourceAsStream("/db/cities.json");
+            try {
+                List<City> cityList = mapper.readValue(inputStream, typeReference);
+
+                for (City city : cityList) {
+
+                    cityRepository.save(city);
+
+                }
+
+                System.out.println("city Saved!");
+            } catch (IOException e) {
+                System.out.println("Unable to save city: " + e.getMessage());
+            }
+        }
+
+
+    }
+
+
+    private void loadDistrict() throws FileNotFoundException {
+
+        if (districtRepository.count() > 0) {
+
+        } else {
+            ObjectMapper mapper = new ObjectMapper();
+            TypeReference<List<District>> typeReference = new TypeReference<List<District>>() {
+            };
+            InputStream inputStream = TypeReference.class.getResourceAsStream("/db/districts.json");
+            try {
+                List<District> cityList = mapper.readValue(inputStream, typeReference);
+
+                for (District city : cityList) {
+
+                    districtRepository.save(city);
+
+                }
+
+                System.out.println("district Saved!");
+            } catch (IOException e) {
+                System.out.println("Unable to save city: " + e.getMessage());
+            }
+        }
+
     }
 
 

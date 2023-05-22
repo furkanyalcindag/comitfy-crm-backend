@@ -1,8 +1,12 @@
 package com.comitfy.crm.app.service;
 
 import com.comitfy.crm.app.dto.CurrencyDTO;
+import com.comitfy.crm.app.entity.City;
+import com.comitfy.crm.app.entity.District;
 import com.comitfy.crm.app.model.enums.OrderStatusEnum;
 import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
+import com.comitfy.crm.app.repository.CityRepository;
+import com.comitfy.crm.app.repository.DistrictRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +21,12 @@ public class ReferenceService {
     @Autowired
     CurrencyService currencyService;
 
+    @Autowired
+    CityRepository cityRepository;
+
+    @Autowired
+    DistrictRepository districtRepository;
+
     public List<ProposalStatusEnum> getProposalStatuses() {
 
         List<ProposalStatusEnum> list = Stream.of(ProposalStatusEnum.values())
@@ -26,12 +36,22 @@ public class ReferenceService {
 
         //list.remove(ProposalStatusEnum.APPROVED);
 
-        return  list;
+        return list;
 
     }
 
     public CurrencyDTO getDefaultCurrency() {
-        return  currencyService.activeCurrency();
+        return currencyService.activeCurrency();
+
+    }
+
+    public List<City> getCities() {
+        return cityRepository.findAll();
+
+    }
+
+    public List<District> getDistricts(Integer cityId) {
+        return districtRepository.findAllByCityId(cityId);
 
     }
 
@@ -44,7 +64,7 @@ public class ReferenceService {
 
         //list.remove(ProposalStatusEnum.APPROVED);
 
-        return  list;
+        return list;
 
     }
 
