@@ -1,9 +1,6 @@
 package com.comitfy.crm.app.controller;
 
-import com.comitfy.crm.app.dto.DiscountDTO;
-import com.comitfy.crm.app.dto.ProposalDTO;
-import com.comitfy.crm.app.dto.ProposalMaterialDTO;
-import com.comitfy.crm.app.dto.ProposalPreparingDTO;
+import com.comitfy.crm.app.dto.*;
 import com.comitfy.crm.app.dto.requestDTO.DiscountRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProposalRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProposalStatusRequestDTO;
@@ -46,9 +43,9 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
 
 
     @GetMapping("prepare-proposal/{productUUID}")
-    public ResponseEntity<ProposalPreparingDTO> prepareProposal(@PathVariable UUID productUUID) {
+    public ResponseEntity< List<ProposalPreparingDTO>> prepareProposal(@PathVariable List<UUID> productUUIDList) {
 
-        return new ResponseEntity<>(getService().calculatePriceOfProduct(productUUID), HttpStatus.OK);
+        return new ResponseEntity<>(getService().calculatePriceOfProduct(productUUIDList), HttpStatus.OK);
 
     }
 
@@ -91,7 +88,7 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
 
 
     @GetMapping("get-materials-by-proposal/{proposalUUID}")
-    public ResponseEntity<List<ProposalMaterialDTO>> getMaterialsByProposal(@PathVariable UUID proposalUUID) {
+    public ResponseEntity<List<ProposalProductDTO>> getMaterialsByProposal(@PathVariable UUID proposalUUID) {
 
         return new ResponseEntity<>(getService().getMaterialsByProposal(proposalUUID), HttpStatus.OK);
 

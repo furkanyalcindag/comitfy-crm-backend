@@ -17,7 +17,8 @@ public class ProposalMaterialDTO extends BaseDTO {
     private UUID proposalUUID;
 
     
-    private ProductDTO productDTO;
+    //private ProductDTO productDTO;
+
 
     
     private MaterialDTO materialDTO;
@@ -35,7 +36,7 @@ public class ProposalMaterialDTO extends BaseDTO {
     private BigDecimal purchaseTotalPrice;
 
     
-    private Integer quantity;
+    private BigDecimal amount;
 
     private DiscountTypeEnum discountType;
 

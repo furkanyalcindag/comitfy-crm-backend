@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 public class ProposalMaterialRequestDTO extends BaseDTO {
     private UUID materialUUID;
-    private Integer quantity;
+    private BigDecimal amount;
     private DiscountTypeEnum discountType;
     private BigDecimal discountAmount;
 }

@@ -18,7 +18,8 @@ public class MaterialDTO extends BaseDTO {
 
     private String name;
     private String code;
-    private Integer quantity;
+    private BigDecimal amount;
+    private String unit;
     private BigDecimal purchaseNetPrice;
     private BigDecimal saleNetPrice;
     private BigDecimal totalPurchaseNetPrice;

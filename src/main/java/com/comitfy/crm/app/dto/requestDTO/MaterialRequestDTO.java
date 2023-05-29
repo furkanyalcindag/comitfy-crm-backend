@@ -12,7 +12,8 @@ public class MaterialRequestDTO extends BaseDTO {
 
     private String name;
     private String code;
-    private Integer quantity;
+    private BigDecimal amount;
+    private String unit;
     private BigDecimal purchaseNetPrice;
     private BigDecimal saleNetPrice;
     //private Set<ProductMaterialDTO> productMaterials;

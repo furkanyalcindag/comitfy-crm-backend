@@ -58,7 +58,7 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
 
                 ProductMaterialDTO productMaterialDTO = new ProductMaterialDTO();
                 productMaterialDTO.setMaterial(mapper.entityToDTO(productMaterial.getMaterial()));
-                productMaterialDTO.setQuantity(productMaterial.getQuantity());
+                productMaterialDTO.setQuantity(productMaterial.getAmount());
                 productMaterialDTO.setProduct(null);
                 productDTO.getProductMaterials().add(productMaterialDTO);
 
@@ -105,7 +105,7 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
                 ProductMaterial productMaterial = new ProductMaterial();
                 productMaterial.setProduct(product);
                 productMaterial.setMaterial(material);
-                productMaterial.setQuantity(pmrDto.getQuantity());
+                productMaterial.setAmount(pmrDto.getAmount());
                 productMaterialRepository.save(productMaterial);
 
             }
@@ -137,7 +137,7 @@ public class ProductMapper implements BaseMapper<ProductDTO, ProductRequestDTO, 
                 ProductMaterial productMaterial = new ProductMaterial();
                 productMaterial.setProduct(product);
                 productMaterial.setMaterial(material);
-                productMaterial.setQuantity(pmrDto.getQuantity());
+                productMaterial.setAmount(pmrDto.getAmount());
                 productMaterialRepository.save(productMaterial);
             }
             return product;

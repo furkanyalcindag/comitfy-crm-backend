@@ -3,10 +3,7 @@ package com.comitfy.crm.app.mapper;
 import com.comitfy.crm.app.dto.*;
 import com.comitfy.crm.app.dto.requestDTO.ProposalMaterialRequestDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProposalRequestDTO;
-import com.comitfy.crm.app.entity.Material;
-import com.comitfy.crm.app.entity.Product;
-import com.comitfy.crm.app.entity.Proposal;
-import com.comitfy.crm.app.entity.ProposalMaterial;
+import com.comitfy.crm.app.entity.*;
 import com.comitfy.crm.app.service.MaterialService;
 import com.comitfy.crm.app.service.ProductService;
 import com.comitfy.crm.app.service.ProposalService;
@@ -49,12 +46,15 @@ public interface ProposalMaterialMapper extends BaseMapper<ProposalMaterialDTO, 
     @Mappings({
             @Mapping(target = "proposalUUID", expression = "java(setProposalUUID(entity,proposalService))"),
 
-            @Mapping(target = "productDTO", expression = "java(setProduct(entity,productService))"),
+            //@Mapping(target = "productDTO", expression = "java(setProduct(entity,productService))"),
 
             @Mapping(target = "materialDTO", expression = "java(setMaterial(entity,materialService))")
     })
     ProposalMaterialDTO entityToDTONew(ProposalMaterial entity,
                                        @Context ProposalService proposalService, @Context ProductService productService, @Context MaterialService materialService);
+
+
+
 
 
     default UUID setProposalUUID(ProposalMaterial entity,ProposalService proposalService) {

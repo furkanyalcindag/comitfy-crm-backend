@@ -10,4 +10,6 @@ import java.util.List;
 public interface ProposalMaterialRepository extends BaseRepository<ProposalMaterial> {
 
     List<ProposalMaterial> findAllByVersionAndProposalId(Integer version, Long proposalId);
+
+    List<ProposalMaterial> findAllByVersionAndProposalIdAndProductId(Integer version, Long proposalId, Long productId);
 }

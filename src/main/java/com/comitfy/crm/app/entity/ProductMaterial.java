@@ -5,6 +5,8 @@ import com.comitfy.crm.util.dbUtil.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table
 @Data
@@ -26,7 +28,7 @@ public class ProductMaterial extends BaseEntity {
     private Material material;
 
     @Column
-    private Integer quantity;
+    private BigDecimal amount;
 
 
 

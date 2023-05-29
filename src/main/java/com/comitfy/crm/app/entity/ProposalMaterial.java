@@ -26,6 +26,9 @@ public class ProposalMaterial extends BaseEntity {
     private Long productId;
 
     @Column
+    private Long proposalProductId;
+
+    @Column
     private Long materialId;
 
     @Column
@@ -41,7 +44,10 @@ public class ProposalMaterial extends BaseEntity {
     private BigDecimal purchaseTotalPrice;
 
     @Column
-    private Integer quantity;
+    private BigDecimal amount;
+
+    @Column
+    private String unit;
 
     @Enumerated(EnumType.STRING)
     private DiscountTypeEnum discountType;

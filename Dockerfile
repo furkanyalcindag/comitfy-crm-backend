@@ -1,12 +1,10 @@
-# For Java 11, try this
-FROM adoptopenjdk/openjdk11:alpine-jre
-
+FROM eclipse-temurin:17-jdk-alpine
 #RUN apk add --update fontconfig freetype
 
 RUN apk --no-cache add msttcorefonts-installer fontconfig && update-ms-fonts && fc-cache -f
 
 # Refer to Maven build -> finalName
-ARG JAR_FILE=target/fair-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=target/crm-0.0.1-SNAPSHOT.jar
 
 # cd /opt/app
 WORKDIR /opt/app

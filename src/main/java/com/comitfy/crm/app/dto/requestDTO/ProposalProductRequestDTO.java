@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class ProposalRequestDTO extends BaseDTO {
+public class ProposalProductRequestDTO extends BaseDTO {
     private UUID productUUID;
-    private UUID customerUUID;
     private List<ProposalMaterialRequestDTO> productMaterialRequestDTOList;
-
-    private List<ProposalProductRequestDTO> proposalProductRequestDTOList;
 }

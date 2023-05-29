@@ -27,7 +27,10 @@ public class Material extends BaseEntity {
     private String code;
 
     @Column
-    private Integer quantity;
+    private BigDecimal amount;
+
+    @Column
+    private String unit;
 
     @Column
     private BigDecimal purchaseNetPrice;
