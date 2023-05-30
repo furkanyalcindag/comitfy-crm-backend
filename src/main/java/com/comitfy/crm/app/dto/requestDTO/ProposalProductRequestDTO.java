@@ -10,4 +10,5 @@ import java.util.UUID;
 public class ProposalProductRequestDTO extends BaseDTO {
     private UUID productUUID;
     private List<ProposalMaterialRequestDTO> productMaterialRequestDTOList;
+    private String note;
 }

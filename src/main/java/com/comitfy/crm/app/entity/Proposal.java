@@ -45,5 +45,27 @@ public class Proposal extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProposalStatusEnum proposalStatus;
 
+    @Column
+    private String projectName;
+
+    @Column
+    private String proposalReferenceNo;
+
+    @Column
+    private String deliveryTime;
+
+    @Column
+    private String validityPeriod;
+
+    @Column
+    private String deliveryPlace;
+
+    @Column
+    private BigDecimal shippingPrice;
+
+    @Column
+    private BigDecimal taxPrice;
+
+
 
 }

@@ -27,4 +27,7 @@ public class ProposalProduct extends BaseEntity {
     @Column
     private Integer version;
 
+    @Column
+    private String note;
+
 }

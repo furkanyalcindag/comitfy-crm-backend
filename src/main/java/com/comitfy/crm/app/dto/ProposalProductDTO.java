@@ -22,4 +22,6 @@ public class ProposalProductDTO extends BaseDTO {
 
     private Integer version;
 
+    private String note;
+
 }

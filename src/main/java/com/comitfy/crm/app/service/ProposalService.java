@@ -189,6 +189,12 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         proposal.setSalePrice(proposalTotalSalePrice);
         proposal.setOfferPrice(proposalTotalOfferPrice);
         proposal.setCurrentVersion(version);
+        proposal.setProposalReferenceNo("");
+        proposal.setShippingPrice(proposalRequestDTO.getShippingPrice());
+        proposal.setValidityPeriod(proposalRequestDTO.getValidityPeriod());
+        proposal.setDeliveryPlace(proposalRequestDTO.getDeliveryPlace());
+        proposal.setDeliveryTime(proposalRequestDTO.getDeliveryTime());
+        proposal.setProjectName(proposalRequestDTO.getProjectName());
         proposal = proposalRepository.saveAndFlush(proposal);
 
         for (ProposalProductRequestDTO proposalProductRequestDTO : proposalRequestDTO.getProposalProductRequestDTOList()) {
@@ -197,6 +203,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             ProposalProduct proposalProduct = new ProposalProduct();
             proposalProduct.setProductId(product.getId());
             proposalProduct.setProposalId(proposal.getId());
+            proposalProduct.setNote(proposalProductRequestDTO.getNote());
             proposalProductRepository.save(proposalProduct);
 
 
@@ -352,6 +359,12 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         proposal.setOfferPrice(proposalTotalOfferPrice);
         proposal.setCurrentVersion(version);
 
+        proposal.setShippingPrice(proposalRequestDTO.getShippingPrice());
+        proposal.setValidityPeriod(proposalRequestDTO.getValidityPeriod());
+        proposal.setDeliveryPlace(proposalRequestDTO.getDeliveryPlace());
+        proposal.setDeliveryTime(proposalRequestDTO.getDeliveryTime());
+        proposal.setProjectName(proposalRequestDTO.getProjectName());
+
         proposal = proposalRepository.saveAndFlush(proposal);
 
 
@@ -363,6 +376,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             proposalProduct.setProductId(product.getId());
             proposalProduct.setProposalId(proposal.getId());
             proposalProduct.setVersion(version);
+            proposalProduct.setNote(proposalProductRequestDTO.getNote());
             proposalProductRepository.save(proposalProduct);
 
             for (ProposalMaterialRequestDTO productMaterialRequestDTO : proposalProductRequestDTO.getProductMaterialRequestDTOList()) {
@@ -566,6 +580,8 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             proposalProductDTO.setProposalMaterialDTOList(proposalMaterialDTOList);
 
             proposalProductDTO.setProductDTO(setProduct(proposalProduct.getProductId()));
+
+            proposalProductDTO.setNote(proposalProduct.getNote());
 
             proposalProductDTO.setVersion(proposalProduct.getVersion());
 

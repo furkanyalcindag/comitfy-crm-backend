@@ -22,7 +22,8 @@ public class Settings extends BaseEntity {
     @Column(unique = true)
     private String key;
 
-    @Column
+
+    @Column(columnDefinition = "TEXT")
     private String value;
 
     @Column

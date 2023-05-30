@@ -45,9 +45,7 @@ public class MaterialController extends BaseCrudController<MaterialDTO, Material
 
     @PostMapping("create-sale-price/")
     public ResponseEntity<SalePriceDTO> prepareProposalMaterialDiscount(@RequestBody SalePriceRequestDTO requestDTO) {
-
         return new ResponseEntity<>(getService().calculateDiscountByMaterial(requestDTO), HttpStatus.OK);
-
     }
 
 
