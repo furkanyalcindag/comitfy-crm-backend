@@ -42,7 +42,7 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
     }
 
 
-    @PostMapping("prepare-proposal/{productUUID}")
+    @PostMapping("prepare-proposal")
     public ResponseEntity<List<ProposalPreparingDTO>> prepareProposal(@RequestBody List<UUID> productUUIDList) {
 
         return new ResponseEntity<>(getService().calculatePriceOfProduct(productUUIDList), HttpStatus.OK);
