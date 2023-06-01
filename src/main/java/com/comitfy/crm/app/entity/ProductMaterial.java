@@ -31,5 +31,9 @@ public class ProductMaterial extends BaseEntity {
     private BigDecimal amount;
 
 
+    @Column
+    private String unit;
+
+
 
 }

@@ -12,5 +12,6 @@ public class ProductMaterialDTO extends BaseDTO {
     @JsonIgnore
     private ProductDTO product;
     private MaterialDTO material;
-    private BigDecimal quantity;
+    private BigDecimal amount;
+    private BigDecimal unit;
 }

@@ -111,6 +111,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
                 materialDTO.setName(productMaterial.getMaterial().getName());
                 materialDTO.setUuid(productMaterial.getMaterial().getUuid());
                 materialDTO.setAmount(productMaterial.getAmount());
+                materialDTO.setUnit(productMaterial.getUnit());
                 materialDTO.setPurchaseNetPrice(productMaterial.getMaterial().getPurchaseNetPrice());
                 materialDTO.setSaleNetPrice(productMaterial.getMaterial().getSaleNetPrice());
                 materialDTO.setTotalPurchaseNetPrice(productMaterial.getMaterial().getPurchaseNetPrice().multiply(productMaterial.getAmount()));
