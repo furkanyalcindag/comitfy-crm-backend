@@ -31,10 +31,10 @@ public class Proposal extends BaseEntity {
     private BigDecimal costPrice; //maaliyet
 
     @Column
-    private BigDecimal salePrice;
+    private BigDecimal saleNetPrice;
 
     @Column
-    private BigDecimal offerPrice;
+    private BigDecimal offerPrice; //saleNet price + discount
 
     @Column
     private BigDecimal discountPrice;
@@ -61,11 +61,16 @@ public class Proposal extends BaseEntity {
     private String deliveryPlace;
 
     @Column
-    private BigDecimal shippingPrice;
+    private BigDecimal shippingPrice = BigDecimal.ZERO;
 
     @Column
-    private BigDecimal taxPrice;
+    private BigDecimal taxRate;
 
+    @Column
+    private BigDecimal taxAmount;
+
+
+    private BigDecimal offerTotalPrice; //include tax + shipping+discount
 
 
 }

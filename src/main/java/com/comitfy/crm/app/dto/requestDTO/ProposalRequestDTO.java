@@ -10,14 +10,16 @@ import java.util.UUID;
 
 @Data
 public class ProposalRequestDTO extends BaseDTO {
-    private UUID productUUID;
+    //private UUID productUUID;
     private UUID customerUUID;
-    private List<ProposalMaterialRequestDTO> productMaterialRequestDTOList;
+    //private List<ProposalMaterialRequestDTO> productMaterialRequestDTOList;
     private List<ProposalProductRequestDTO> proposalProductRequestDTOList;
     private String projectName;
     private String deliveryTime;
+    private BigDecimal taxRate;
     private String validityPeriod;
     private String deliveryPlace;
     private BigDecimal shippingPrice;
+    private DiscountRequestDTO discountRequestDTO;
     
 }
