@@ -133,7 +133,7 @@ public class InitializeDatabase implements CommandLineRunner {
         if (currencyRepository.count() == 0) {
             Currency currency = new Currency();
             currency.setIsDefault(Boolean.TRUE);
-            currency.setName("TL");
+            currency.setName("TL:-:TRY");
             currency.setSymbol("₺");
             currency.setExchangeRate(BigDecimal.ONE);
             currencyRepository.save(currency);
