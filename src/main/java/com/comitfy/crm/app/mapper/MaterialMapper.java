@@ -37,7 +37,7 @@ public interface MaterialMapper extends BaseMapper<MaterialDTO, MaterialRequestD
 
 
     default String setLabelFullDetail(Material entity) {
-        return entity.getCode() + ":-:" + entity.getName() + ":-:" + entity.getPurchaseNetPrice() + ":-:" + entity.getSaleNetPrice();
+        return entity.getCode() + ":-:" + entity.getName() + ":-:" + entity.getPurchaseNetPrice() + ":-:" + entity.getSaleNetPrice()+":-:"+entity.getUnit();
 
     }
 
