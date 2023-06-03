@@ -248,7 +248,6 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             proposalProduct.setTotalSaleNetPrice(proposalProduct.getUnitSaleNetPrice().multiply(BigDecimal.valueOf(proposalProduct.getQuantity())));
 
 
-
             proposalProductRepository.save(proposalProduct);
 
 
@@ -259,7 +258,6 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
                 Material material = productMaterial.getMaterial();
 
                 totalProductUnitPurchaseNetPrice = totalProductUnitPurchaseNetPrice.add(material.getPurchaseNetPrice());
-
 
 
                 ProposalMaterial proposalMaterial = new ProposalMaterial();
@@ -311,8 +309,6 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         proposal.setDiscountPrice(proposalTotalDiscountPrice);//indirim
 
         proposal.setOfferPrice(proposal.getOfferPrice().subtract(proposalTotalDiscountPrice));
-
-
 
 
         if (proposal.getTaxRate() != null) {
@@ -612,7 +608,6 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
                 order.setSalePrice(proposal.getSaleNetPrice());
                 order.setDiscountPrice(proposal.getDiscountPrice());
                 order.setOfferPrice(proposal.getOfferPrice());
-
 
                 orderRepository.save(order);
 
