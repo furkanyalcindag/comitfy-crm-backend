@@ -65,6 +65,9 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
     @Autowired
     ProposalProductRepository proposalProductRepository;
 
+    @Autowired
+    SettingsRepository settingsRepository;
+
     @Override
     public ProposalRepository getRepository() {
         return proposalRepository;
@@ -207,10 +210,10 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         int version = 1;
         BigDecimal proposalTotalOfferPrice = BigDecimal.ZERO;
         BigDecimal proposalTotalPurchasePrice = BigDecimal.ZERO;
-        BigDecimal proposalTotalSalePrice = BigDecimal.ZERO;
         BigDecimal proposalTotalSaleNetPrice = BigDecimal.ZERO;
         BigDecimal proposalTotalTaxPrice = BigDecimal.ZERO;
         BigDecimal proposalTotalDiscountPrice = BigDecimal.ZERO;
+        BigDecimal materialsSaleTotal = BigDecimal.ZERO;
 
         Customer customer = customerRepository.findByUuid(proposalRequestDTO.getCustomerUUID()).get();
 
@@ -219,7 +222,8 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         proposal.setCostPrice(proposalTotalPurchasePrice);
         proposal.setDiscountPrice(proposalTotalDiscountPrice);
         proposal.setSaleNetPrice(proposalTotalSaleNetPrice);
-        proposal.setOfferPrice(proposalTotalOfferPrice);
+        proposal.setOfferPrice(proposalTotalSaleNetPrice);
+        proposal.setOfferTotalPrice(proposalTotalOfferPrice);
         proposal.setCurrentVersion(version);
         proposal.setProposalReferenceNo("");
         proposal.setTaxRate(proposalRequestDTO.getTaxRate());
@@ -274,6 +278,8 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
                 proposalMaterial.setPurchaseTotalPrice(material.getPurchaseNetPrice().multiply(productMaterial.getAmount()));
                 proposalMaterial.setSaleTotalPrice(proposalMaterial.getSalePrice().multiply(productMaterial.getAmount()));
 
+                materialsSaleTotal = materialsSaleTotal.add(proposalMaterial.getSaleTotalPrice());
+
                 proposalMaterialRepository.save(proposalMaterial);
 
 
@@ -288,13 +294,11 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             //proposalTotalSalePrice = proposalTotalSalePrice.add(proposalProduct.getTotalSalePrice());
             proposalTotalSaleNetPrice = proposalTotalSaleNetPrice.add(proposalProduct.getTotalSaleNetPrice());
 
-            proposalTotalSaleNetPrice = proposalTotalSaleNetPrice.add(proposalProduct.getTotalSaleNetPrice());
-
 
         }
 
         proposal.setCostPrice(proposalTotalPurchasePrice);//maaliyet
-        proposal.setOfferPrice(proposalTotalSaleNetPrice);//satış
+        proposal.setSaleNetPrice(materialsSaleTotal);
 
 
         DiscountRequestDTO discountRequestDTO = proposalRequestDTO.getDiscountRequestDTO() != null ? proposalRequestDTO.getDiscountRequestDTO() : null;
@@ -308,7 +312,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         }
         proposal.setDiscountPrice(proposalTotalDiscountPrice);//indirim
 
-        proposal.setOfferPrice(proposal.getOfferPrice().subtract(proposalTotalDiscountPrice));
+        proposal.setOfferPrice(proposalTotalSaleNetPrice);
 
 
         if (proposal.getTaxRate() != null) {
@@ -320,15 +324,16 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
         proposal.setTaxAmount(proposalTotalTaxPrice);
 
-        proposal.setOfferTotalPrice(proposal.getOfferPrice().add(proposal.getTaxAmount()).subtract(proposal.getDiscountPrice()));
+        proposal.setOfferTotalPrice(proposal.getOfferPrice().add(proposal.getShippingPrice().add(proposal.getTaxAmount()).subtract(proposal.getDiscountPrice())));
 
 
-        proposal.setOfferPrice(proposalTotalOfferPrice);//teklif fiyatı
+        //proposal.setOfferPrice(proposalTotalOfferPrice);//teklif fiyatı
 
 
-        proposal.setOfferTotalPrice(proposal.getOfferPrice().add(proposal.getShippingPrice()).add(proposal.getTaxAmount()));
+        //proposal.setOfferTotalPrice(proposal.getOfferPrice().add(proposal.getShippingPrice()).add(proposal.getTaxAmount()));
         proposal.setProposalStatus(ProposalStatusEnum.CREATED);
 
+        proposal.setProposalReferenceNo(settingsRepository.findByKey("proposalPrefix").getValue() + "-" + proposal.getId());
         proposalRepository.save(proposal);
 
     }
@@ -407,8 +412,8 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
     }*/
 
     @Transactional
-    public void updateProposal(ProposalRequestDTO proposalRequestDTO, UUID proposalUUID) throws Exception {/*
-
+    public void updateProposal(ProposalRequestDTO proposalRequestDTO, UUID proposalUUID) throws Exception {
+/*
         Proposal proposal = proposalRepository.findByUuid(proposalUUID).get();
 
         if (proposal.getProposalStatus().equals(ProposalStatusEnum.CANCELED) || proposal.getProposalStatus().equals(ProposalStatusEnum.APPROVED) || proposal.getProposalStatus().equals(ProposalStatusEnum.SENT_CUSTOMER))
@@ -501,8 +506,8 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         proposal.setOfferPrice(proposalTotalOfferPrice);
         proposal.setProposalStatus(ProposalStatusEnum.REVISION);
 
-        proposalRepository.save(proposal);*/
-
+        proposalRepository.save(proposal);
+*/
     }
     /*
 

@@ -69,7 +69,7 @@ public class Proposal extends BaseEntity {
     @Column
     private BigDecimal taxAmount;
 
-
+    @Column
     private BigDecimal offerTotalPrice; //include tax + shipping+discount
 
 

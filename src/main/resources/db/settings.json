@@ -1,0 +1,20 @@
+[
+  {
+    "key": "orderPrefix",
+    "value": "cmt"
+  },
+  {
+    "key": "proposalPrefix",
+    "value": "cmt"
+  },
+  {
+    "key": "checkingAccountPrefix",
+    "value": "cmt"
+  },
+  {
+    "key": "defaultFeatures ",
+    "value": ""
+  }
+
+
+]

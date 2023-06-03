@@ -28,7 +28,8 @@ ProposalDTO extends BaseDTO {
     private String validityPeriod;
     private String deliveryPlace;
     private BigDecimal shippingPrice;
-    private BigDecimal taxPrice;
+    private BigDecimal taxAmount;
+    private BigDecimal offerTotalPrice;
 
 
 

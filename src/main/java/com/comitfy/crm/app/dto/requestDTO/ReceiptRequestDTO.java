@@ -7,8 +7,6 @@ import java.util.List;
 
 @Data
 public class ReceiptRequestDTO extends BaseDTO {
-    private String name;
-    private String code;
     private List<ReceiptDTO> receipts;
-    private List<ProductMaterialRequestDTO> materialList;
+
 }

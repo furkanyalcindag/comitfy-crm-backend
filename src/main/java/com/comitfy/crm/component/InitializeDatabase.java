@@ -3,30 +3,26 @@ package com.comitfy.crm.component;
 import com.comitfy.crm.app.entity.City;
 import com.comitfy.crm.app.entity.Currency;
 import com.comitfy.crm.app.entity.District;
+import com.comitfy.crm.app.entity.Settings;
 import com.comitfy.crm.app.repository.CityRepository;
 import com.comitfy.crm.app.repository.CurrencyRepository;
 import com.comitfy.crm.app.repository.DistrictRepository;
+import com.comitfy.crm.app.repository.SettingsRepository;
 import com.comitfy.crm.userModule.entity.Role;
 import com.comitfy.crm.userModule.entity.User;
 import com.comitfy.crm.userModule.repository.RoleRepository;
 import com.comitfy.crm.userModule.repository.UserRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.Resource;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
-
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +49,9 @@ public class InitializeDatabase implements CommandLineRunner {
     @Autowired
     DistrictRepository districtRepository;
 
+    @Autowired
+    SettingsRepository settingsRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -61,6 +60,7 @@ public class InitializeDatabase implements CommandLineRunner {
         loadCurrency();
         loadCity();
         loadDistrict();
+        loadSettings();
     }
 
     private void loadCity() throws FileNotFoundException {
@@ -159,6 +159,39 @@ public class InitializeDatabase implements CommandLineRunner {
 
         }
         System.out.println(userRepository.count());
+    }
+
+
+    private void loadSettings() throws FileNotFoundException {
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<Settings>> typeReference = new TypeReference<List<Settings>>() {
+        };
+        InputStream inputStream = TypeReference.class.getResourceAsStream("/db/settings.json");
+        try {
+            List<Settings> settingsList = mapper.readValue(inputStream, typeReference);
+
+            for (Settings settings : settingsList) {
+                settings.setCurrent(Boolean.TRUE);
+
+                try{
+                    settingsRepository.save(settings);
+                    System.out.println("settings Saved!");
+                }
+                catch (Exception e){
+                    System.out.println("duplicated setting: " + e.getMessage());
+                }
+
+
+            }
+
+
+        } catch (IOException e) {
+            System.out.println("duplicated setting: " + e.getMessage());
+        }
+
+
     }
 
 

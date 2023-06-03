@@ -21,5 +21,6 @@ public class ProposalRequestDTO extends BaseDTO {
     private String deliveryPlace;
     private BigDecimal shippingPrice;
     private DiscountRequestDTO discountRequestDTO;
+    private BigDecimal offerPrice;
     
 }
