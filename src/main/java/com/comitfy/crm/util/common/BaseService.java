@@ -26,7 +26,7 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
 
 
     public PageDTO<DTO> findAll(BaseFilterRequestDTO filterRequestDTO) {
-        Pageable pageable = PageRequest.of(filterRequestDTO.getPageNumber(), filterRequestDTO.getPageSize(), Sort.by("id"));
+        Pageable pageable = PageRequest.of(filterRequestDTO.getPageNumber(), filterRequestDTO.getPageSize(), Sort.by("id").descending());
 
         getSpecification().setCriterias(filterRequestDTO.getFilters());
         //return getMapper().pageEntityToPageDTO(getRepository().findAllByLanguageEnum(pageable,languageEnum));
@@ -45,7 +45,7 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
 
     public List<AutoCompleteDTO> autoComplete(BaseFilterRequestDTO filterRequestDTO) {
         AutoCompleteDTO autoCompleteDTO = new AutoCompleteDTO();
-        Pageable pageable = PageRequest.of(filterRequestDTO.getPageNumber(), filterRequestDTO.getPageSize(), Sort.by("id"));
+        Pageable pageable = PageRequest.of(filterRequestDTO.getPageNumber(), filterRequestDTO.getPageSize(), Sort.by("id").descending());
 
         getSpecification().setCriterias(filterRequestDTO.getFilters());
         //return getMapper().pageEntityToPageDTO(getRepository().findAllByLanguageEnum(pageable,languageEnum));
@@ -67,7 +67,7 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
 
 
     public PageDTO<DTO> findAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Entity> pageEntity = getRepository().findAll(pageable);
         PageDTO<DTO> pageDTO = new PageDTO<>();
         pageDTO.setNumber(pageEntity.getNumber());
