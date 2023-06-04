@@ -95,17 +95,19 @@ public class SettingsService extends BaseService<SettingsDTO, SettingsRequestDTO
 
     }
 
-    public SettingsDTO updateByKey(SettingsRequestDTO dto){
+    public SettingsDTO updateByKey(SettingsRequestDTO dto) {
 
         Settings settings = settingsRepository.findByKey(dto.getKey());
 
         settings.setValue(dto.getValue());
 
+        settingsRepository.save(settings);
+
         return getMapper().entityToDTO(settings);
 
     }
 
-    public SettingsDTO getByKey(String key){
+    public SettingsDTO getByKey(String key) {
 
         Settings settings = settingsRepository.findByKey(key);
 
