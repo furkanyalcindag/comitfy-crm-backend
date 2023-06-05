@@ -14,7 +14,6 @@ public class
 ProposalDTO extends BaseDTO {
 
     private CustomerDTO customer;
-    private ProductDTO product;
     private BigDecimal costPrice;
     private BigDecimal saleNetPrice;
     private BigDecimal offerPrice;

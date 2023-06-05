@@ -19,6 +19,9 @@ import java.math.BigDecimal;
 public class Order extends BaseEntity {
 
         @Column
+        private String orderReferenceNo;
+
+        @Column
         private Long proposalId;
 
         @Column
@@ -31,16 +34,7 @@ public class Order extends BaseEntity {
         private OrderStatusEnum orderStatus;
 
         @Column
-        private BigDecimal costPrice; //maaliyet
-
-        @Column
-        private BigDecimal salePrice; //satış fiyatı
-
-        @Column
-        private BigDecimal offerPrice; //teklif fiyatı
-
-        @Column
-        private BigDecimal discountPrice; //indirim fiyatı
+        private String proposalReferenceNo;
 
 
 }

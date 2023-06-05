@@ -13,15 +13,16 @@ import java.math.BigDecimal;
 @AttributeOverride(
         name = "uuid",
         column = @Column(
-                name = "proposal_uuid"
+                name = "proposal_history_uuid"
         )
 )
-public class Proposal extends BaseEntity {
+public class ProposalHistory extends BaseEntity {
 
+    @Column
+    private Long customerId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @Column
+    private Long proposalId;
 
     @Column
     private BigDecimal costPrice; //maaliyet

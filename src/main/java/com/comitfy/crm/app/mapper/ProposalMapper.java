@@ -4,6 +4,7 @@ import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.app.dto.ProposalDTO;
 import com.comitfy.crm.app.dto.requestDTO.ProposalRequestDTO;
 import com.comitfy.crm.app.entity.Proposal;
+import com.comitfy.crm.app.entity.ProposalHistory;
 import com.comitfy.crm.util.common.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -39,6 +40,22 @@ public interface ProposalMapper extends BaseMapper<ProposalDTO, ProposalRequestD
         return entity.getUuid() + ":-:" + entity.getCustomer().getCompanyName();
 
     }
+
+
+    @Mappings({
+            @Mapping(target = "id", ignore = true),
+            @Mapping(target = "uuid", ignore = true),
+            @Mapping(target = "deleted", ignore = true),
+            @Mapping(target = "creationDate", ignore = true),
+            @Mapping(target = "updatedDate", ignore = true),
+            @Mapping(target = "createdBy", ignore = true),
+            @Mapping(target = "lastModifiedBy", ignore = true),
+            @Mapping(target = "productId", ignore = true),
+            @Mapping(target = "proposalId", ignore = true),
+            @Mapping(target = "customerId", ignore = true)
+
+    })
+    void proposalToProposalHistory(@MappingTarget ProposalHistory proposalHistory, Proposal proposal);
 
 
 }

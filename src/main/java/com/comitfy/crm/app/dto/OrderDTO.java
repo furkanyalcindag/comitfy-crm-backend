@@ -9,13 +9,12 @@ import java.math.BigDecimal;
 @Data
 public class OrderDTO extends BaseDTO {
 
+    private String orderReferenceNo;
     private Long proposalId;
     private CustomerDTO customer;
     private ProductDTO product;
     private OrderStatusEnum orderStatus;
-    private BigDecimal costPrice; //maaliyet
-    private BigDecimal salePrice; //satış fiyatı
-    private BigDecimal offerPrice; //teklif fiyatı
-    private BigDecimal discountPrice; //indirim fiyatı
+    private String proposalReferenceNo;
+
 
 }
