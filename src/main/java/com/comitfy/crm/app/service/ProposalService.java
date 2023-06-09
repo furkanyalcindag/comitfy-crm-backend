@@ -5,6 +5,7 @@ import com.comitfy.crm.app.dto.requestDTO.*;
 import com.comitfy.crm.app.entity.*;
 import com.comitfy.crm.app.mapper.ProposalMapper;
 import com.comitfy.crm.app.mapper.ProposalMaterialMapper;
+import com.comitfy.crm.app.mapper.ProposalProductMapper;
 import com.comitfy.crm.app.model.enums.DiscountTypeEnum;
 import com.comitfy.crm.app.model.enums.OrderStatusEnum;
 import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
@@ -69,6 +70,9 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
     SettingsRepository settingsRepository;
     @Autowired
     private ProposalHistoryRepository proposalHistoryRepository;
+
+    @Autowired
+    private ProposalProductMapper proposalProductMapper;
 
     @Override
     public ProposalRepository getRepository() {
@@ -691,6 +695,25 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
     }
 
+    public List<ProposalProductDTO> getProductsByProposal(UUID proposalUUID) {
+        List<ProposalProductDTO> proposalProductDTOList = new ArrayList<>();
+
+
+        Proposal proposal = proposalRepository.findByUuid(proposalUUID).get();
+
+
+        List<ProposalProduct> proposalProducts = proposalProductRepository.findAllByProposalIdAndVersion(proposal.getId(), proposal.getCurrentVersion());
+
+        for (ProposalProduct proposalProduct:proposalProducts) {
+            proposalProductDTOList.add(proposalProductMapper.entityToDTONew(proposalProduct,this,productService));
+        }
+
+
+
+
+        return proposalProductDTOList;
+    }
+
 
     public List<ProposalProductDTO> getMaterialsByProposal(UUID proposalUUID) {
 
@@ -717,7 +740,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
             }
 
-            proposalProductDTO.setProposalMaterialDTOList(proposalMaterialDTOList);
+            //proposalProductDTO.setProposalMaterialDTOList(proposalMaterialDTOList);
 
             proposalProductDTO.setProductDTO(setProduct(proposalProduct.getProductId()));
 

@@ -87,10 +87,10 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
     }
 
 
-    @GetMapping("get-materials-by-proposal/{proposalUUID}")
-    public ResponseEntity<List<ProposalProductDTO>> getMaterialsByProposal(@PathVariable UUID proposalUUID) {
+    @GetMapping("get-products-by-proposal/{proposalUUID}")
+    public ResponseEntity<List<ProposalProductDTO>> getProductsByProposal(@PathVariable UUID proposalUUID) {
 
-        return new ResponseEntity<>(getService().getMaterialsByProposal(proposalUUID), HttpStatus.OK);
+        return new ResponseEntity<>(getService().getProductsByProposal(proposalUUID), HttpStatus.OK);
 
     }
 
