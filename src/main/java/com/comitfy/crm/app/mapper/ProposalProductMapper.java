@@ -29,18 +29,7 @@ public interface ProposalProductMapper  {
 
 
 
-
-
-    default UUID setProposalUUID(ProposalMaterial entity,ProposalService proposalService) {
-
-
-        Proposal proposal = proposalService.findEntityById(entity.getProposalId());
-
-        return proposal.getUuid();
-
-    }
-
-    default ProductDTO setProduct(ProposalMaterial entity, ProductService productService) {
+    default ProductDTO setProduct(ProposalProduct entity, ProductService productService) {
 
 
         Product product = productService.findEntityById(entity.getProductId());
