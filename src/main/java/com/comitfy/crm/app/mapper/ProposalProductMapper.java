@@ -12,7 +12,7 @@ import org.mapstruct.*;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
-public interface ProposalProductMapper extends BaseMapper<ProposalProductDTO, ProposalMaterialRequestDTO, ProposalProduct> {
+public interface ProposalProductMapper  {
 
 
 
