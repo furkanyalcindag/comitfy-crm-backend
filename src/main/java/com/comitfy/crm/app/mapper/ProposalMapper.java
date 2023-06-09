@@ -50,7 +50,6 @@ public interface ProposalMapper extends BaseMapper<ProposalDTO, ProposalRequestD
             @Mapping(target = "updatedDate", ignore = true),
             @Mapping(target = "createdBy", ignore = true),
             @Mapping(target = "lastModifiedBy", ignore = true),
-            @Mapping(target = "productId", ignore = true),
             @Mapping(target = "proposalId", ignore = true),
             @Mapping(target = "customerId", ignore = true)
 

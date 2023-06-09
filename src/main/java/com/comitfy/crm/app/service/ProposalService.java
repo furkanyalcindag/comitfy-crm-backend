@@ -428,7 +428,6 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         ProposalHistory proposalHistory = new ProposalHistory();
 
         proposalMapper.proposalToProposalHistory(proposalHistory, proposal);
-        proposalHistory.setCustomerId(proposal.getCustomer().getId());
         proposalHistory.setProposalId(proposal.getId());
         proposalHistory.setCustomerId(proposal.getCustomer().getId());
         proposalHistoryRepository.save(proposalHistory);
