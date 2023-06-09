@@ -12,33 +12,9 @@ import org.mapstruct.*;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
-public interface ProposalProductMapper extends BaseMapper<ProposalMaterialDTO, ProposalMaterialRequestDTO, ProposalMaterial> {
-
-    @Mappings({
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "uuid", ignore = true),
-            @Mapping(target = "deleted", ignore = true),
-            @Mapping(target = "creationDate", ignore = true),
-            @Mapping(target = "updatedDate", ignore = true),
-            @Mapping(target = "createdBy", ignore = true),
-            @Mapping(target = "lastModifiedBy", ignore = true)
-    })
-    @Override
-    void update(@MappingTarget ProposalMaterial entity, ProposalMaterial updateEntity);
+public interface ProposalProductMapper extends BaseMapper<ProposalProductDTO, ProposalMaterialRequestDTO, ProposalProduct> {
 
 
-    @Mappings({
-            @Mapping(source = "uuid", target = "value"),
-
-            @Mapping(target = "label", expression = "java(setLabelFullDetail(entity))")
-    })
-    AutoCompleteDTO entityToAutoCompleteDTO(Proposal entity);
-
-
-    default String setLabelFullDetail(Proposal entity) {
-        return entity.getUuid() + ":-:" + entity.getCustomer().getCompanyName();
-
-    }
 
 
     @Mappings({
@@ -81,21 +57,6 @@ public interface ProposalProductMapper extends BaseMapper<ProposalMaterialDTO, P
 
     }
 
-    default MaterialDTO setMaterial(ProposalMaterial entity, MaterialService materialService) {
-
-
-        Material material = materialService.findEntityById(entity.getMaterialId());
-
-        MaterialDTO materialDTO = new MaterialDTO();
-
-        materialDTO.setCode(material.getCode());
-        materialDTO.setName(material.getName());
-        materialDTO.setUuid(material.getUuid());
-
-
-        return materialDTO;
-
-    }
 
 
 }
