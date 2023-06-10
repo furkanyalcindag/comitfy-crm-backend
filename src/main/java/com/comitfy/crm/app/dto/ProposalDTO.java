@@ -33,6 +33,7 @@ ProposalDTO extends BaseDTO {
     private BigDecimal shippingPrice;
     private BigDecimal taxAmount;
     private BigDecimal offerTotalPrice;
+    private BigDecimal taxRate;
 
 
 
