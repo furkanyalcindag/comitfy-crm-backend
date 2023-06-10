@@ -12,7 +12,9 @@ import com.comitfy.crm.app.service.ProposalService;
 import com.comitfy.crm.app.specification.ProposalSpecification;
 import com.comitfy.crm.util.common.BaseCrudController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,6 +94,32 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
 
         return new ResponseEntity<>(getService().getProductsByProposal(proposalUUID), HttpStatus.OK);
 
+    }
+
+
+    @GetMapping("/generate-proposal-pdf/{id}")
+    public ResponseEntity<byte[]> getProposalPDF(@PathVariable UUID id) {
+
+        try {
+
+            Proposal proposal = getService().findEntityByUUID(id);
+            String fileName = proposal.getProposalReferenceNo() + ".pdf";
+
+            byte[] response = getService().generateProposalPDF(proposal);
+            if (response == null)
+                throw new Exception("response is null");
+            HttpHeaders headers = new HttpHeaders();
+            //set the PDF format
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("filename", fileName);
+            //create the report in PDF format
+            return new ResponseEntity<byte[]>
+                    (response, headers, HttpStatus.OK);
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

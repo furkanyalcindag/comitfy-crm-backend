@@ -13,13 +13,15 @@ import com.comitfy.crm.app.repository.*;
 import com.comitfy.crm.app.specification.ProposalSpecification;
 import com.comitfy.crm.util.common.BaseService;
 import jakarta.transaction.Transactional;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO, Proposal, ProposalRepository, ProposalMapper, ProposalSpecification> {
@@ -310,7 +312,6 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         DiscountRequestDTO discountRequestDTO = proposalRequestDTO.getDiscountRequestDTO() != null ? proposalRequestDTO.getDiscountRequestDTO() : null;
 
 
-
         if (discountRequestDTO != null) {
             proposal.setDiscountType(discountRequestDTO.getDiscountType());
             proposal.setDiscountAmount(discountRequestDTO.getAmount());
@@ -448,7 +449,6 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         BigDecimal materialsSaleTotal = BigDecimal.ZERO;
 
 
-
         Customer customer = customerRepository.findByUuid(proposalRequestDTO.getCustomerUUID()).get();
 
         proposal.setCustomer(customer);
@@ -466,7 +466,6 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         proposal.setDeliveryTime(proposalRequestDTO.getDeliveryTime());
         proposal.setProjectName(proposalRequestDTO.getProjectName());
         proposal = proposalRepository.saveAndFlush(proposal);
-
 
 
         for (ProposalProductRequestDTO proposalProductRequestDTO : proposalRequestDTO.getProposalProductRequestDTOList()) {
@@ -574,87 +573,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         proposalRepository.save(proposal);
 
 
-
     }
-    /*
-
-    @Transactional
-    public void updateProposal(ProposalRequestDTO proposalRequestDTO, UUID proposalUUID) throws Exception {
-
-        Proposal proposal = proposalRepository.findByUuid(proposalUUID).get();
-
-        if (proposal.getProposalStatus().equals(ProposalStatusEnum.CANCELED) || proposal.getProposalStatus().equals(ProposalStatusEnum.APPROVED) || proposal.getProposalStatus().equals(ProposalStatusEnum.SENT_CUSTOMER))
-            throw new Exception("Güncelleme Yapılamaz");
-
-        int version = proposal.getCurrentVersion() + 1;
-        BigDecimal proposalTotalOfferPrice = BigDecimal.ZERO;
-        BigDecimal proposalTotalPurchasePrice = BigDecimal.ZERO;
-        BigDecimal proposalTotalSalePrice = BigDecimal.ZERO;
-        BigDecimal proposalTotalDiscountPrice = BigDecimal.ZERO;
-
-        Customer customer = customerRepository.findByUuid(proposalRequestDTO.getCustomerUUID()).get();
-        Product product = productRepository.findByUuid(proposalRequestDTO.getProductUUID()).get();
-
-        proposal.setCustomer(customer);
-        proposal.setProduct(product);
-        proposal.setCostPrice(proposalTotalPurchasePrice);
-        proposal.setDiscountPrice(proposalTotalDiscountPrice);
-        proposal.setSalePrice(proposalTotalSalePrice);
-        proposal.setOfferPrice(proposalTotalOfferPrice);
-        proposal.setCurrentVersion(version);
-
-        proposal = proposalRepository.saveAndFlush(proposal);
-
-
-        for (ProposalMaterialRequestDTO productMaterialRequestDTO : proposalRequestDTO.getProductMaterialRequestDTOList()) {
-
-            Material material = materialRepository.findByUuid(productMaterialRequestDTO.getMaterialUUID()).get();
-
-            ProposalMaterial proposalMaterial = new ProposalMaterial();
-            proposalMaterial.setProposalId(proposal.getId());
-            proposalMaterial.setVersion(version);
-            proposalMaterial.setProductId(product.getId());
-            proposalMaterial.setMaterialId(material.getId());
-            proposalMaterial.setPurchasePrice(material.getPurchaseNetPrice());
-            proposalMaterial.setSalePrice(material.getSaleNetPrice());
-            proposalMaterial.setQuantity(productMaterialRequestDTO.getQuantity());
-            proposalMaterial.setPurchaseTotalPrice(material.getPurchaseNetPrice().multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
-            proposalMaterial.setSaleTotalPrice(material.getSaleNetPrice().multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
-            proposalMaterial.setDiscountType((productMaterialRequestDTO.getDiscountType()));
-
-            DiscountRequestDTO discountRequestDTO = new DiscountRequestDTO();
-            discountRequestDTO.setDiscountType(productMaterialRequestDTO.getDiscountType());
-            discountRequestDTO.setMaterialUUID(material.getUuid());
-            discountRequestDTO.setAmount(productMaterialRequestDTO.getDiscountAmount());
-            discountRequestDTO.setProductUUID(product.getUuid());
-
-            DiscountDTO discountDTO = calculateDiscountByProduct(discountRequestDTO);
-
-            proposalMaterial.setDiscountAmount(discountRequestDTO.getAmount());
-            proposalMaterial.setDiscountPrice(discountDTO.getDiscountAmount());
-            proposalMaterial.setDiscountPriceTotal(discountDTO.getDiscountAmount());
-            proposalMaterial.setOfferPrice(discountDTO.getDiscountedPrice());
-
-
-            proposalMaterialRepository.save(proposalMaterial);
-
-            proposalTotalPurchasePrice.add(proposalMaterial.getPurchaseTotalPrice());
-            proposalTotalSalePrice.add(proposalMaterial.getSaleTotalPrice());
-            proposalTotalDiscountPrice.add(proposalMaterial.getDiscountPriceTotal());
-            proposalTotalOfferPrice.add(proposalMaterial.getOfferPrice());
-
-        }
-
-        proposal.setCostPrice(proposalTotalPurchasePrice);
-        proposal.setDiscountPrice(proposalTotalDiscountPrice);
-        proposal.setSalePrice(proposalTotalSalePrice);
-        proposal.setOfferPrice(proposalTotalOfferPrice);
-        proposal.setProposalStatus(ProposalStatusEnum.REVISION);
-
-        proposalRepository.save(proposal);
-
-    }
-*/
 
     @Transactional
     public ProposalStatusEnum updateProposalStatus(ProposalStatusRequestDTO requestDTO, UUID proposalUUID) {
@@ -669,13 +588,13 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             proposal.setProposalStatus(requestDTO.getProposalStatusEnum());
             proposal = proposalRepository.save(proposal);
 
-            List<ProposalProduct> proposalProductList = proposalProductRepository.findAllByProposalIdAndVersion(proposal.getId(),proposal.getCurrentVersion());
+            List<ProposalProduct> proposalProductList = proposalProductRepository.findAllByProposalIdAndVersion(proposal.getId(), proposal.getCurrentVersion());
 
 
             if (requestDTO.getProposalStatusEnum().equals(ProposalStatusEnum.APPROVED)) {
 
 
-                for (ProposalProduct proposalProduct:proposalProductList) {
+                for (ProposalProduct proposalProduct : proposalProductList) {
 
                     Order order = new Order();
                     order.setOrderStatus(OrderStatusEnum.WAITING);
@@ -684,7 +603,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
                     order.setProposalId(proposal.getId());
                     order.setProposalReferenceNo(proposal.getProposalReferenceNo());
                     orderRepository.save(order);
-                    order.setOrderReferenceNo(settings.getValue()+"-"+order.getId());
+                    order.setOrderReferenceNo(settings.getValue() + "-" + order.getId());
                     orderRepository.save(order);
 
                 }
@@ -709,11 +628,9 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
         List<ProposalProduct> proposalProducts = proposalProductRepository.findAllByProposalIdAndVersion(proposal.getId(), proposal.getCurrentVersion());
 
-        for (ProposalProduct proposalProduct:proposalProducts) {
-            proposalProductDTOList.add(proposalProductMapper.entityToDTONew(proposalProduct,this,productService));
+        for (ProposalProduct proposalProduct : proposalProducts) {
+            proposalProductDTOList.add(proposalProductMapper.entityToDTONew(proposalProduct, this, productService));
         }
-
-
 
 
         return proposalProductDTOList;
@@ -784,6 +701,72 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
     public List<Object[]> groupByProposalStatus() {
 
         return proposalRepository.countTotalProposalStatus();
+    }
+
+
+    public byte[] generateProposalPDF(Proposal proposal) throws JRException {
+
+
+
+        Customer customer = proposal.getCustomer();
+        List<ProposalProductReportDTO> proposalProductReportDTOS = new ArrayList<>();
+
+
+        List<ProposalProductDTO> proposalProductList = getProductsByProposal(proposal.getUuid());
+
+        int order = 0;
+        for (ProposalProductDTO proposalProductDTO : proposalProductList) {
+
+            ProposalProductReportDTO dto = new ProposalProductReportDTO();
+
+            dto.setFeatures(proposalProductDTO.getProductDTO().getReceipts());
+            dto.setOrderNo(String.valueOf(order));
+            dto.setAmount(String.valueOf(proposalProductDTO.getQuantity()));
+            dto.setUnit("Adet");
+            dto.setProductName(proposalProductDTO.getProductDTO().getName());
+            dto.setUnitNetPrice(String.valueOf(proposalProductDTO.getUnitSaleNetPrice()));
+            dto.setTotalNetPrice(String.valueOf(proposalProductDTO.getTotalSaleNetPrice()));
+            proposalProductReportDTOS.add(dto);
+            order++;
+
+        }
+
+        String fileName = proposal.getProposalReferenceNo() + ".pdf";
+
+
+        JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/proposal.jrxml"));
+
+        Map<String, Object> empParams = new HashMap<String, Object>();
+        empParams.put("companyName", customer.getCompanyName());
+        empParams.put("authorizedPerson", customer.getAuthorizedPerson());
+        empParams.put("phoneNumber", customer.getTelephoneNumber());
+        empParams.put("email", customer.getEmail());
+        empParams.put("validityPeriod", proposal.getValidityPeriod());
+        empParams.put("deliveryTime", proposal.getDeliveryTime());
+        empParams.put("deliveryPlace", proposal.getDeliveryPlace());
+        empParams.put("taxAmount", proposal.getTaxAmount().toString());
+        empParams.put("offerPrice", proposal.getOfferPrice().toString());
+        empParams.put("totalOfferPrice", proposal.getOfferTotalPrice().toString());
+        empParams.put("shippingPrice", proposal.getShippingPrice().toString());
+        empParams.put("proposalReferenceNo", proposal.getProposalReferenceNo());
+        empParams.put("revision", proposal.getCurrentVersion());
+
+        JasperPrint empReport =
+                JasperFillManager.fillReport
+                        (
+                                jasperReport
+                                , empParams // dynamic parameters
+                                , new JRBeanCollectionDataSource(proposalProductReportDTOS)
+                        );
+
+        HttpHeaders headers = new HttpHeaders();
+        //set the PDF format
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("filename", fileName);
+        //create the report in PDF format
+        return
+                JasperExportManager.exportReportToPdf(empReport);
+
     }
 
 }
