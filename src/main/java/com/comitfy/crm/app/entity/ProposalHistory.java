@@ -1,5 +1,6 @@
 package com.comitfy.crm.app.entity;
 
+import com.comitfy.crm.app.model.enums.DiscountTypeEnum;
 import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.util.dbUtil.BaseEntity;
 import jakarta.persistence.*;
@@ -35,6 +36,13 @@ public class ProposalHistory extends BaseEntity {
 
     @Column
     private BigDecimal discountPrice;
+
+    @Column
+    private DiscountTypeEnum discountType;
+
+    @Column
+    private BigDecimal discountAmount;
+
 
     @Column
     private Integer currentVersion;

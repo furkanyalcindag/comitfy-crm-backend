@@ -1,5 +1,6 @@
 package com.comitfy.crm.app.dto;
 
+import com.comitfy.crm.app.model.enums.DiscountTypeEnum;
 import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.util.common.BaseDTO;
 import jakarta.persistence.Column;
@@ -18,6 +19,9 @@ ProposalDTO extends BaseDTO {
     private BigDecimal saleNetPrice;
     private BigDecimal offerPrice;
     private BigDecimal discountPrice;
+    private DiscountTypeEnum discountType;
+    private BigDecimal discountAmount;
+
     private Integer currentVersion;
     private ProposalStatusEnum proposalStatus;
     

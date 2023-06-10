@@ -310,7 +310,10 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         DiscountRequestDTO discountRequestDTO = proposalRequestDTO.getDiscountRequestDTO() != null ? proposalRequestDTO.getDiscountRequestDTO() : null;
 
 
+
         if (discountRequestDTO != null) {
+            proposal.setDiscountType(discountRequestDTO.getDiscountType());
+            proposal.setDiscountAmount(discountRequestDTO.getAmount());
             DiscountDTO discountDTO = calculateDiscountByProposal(discountRequestDTO, proposalTotalSaleNetPrice);
             proposalTotalDiscountPrice = discountDTO.getDiscountAmount();
         } else {
@@ -537,6 +540,8 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
 
         if (discountRequestDTO != null) {
+            proposal.setDiscountType(discountRequestDTO.getDiscountType());
+            proposal.setDiscountAmount(discountRequestDTO.getAmount());
             DiscountDTO discountDTO = calculateDiscountByProposal(discountRequestDTO, proposalTotalSaleNetPrice);
             proposalTotalDiscountPrice = discountDTO.getDiscountAmount();
         } else {
