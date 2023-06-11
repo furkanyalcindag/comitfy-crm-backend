@@ -98,6 +98,7 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
 
 
     @GetMapping("/generate-proposal-pdf/{id}")
+    @CrossOrigin(exposedHeaders = "Content-Disposition")
     public ResponseEntity<byte[]> getProposalPDF(@PathVariable UUID id) {
 
         try {
@@ -106,12 +107,15 @@ public class ProposalController extends BaseCrudController<ProposalDTO, Proposal
             String fileName = proposal.getProposalReferenceNo() + ".pdf";
 
             byte[] response = getService().generateProposalPDF(proposal);
+
+
             if (response == null)
                 throw new Exception("response is null");
             HttpHeaders headers = new HttpHeaders();
             //set the PDF format
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("filename", fileName);
+            headers.set("Content-Disposition", "attachment; filename="+fileName);
             //create the report in PDF format
             return new ResponseEntity<byte[]>
                     (response, headers, HttpStatus.OK);

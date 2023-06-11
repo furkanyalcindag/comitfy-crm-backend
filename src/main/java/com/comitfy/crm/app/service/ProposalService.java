@@ -714,7 +714,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
         List<ProposalProductDTO> proposalProductList = getProductsByProposal(proposal.getUuid());
 
-        int order = 0;
+        int order = 1;
         for (ProposalProductDTO proposalProductDTO : proposalProductList) {
 
             ProposalProductReportDTO dto = new ProposalProductReportDTO();
@@ -726,6 +726,7 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
             dto.setProductName(proposalProductDTO.getProductDTO().getName());
             dto.setUnitNetPrice(String.valueOf(proposalProductDTO.getUnitSaleNetPrice()));
             dto.setTotalNetPrice(String.valueOf(proposalProductDTO.getTotalSaleNetPrice()));
+            dto.setNote(proposalProductDTO.getNote()!=null?proposalProductDTO.getNote():"-");
             proposalProductReportDTOS.add(dto);
             order++;
 
@@ -737,19 +738,19 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/proposal.jrxml"));
 
         Map<String, Object> empParams = new HashMap<String, Object>();
-        empParams.put("companyName", customer.getCompanyName());
-        empParams.put("authorizedPerson", customer.getAuthorizedPerson());
-        empParams.put("phoneNumber", customer.getTelephoneNumber());
-        empParams.put("email", customer.getEmail());
-        empParams.put("validityPeriod", proposal.getValidityPeriod());
-        empParams.put("deliveryTime", proposal.getDeliveryTime());
-        empParams.put("deliveryPlace", proposal.getDeliveryPlace());
-        empParams.put("taxAmount", proposal.getTaxAmount().toString());
-        empParams.put("offerPrice", proposal.getOfferPrice().toString());
-        empParams.put("totalOfferPrice", proposal.getOfferTotalPrice().toString());
-        empParams.put("shippingPrice", proposal.getShippingPrice().toString());
-        empParams.put("proposalReferenceNo", proposal.getProposalReferenceNo());
-        empParams.put("revision", proposal.getCurrentVersion());
+        empParams.put("companyName", customer.getCompanyName()!=null?customer.getCompanyName():"-");
+        empParams.put("authorizedPerson", customer.getAuthorizedPerson()!=null?customer.getAuthorizedPerson():"-");
+        empParams.put("phoneNumber", customer.getTelephoneNumber()!=null?customer.getTelephoneNumber():"-");
+        empParams.put("email", customer.getEmail()!=null?customer.getEmail():"-");
+        empParams.put("validityPeriod", proposal.getValidityPeriod()!=null?proposal.getValidityPeriod():"-");
+        empParams.put("deliveryTime", proposal.getDeliveryTime()!=null?proposal.getDeliveryTime():"-");
+        empParams.put("deliveryPlace", proposal.getDeliveryPlace()!=null?proposal.getDeliveryPlace():"-");
+        empParams.put("taxAmount", proposal.getTaxAmount()!=null?proposal.getTaxAmount().toString():"-");
+        empParams.put("offerPrice", proposal.getOfferPrice()!=null?proposal.getOfferPrice().toString():"-");
+        empParams.put("totalOfferPrice", proposal.getOfferTotalPrice()!=null?proposal.getOfferTotalPrice().toString():"-");
+        empParams.put("shippingPrice", proposal.getShippingPrice()!=null?proposal.getShippingPrice().toString():"-");
+        empParams.put("proposalReferenceNo", proposal.getProposalReferenceNo()!=null?proposal.getProposalReferenceNo():"-");
+        empParams.put("revision", proposal.getCurrentVersion()!=null?proposal.getCurrentVersion():"-");
 
         JasperPrint empReport =
                 JasperFillManager.fillReport
