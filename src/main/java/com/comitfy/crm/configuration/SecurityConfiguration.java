@@ -55,6 +55,7 @@ public class SecurityConfiguration {
                     configuration.setAllowedOrigins(List.of("*"));
                     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
                     configuration.setAllowedHeaders(List.of("*"));
+                    configuration.setExposedHeaders(List.of("Content-Disposition"));
                     return configuration;
                 }).and()
                 .authorizeHttpRequests()
