@@ -76,6 +76,7 @@
 	<parameter name="taxAmount" class="java.lang.String"/>
 	<parameter name="shippingPrice" class="java.lang.String"/>
 	<parameter name="revision" class="java.lang.String"/>
+	<parameter name="creatorUser" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -496,6 +497,7 @@
 			<textField>
 				<reportElement x="180" y="175" width="100" height="25" uuid="773646cf-6279-4848-96c1-8a3550c88300"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{creatorUser}]]></textFieldExpression>
 				<patternExpression><![CDATA[$P{companyName}]]></patternExpression>
 			</textField>
 			<textField>

@@ -744,7 +744,8 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         Map<String, Object> empParams = new HashMap<String, Object>();
         empParams.put("companyName", customer.getCompanyName()!=null?customer.getCompanyName():"-");
         empParams.put("authorizedPerson", customer.getAuthorizedPerson()!=null?customer.getAuthorizedPerson():"-");
-        empParams.put("phoneNumber", customer.getTelephoneNumber()!=null?customer.getTelephoneNumber():"-");
+        empParams.put("creatorUser","");
+        empParams.put("telephoneNumber", customer.getTelephoneNumber()!=null?customer.getTelephoneNumber():"-");
         empParams.put("email", customer.getEmail()!=null?customer.getEmail():"-");
         empParams.put("validityPeriod", proposal.getValidityPeriod()!=null?proposal.getValidityPeriod():"-");
         empParams.put("deliveryTime", proposal.getDeliveryTime()!=null?proposal.getDeliveryTime():"-");
@@ -754,7 +755,8 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
         empParams.put("totalOfferPrice", proposal.getOfferTotalPrice()!=null?proposal.getOfferTotalPrice().toString():"-");
         empParams.put("shippingPrice", proposal.getShippingPrice()!=null?proposal.getShippingPrice().toString():"-");
         empParams.put("proposalReferenceNo", proposal.getProposalReferenceNo()!=null?proposal.getProposalReferenceNo():"-");
-        empParams.put("revision", proposal.getCurrentVersion()!=null?proposal.getCurrentVersion():"-");
+        empParams.put("revision", proposal.getCurrentVersion()!=null?String.valueOf(proposal.getCurrentVersion()):"-");
+        empParams.put("projectName", proposal.getProjectName()!=null?proposal.getProjectName():"-");
 
         JasperPrint empReport =
                 JasperFillManager.fillReport
