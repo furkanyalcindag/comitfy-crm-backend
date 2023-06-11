@@ -1,11 +1,15 @@
 package com.comitfy.crm.userModule.mapper;
 
+import com.comitfy.crm.app.dto.AutoCompleteDTO;
+import com.comitfy.crm.app.entity.Currency;
 import com.comitfy.crm.userModule.dto.RoleDTO;
 import com.comitfy.crm.userModule.dto.requestDTO.RoleRequestDTO;
 import com.comitfy.crm.userModule.entity.Role;
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.common.BaseMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -97,4 +101,11 @@ public interface RoleMapper extends BaseMapper<RoleDTO, RoleRequestDTO, Role> {
 
         return pageDTO;
     }*/
+
+    @Mappings({@Mapping(source = "uuid", target = "value"),
+            @Mapping(source = "name", target = "label")
+
+    })
+    AutoCompleteDTO entityToAutoCompleteDTO(Role entity);
+
 }

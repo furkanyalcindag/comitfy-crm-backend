@@ -120,12 +120,32 @@ public class InitializeDatabase implements CommandLineRunner {
 
 
     private void loadRoleData() {
-        if (roleRepository.count() == 0) {
-            Role role = new Role();
-            role.setName("ADMIN");
-            roleRepository.save(role);
-        }
 
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<Role>> typeReference = new TypeReference<List<Role>>() {
+        };
+        InputStream inputStream = TypeReference.class.getResourceAsStream("/db/roles.json");
+        try {
+            List<Role> roleList = mapper.readValue(inputStream, typeReference);
+
+            for (Role role : roleList) {
+
+
+                try{
+                    roleRepository.save(role);
+                    System.out.println("role Saved!");
+                }
+                catch (Exception e){
+                    System.out.println("duplicated role: " + e.getMessage());
+                }
+
+
+            }
+
+
+        } catch (IOException e) {
+            System.out.println("duplicated role: " + e.getMessage());
+        }
 
     }
 
