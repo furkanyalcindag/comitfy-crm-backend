@@ -8,6 +8,7 @@ public class ProposalProductReportDTO {
     private String amount;
     private String unit;
     private String features;
+    private String featuresNew;
     private String Note;
     private String orderNo;
     private String unitNetPrice;

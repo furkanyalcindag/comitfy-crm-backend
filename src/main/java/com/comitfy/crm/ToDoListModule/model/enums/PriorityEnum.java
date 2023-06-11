@@ -1,5 +1,8 @@
 package com.comitfy.crm.ToDoListModule.model.enums;
 
+import lombok.Data;
+
+
 public enum PriorityEnum {
 
 
@@ -18,6 +21,17 @@ public enum PriorityEnum {
         this.label = label;
         this.color = color;
         this.value = value;
+    }
+
+    public PriorityDTO toDTO(){
+
+        PriorityDTO dto = new PriorityDTO();
+        dto.setColor(color);
+        dto.setLabel(label);
+        dto.setValue(value);
+
+        return dto;
+
     }
 
 

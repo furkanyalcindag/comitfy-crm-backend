@@ -12,6 +12,9 @@ import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.app.repository.*;
 import com.comitfy.crm.app.specification.ProposalSpecification;
 import com.comitfy.crm.util.common.BaseService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -348,78 +351,6 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
     }
 
-   /* @Transactional
-    public void createProposal(ProposalRequestDTO proposalRequestDTO) {
-
-        Proposal proposal = new Proposal();
-
-        int version = 1;
-        BigDecimal proposalTotalOfferPrice = BigDecimal.ZERO;
-        BigDecimal proposalTotalPurchasePrice = BigDecimal.ZERO;
-        BigDecimal proposalTotalSalePrice = BigDecimal.ZERO;
-        BigDecimal proposalTotalDiscountPrice = BigDecimal.ZERO;
-
-        Customer customer = customerRepository.findByUuid(proposalRequestDTO.getCustomerUUID()).get();
-        Product product = productRepository.findByUuid(proposalRequestDTO.getProductUUID()).get();
-
-        proposal.setCustomer(customer);
-        proposal.setProduct(product);
-        proposal.setCostPrice(proposalTotalPurchasePrice);
-        proposal.setDiscountPrice(proposalTotalDiscountPrice);
-        proposal.setSalePrice(proposalTotalSalePrice);
-        proposal.setOfferPrice(proposalTotalOfferPrice);
-        proposal.setCurrentVersion(version);
-
-        proposal = proposalRepository.saveAndFlush(proposal);
-
-
-        for (ProposalMaterialRequestDTO productMaterialRequestDTO : proposalRequestDTO.getProductMaterialRequestDTOList()) {
-
-            Material material = materialRepository.findByUuid(productMaterialRequestDTO.getMaterialUUID()).get();
-
-            ProposalMaterial proposalMaterial = new ProposalMaterial();
-            proposalMaterial.setProposalId(proposal.getId());
-            proposalMaterial.setVersion(version);
-            proposalMaterial.setProductId(product.getId());
-            proposalMaterial.setMaterialId(material.getId());
-            proposalMaterial.setPurchasePrice(material.getPurchaseNetPrice());
-            proposalMaterial.setSalePrice(material.getSaleNetPrice());
-            proposalMaterial.setQuantity(productMaterialRequestDTO.getQuantity());
-            proposalMaterial.setPurchaseTotalPrice(material.getPurchaseNetPrice().multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
-            proposalMaterial.setSaleTotalPrice(material.getSaleNetPrice().multiply(BigDecimal.valueOf(productMaterialRequestDTO.getQuantity())));
-            proposalMaterial.setDiscountType(productMaterialRequestDTO.getDiscountType());
-
-            DiscountRequestDTO discountRequestDTO = new DiscountRequestDTO();
-            discountRequestDTO.setDiscountType(productMaterialRequestDTO.getDiscountType());
-            discountRequestDTO.setMaterialUUID(material.getUuid());
-            discountRequestDTO.setAmount(productMaterialRequestDTO.getDiscountAmount());
-            discountRequestDTO.setProductUUID(product.getUuid());
-
-            DiscountDTO discountDTO = calculateDiscountByProduct(discountRequestDTO);
-
-            proposalMaterial.setDiscountAmount(discountRequestDTO.getAmount());
-            proposalMaterial.setDiscountPrice(discountDTO.getDiscountAmount());
-            proposalMaterial.setDiscountPriceTotal(discountDTO.getDiscountedPrice());
-            proposalMaterial.setOfferPrice(discountDTO.getDiscountedPrice());
-
-            proposalMaterialRepository.save(proposalMaterial);
-
-            proposalTotalPurchasePrice = proposalTotalPurchasePrice.add(proposalMaterial.getPurchaseTotalPrice());
-            proposalTotalSalePrice = proposalTotalSalePrice.add(proposalMaterial.getSaleTotalPrice());
-            proposalTotalDiscountPrice = proposalTotalDiscountPrice.add(proposalMaterial.getDiscountPriceTotal());
-            proposalTotalOfferPrice = proposalTotalOfferPrice.add(proposalMaterial.getOfferPrice());
-
-        }
-
-        proposal.setCostPrice(proposalTotalPurchasePrice);
-        proposal.setDiscountPrice(proposalTotalDiscountPrice);
-        proposal.setSalePrice(proposalTotalSalePrice);
-        proposal.setOfferPrice(proposalTotalOfferPrice);
-        proposal.setProposalStatus(ProposalStatusEnum.CREATED);
-
-        proposalRepository.save(proposal);
-
-    }*/
 
     @Transactional
     public void updateProposal(ProposalRequestDTO proposalRequestDTO, UUID proposalUUID) throws Exception {
@@ -708,9 +639,11 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
     }
 
 
-    public byte[] generateProposalPDF(Proposal proposal) throws JRException {
+    public byte[] generateProposalPDF(Proposal proposal) throws JRException, JsonProcessingException {
 
 
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<ReceiptDTO>> typeReference = new TypeReference<List<ReceiptDTO>>(){} ;
 
         Customer customer = proposal.getCustomer();
         List<ProposalProductReportDTO> proposalProductReportDTOS = new ArrayList<>();
@@ -720,13 +653,23 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
         int order = 1;
         for (ProposalProductDTO proposalProductDTO : proposalProductList) {
+            String receipt = "";
 
+            List<ReceiptDTO> receiptDTOS = new ArrayList<>();
             ProposalProductReportDTO dto = new ProposalProductReportDTO();
 
             dto.setFeatures(proposalProductDTO.getProductDTO().getReceipts());
             dto.setOrderNo(String.valueOf(order));
             dto.setAmount(String.valueOf(proposalProductDTO.getQuantity()));
+            receiptDTOS=mapper.readValue(dto.getFeatures(), typeReference);
+
+            for (ReceiptDTO receiptDTO:receiptDTOS) {
+
+                receipt = receipt + receiptDTO.getName()+ " "+receiptDTO.getAmount()+ " "+receiptDTO.getUnit()+"\n";
+
+            }
             dto.setUnit("Adet");
+            dto.setFeaturesNew(receipt);
             dto.setProductName(proposalProductDTO.getProductDTO().getName());
             dto.setUnitNetPrice(String.valueOf(proposalProductDTO.getUnitSaleNetPrice()));
             dto.setTotalNetPrice(String.valueOf(proposalProductDTO.getTotalSaleNetPrice()));
