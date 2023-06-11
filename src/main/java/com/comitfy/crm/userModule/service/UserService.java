@@ -67,7 +67,11 @@ public class UserService extends BaseService<UserDTO, UserRequestDTO, User, User
         if (role.isPresent()) {
             User user = getMapper().requestDTOToEntity(dto);
             user.setPassword(passwordEncoder.encode(dto.getPassword()));
+            Set<Role> roles = new HashSet<>();
+            roles.add(role.get());
+            user.setRoles(roles);
             userRepository.save(user);
+
             return dto;
         } else {
             return null;
