@@ -42,11 +42,7 @@ public class AuthService implements IAuthService {
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
             newUser.setFirstName(request.getFirstName());
             newUser.setLastName(request.getLastName());
-            newUser.setAgeRangeEnum(request.getAgeRangeEnum());
-            newUser.setGenderEnum(request.getGenderEnum());
 
-
-            // newUser.setGender(gender);
 
             // doctorDTO.setFirstName(entity.getUser().getFirstName());
 

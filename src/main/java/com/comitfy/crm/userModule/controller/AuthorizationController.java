@@ -78,7 +78,7 @@ public class AuthorizationController {
         Map<String, Object> authorizationMap = new HashMap<>();
         authorizationMap.put("roles", roles);
         authorizationMap.put("jwt-token", token);
-        authorizationMap.put("gender", user.getGenderEnum() != null ? user.getGenderEnum().name() : "");
+        //authorizationMap.put("gender", user.getGenderEnum() != null ? user.getGenderEnum().name() : "");
         //Collections.singletonMap("jwt-token", token);
 
         return authorizationMap;
