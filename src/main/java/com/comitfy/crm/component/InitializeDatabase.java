@@ -1,5 +1,7 @@
 package com.comitfy.crm.component;
 
+import com.comitfy.crm.ToDoListModule.entity.BoardColumn;
+import com.comitfy.crm.ToDoListModule.repository.BoardColumnRepository;
 import com.comitfy.crm.app.entity.City;
 import com.comitfy.crm.app.entity.Currency;
 import com.comitfy.crm.app.entity.District;
@@ -52,6 +54,9 @@ public class InitializeDatabase implements CommandLineRunner {
     @Autowired
     SettingsRepository settingsRepository;
 
+    @Autowired
+    BoardColumnRepository boardColumnRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -61,6 +66,7 @@ public class InitializeDatabase implements CommandLineRunner {
         loadCity();
         loadDistrict();
         loadSettings();
+        loadBoardColumn();
     }
 
     private void loadCity() throws FileNotFoundException {
@@ -129,6 +135,7 @@ public class InitializeDatabase implements CommandLineRunner {
             List<Role> roleList = mapper.readValue(inputStream, typeReference);
 
             for (Role role : roleList) {
+
 
 
                 try{
@@ -209,6 +216,41 @@ public class InitializeDatabase implements CommandLineRunner {
 
         } catch (IOException e) {
             System.out.println("duplicated setting: " + e.getMessage());
+        }
+
+
+    }
+
+
+
+    private void loadBoardColumn() throws FileNotFoundException {
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<BoardColumn>> typeReference = new TypeReference<List<BoardColumn>>() {
+        };
+        InputStream inputStream = TypeReference.class.getResourceAsStream("/db/boardColumns.json");
+        try {
+            List<BoardColumn> boardColumnList = mapper.readValue(inputStream, typeReference);
+
+            for (BoardColumn boardColumn : boardColumnList) {
+
+
+
+                try{
+                    boardColumnRepository.save(boardColumn);
+                    System.out.println("boardColumn Saved!");
+                }
+                catch (Exception e){
+                    System.out.println("duplicated boardColumn: " + e.getMessage());
+                }
+
+
+            }
+
+
+        } catch (IOException e) {
+            System.out.println("duplicated boardColumn: " + e.getMessage());
         }
 
 

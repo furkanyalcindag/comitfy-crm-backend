@@ -1,0 +1,32 @@
+[
+  {
+    "label": "Yeni",
+    "position": 1,
+    "color": "primary",
+    "isVisible": true
+  },
+  {
+    "label": "Kapalı",
+    "position": 2,
+    "color": "DarkMagenta",
+    "isVisible": true
+  },
+  {
+    "label": "Devam Eden",
+    "position": 3,
+    "color": "secondary",
+    "isVisible": true
+  },
+  {
+    "label": "Onay Bekleyen",
+    "position": 4,
+    "color": "info",
+    "isVisible": true
+  },
+  {
+    "label": "Tamamlanan",
+    "position": 5,
+    "color": "positive",
+    "isVisible": true
+  }
+]

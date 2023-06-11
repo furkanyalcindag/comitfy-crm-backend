@@ -18,7 +18,7 @@ import lombok.Data;
 )
 public class BoardColumn extends BaseEntity {
 
-    @Column
+    @Column(unique = true)
     private String label;
     @Column
     private Integer position;
@@ -26,6 +26,4 @@ public class BoardColumn extends BaseEntity {
     private String color;
     @Column
     private Boolean isVisible = Boolean.TRUE;
-
-
 }
