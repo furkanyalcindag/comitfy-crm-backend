@@ -74,7 +74,7 @@ public class UserService extends BaseService<UserDTO, UserRequestDTO, User, User
         }
     }
 
-    public PageDTO<UserDTO> getUserByRole(UUID id, int page, int size,LanguageEnum languageEnum) {
+    public PageDTO<UserDTO> getUserByRole(UUID id, int page, int size) {
         Optional<Role> role = roleRepository.findByUuid(id);
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
         if (role.isPresent()) {

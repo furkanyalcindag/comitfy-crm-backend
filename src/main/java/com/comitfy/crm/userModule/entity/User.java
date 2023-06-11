@@ -36,14 +36,6 @@ public class User extends BaseEntity {
     @Column
     private boolean isEnable;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private AgeRangeEnum ageRangeEnum;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private GenderEnum genderEnum;
-
 
     /*@JoinTable(name = "user_group",joinColumns = @JoinColumn(name="user_id"))
     @JoinColumn(name = "group_id")

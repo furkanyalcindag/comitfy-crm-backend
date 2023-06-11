@@ -1,15 +1,19 @@
 package com.comitfy.crm.userModule.mapper;
 
+import com.comitfy.crm.app.dto.AutoCompleteDTO;
 import com.comitfy.crm.userModule.dto.UserDTO;
 import com.comitfy.crm.userModule.dto.requestDTO.UserAgeRangeRequestDTO;
 import com.comitfy.crm.userModule.dto.requestDTO.UserGenderRequestDTO;
 import com.comitfy.crm.userModule.dto.requestDTO.UserNameRequestDTO;
 import com.comitfy.crm.userModule.dto.requestDTO.UserRequestDTO;
+import com.comitfy.crm.userModule.entity.Role;
 import com.comitfy.crm.userModule.entity.User;
 import com.comitfy.crm.userModule.repository.RoleRepository;
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.common.BaseMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -138,4 +142,10 @@ public interface UserMapper extends BaseMapper<UserDTO, UserRequestDTO, User> {
 
         return pageDTO;
     }*/
+
+    @Mappings({@Mapping(source = "uuid", target = "value"),
+            @Mapping(source = "username", target = "label")
+
+    })
+    AutoCompleteDTO entityToAutoCompleteDTO(User entity);
 }

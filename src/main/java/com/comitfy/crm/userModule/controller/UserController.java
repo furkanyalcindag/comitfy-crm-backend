@@ -48,8 +48,7 @@ public class UserController extends BaseCrudController<UserDTO, UserRequestDTO, 
 
 
     @PostMapping("/{roleId}")
-    public ResponseEntity<UserRequestDTO> saveByRole(@RequestHeader(value = "accept-language", required = true) String acceptLanguage,
-                                                     @RequestBody UserRequestDTO userRequestDTO, @PathVariable UUID roleId) {
+    public ResponseEntity<UserRequestDTO> saveByRole(@RequestBody UserRequestDTO userRequestDTO, @PathVariable UUID roleId) {
         User user = helperService.getUserFromSession();
         if (user != null) {
             {
@@ -60,9 +59,9 @@ public class UserController extends BaseCrudController<UserDTO, UserRequestDTO, 
 
 
     @GetMapping("get-all-by-role/{roleId}")
-    public ResponseEntity<PageDTO<UserDTO>> getByRoleId(@RequestHeader(value = "accept-language", required = true) String language,
+    public ResponseEntity<PageDTO<UserDTO>> getByRoleId(
                                                         @PathVariable UUID roleId, @RequestParam int pageNumber, @RequestParam int pageSize) {
-        PageDTO<UserDTO> pageDTO = userService.getUserByRole(roleId, pageNumber, pageSize, LanguageEnum.valueOf(language));
+        PageDTO<UserDTO> pageDTO = userService.getUserByRole(roleId, pageNumber, pageSize);
 
         return new ResponseEntity<>(pageDTO, HttpStatus.OK);
     }
