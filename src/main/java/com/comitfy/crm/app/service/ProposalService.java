@@ -596,15 +596,19 @@ public class ProposalService extends BaseService<ProposalDTO, ProposalRequestDTO
 
                 for (ProposalProduct proposalProduct : proposalProductList) {
 
-                    Order order = new Order();
-                    order.setOrderStatus(OrderStatusEnum.WAITING);
-                    order.setCustomerId(proposal.getCustomer().getId());
-                    order.setProductId(proposalProduct.getProductId());
-                    order.setProposalId(proposal.getId());
-                    order.setProposalReferenceNo(proposal.getProposalReferenceNo());
-                    orderRepository.save(order);
-                    order.setOrderReferenceNo(settings.getValue() + "-" + order.getId());
-                    orderRepository.save(order);
+                    proposalProduct.getQuantity();
+                    for (int i =0;i<proposalProduct.getQuantity();i++){
+                        Order order = new Order();
+                        order.setOrderStatus(OrderStatusEnum.WAITING);
+                        order.setCustomerId(proposal.getCustomer().getId());
+                        order.setProductId(proposalProduct.getProductId());
+                        order.setProposalId(proposal.getId());
+                        order.setProposalReferenceNo(proposal.getProposalReferenceNo());
+                        orderRepository.save(order);
+                        order.setOrderReferenceNo(settings.getValue() + "-" + order.getId());
+                        orderRepository.save(order);
+                    }
+
 
                 }
 

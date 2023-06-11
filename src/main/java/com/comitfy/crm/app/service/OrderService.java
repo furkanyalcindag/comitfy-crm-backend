@@ -2,13 +2,21 @@ package com.comitfy.crm.app.service;
 
 import com.comitfy.crm.app.dto.OrderDTO;
 import com.comitfy.crm.app.dto.requestDTO.OrderRequestDTO;
+import com.comitfy.crm.app.dto.requestDTO.OrderStatusRequestDTO;
+import com.comitfy.crm.app.dto.requestDTO.ProposalStatusRequestDTO;
 import com.comitfy.crm.app.entity.Order;
+import com.comitfy.crm.app.entity.Proposal;
+import com.comitfy.crm.app.entity.ProposalProduct;
+import com.comitfy.crm.app.entity.Settings;
 import com.comitfy.crm.app.mapper.OrderMapper;
+import com.comitfy.crm.app.model.enums.OrderStatusEnum;
+import com.comitfy.crm.app.model.enums.ProposalStatusEnum;
 import com.comitfy.crm.app.repository.*;
 import com.comitfy.crm.app.specification.OrderSpecification;
 import com.comitfy.crm.util.PageDTO;
 import com.comitfy.crm.util.common.BaseFilterRequestDTO;
 import com.comitfy.crm.util.common.BaseService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -103,6 +112,25 @@ public class OrderService extends BaseService<OrderDTO, OrderRequestDTO, Order, 
     public List<Object[]> groupByOrderStatus() {
 
         return orderRepository.countTotalOrderStatus();
+    }
+
+    @Transactional
+    public OrderStatusEnum updateOrderStatus(OrderStatusRequestDTO requestDTO, UUID orderUUID) {
+
+
+        Order order = findEntityByUUID(orderUUID);
+
+        //burada sipariş ve cari oluştur
+        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED)) {
+
+            order.setOrderStatus(requestDTO.getOrderStatusEnum());
+            order = orderRepository.save(order);
+            return order.getOrderStatus();
+        } else {
+            return null;
+        }
+
+
     }
 
 
