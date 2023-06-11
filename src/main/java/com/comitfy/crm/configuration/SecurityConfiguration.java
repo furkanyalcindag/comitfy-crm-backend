@@ -70,6 +70,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/settings/**").permitAll()
                 .requestMatchers("/reference/**").permitAll()
                 .requestMatchers("/proposal/**").permitAll()
+                .requestMatchers("/kanban/**").permitAll()
                 .requestMatchers("/dashboard/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/user-api/**").permitAll()
