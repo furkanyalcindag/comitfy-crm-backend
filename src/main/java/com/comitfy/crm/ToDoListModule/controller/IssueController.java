@@ -36,14 +36,14 @@ public class IssueController extends BaseCrudController<IssueDTO, IssueRequestDT
     }
 
 
-    @PostMapping("/")
+    @PostMapping("create-issue")
     public ResponseEntity<IssueDTO> save(@RequestBody IssueRequestDTO body) {
 
         return new ResponseEntity<>(getService().save(body), HttpStatus.CREATED);
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("update-issue/{id}")
     public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody IssueRequestDTO body) {
         IssueDTO issueDTO = getService().update(id, body);
 
