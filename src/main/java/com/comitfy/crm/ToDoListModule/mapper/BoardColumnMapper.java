@@ -31,7 +31,7 @@ public interface BoardColumnMapper extends BaseMapper<BoardColumnDTO, BoardColum
     @Mappings({
             @Mapping(source = "uuid", target = "value"),
 
-            @Mapping(target = "label", expression = "label")
+            @Mapping(source = "label", target = "label")
     })
     AutoCompleteDTO entityToAutoCompleteDTO(BoardColumn entity);
 
