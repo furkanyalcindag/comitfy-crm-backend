@@ -8,7 +8,7 @@
   {
     "label": "Kapalı",
     "position": 2,
-    "color": "DarkMagenta",
+    "color": "negative",
     "isVisible": true
   },
   {
