@@ -7,11 +7,11 @@ public enum PriorityEnum {
 
 
 
-    LOWEST("LOWEST", "Önemsiz", "blue"),
-    LOW("LOW", "Düşük", "green"),
-    MEDIUM("MEDIUM", "Orta", "yellow"),
-    HIGH("HIGH", "Yüksek", "orange"),
-    CRITICAL("CRITICAL", "Kritik", "red");
+    LOWEST("LOWEST", "Önemsiz", "lowest"),
+    LOW("LOW", "Düşük", "low"),
+    MEDIUM("MEDIUM", "Orta", "medium"),
+    HIGH("HIGH", "Yüksek", "high"),
+    CRITICAL("CRITICAL", "Kritik", "critical");
 
     private String label;
     private String value;
