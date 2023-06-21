@@ -38,7 +38,7 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
         pageDTO.setTotalPage(pageEntity.getTotalPages());
         pageDTO.setSort(pageEntity.getSort());
         pageDTO.setData(pageEntity.toList().stream().map(getMapper()::entityToDTO).collect(Collectors.toList()));
-
+        pageDTO.setTotalElements(pageEntity.getTotalElements());
 
         return pageDTO;
     }
@@ -56,6 +56,7 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
         pageDTO.setSize(pageEntity.getSize());
         pageDTO.setTotalPage(pageEntity.getTotalPages());
         pageDTO.setSort(pageEntity.getSort());
+        pageDTO.setTotalElements(pageEntity.getTotalElements());
         //  pageDTO.setData(pageEntity.toList().stream().map(getMapper()::entityToDTO).collect(Collectors.toList()));
 
         List<AutoCompleteDTO> autoCompleteDTOList = new ArrayList<>();
@@ -75,6 +76,7 @@ public abstract class BaseService<DTO extends BaseDTO, RequestDTO extends BaseDT
         pageDTO.setTotalPage(pageEntity.getTotalPages());
         pageDTO.setSort(pageEntity.getSort());
         pageDTO.setData(pageEntity.toList().stream().map(getMapper()::entityToDTO).collect(Collectors.toList()));
+        pageDTO.setTotalElements(pageEntity.getTotalElements());
         return pageDTO;
     }
 
