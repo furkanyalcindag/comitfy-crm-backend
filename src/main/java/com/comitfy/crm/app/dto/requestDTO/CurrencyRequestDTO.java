@@ -12,6 +12,8 @@ public class CurrencyRequestDTO extends BaseDTO {
 
     private String name;
 
+    private String code;
+
 
     private BigDecimal exchangeRate;
 

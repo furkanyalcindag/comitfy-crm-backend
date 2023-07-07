@@ -24,6 +24,8 @@ public class Currency extends BaseEntity {
     @Column
     private String name;
     @Column
+    private String code;
+    @Column
     private String symbol;
     @Column
     private BigDecimal exchangeRate;

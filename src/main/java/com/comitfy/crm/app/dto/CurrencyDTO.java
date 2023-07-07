@@ -10,6 +10,8 @@ public class CurrencyDTO extends BaseDTO {
 
     private String name;
 
+    private String code;
+
     private String symbol;
 
     private BigDecimal exchangeRate;
